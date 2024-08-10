@@ -10,9 +10,10 @@
 
 int main() {
 	Bank bank = { 0,NULL,0,0 };
-
+	
 	int s;
 
 	free(bank.branches);
+	printf("fix");
 	return 0;
 }

@@ -4,8 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "Bank.h"
+#include "Branch.h"
+
 
 int main() {
+	Bank bank = { 0,NULL,0,0 };
 
+	int s;
+
+	free(bank.branches);
 	return 0;
 }

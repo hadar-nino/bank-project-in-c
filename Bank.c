@@ -19,7 +19,7 @@ void createBank(Bank* b) {
 
 }
 
-void addNewBranch(Bank* bank, Branch* branch) {
+void createNewBranch(Bank* bank, Branch* branch) {
     Branch* temp = NULL;
     temp = (Branch*)realloc(bank->branches, (bank->branchCount + 1) * sizeof(Branch));
     if (temp != NULL) {

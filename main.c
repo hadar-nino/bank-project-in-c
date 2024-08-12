@@ -46,8 +46,12 @@ void readTextFile(Bank* bank);
 
 void printSubTypes();
 
-void addNewBranch(Bank* bank) {
-    
+void addNewBranch(Bank* bank,Branch* branch) {
+    scanf("enter name (the name will be 100 words)");
+    fgets(branch->name, 50, stdin);
+    branch->name[strcspn(branch->name, "\n")] = '\0';
+    createNewBranch(bank, branch);
+    printf("%s", bank->branches[bank->branchCount].name);
 }
 
 void addNewEmployee(Bank* bank);
@@ -82,11 +86,10 @@ void displayMenu() {
         "[13] Find customer with most loans\n"
         "[0] Exit\n");
 }
-
 int main() {
     int choice;
     Bank bank;
-    Branch branch;
+    Branch branch = {0,"",NULL,NULL,0,0};
     Customer customer;
 
     // Display the menu
@@ -98,6 +101,7 @@ int main() {
     
     // Process the choice
     switch (choice) {
+    /*
     case 1:
         // Call function to sort branches by type
         // Example: sortBranchByType(&branch, type);
@@ -117,9 +121,11 @@ int main() {
     case 5:
         printSubTypes();
         break;
+        */
     case 6:
-        addNewBranch(&bank);
+        addNewBranch(&bank,&branch);        
         break;
+        /*
     case 7:
         addNewEmployee(&branch);
         break;
@@ -141,6 +147,7 @@ int main() {
     case 13:
         mostLoansCustomer(&branch);
         break;
+        */
     case 0:
         printf("Exiting...\n");
         break;

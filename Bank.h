@@ -14,5 +14,5 @@ typedef struct {
 } Bank;
 
 void createBank(Bank* b);
-void addNewBranch(Bank* bank, Branch* branch);
+void createNewBranch(Bank* bank, Branch* branch);
 #endif // Bank_H

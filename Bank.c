@@ -23,7 +23,6 @@ void createNewBranch(Bank* bank, Branch* branch) {
     Branch* temp = NULL;
     temp = (Branch*)realloc(bank->branches, (bank->branchCount + 1) * sizeof(Branch));
     if (temp != NULL) {
-        // Update the manager's suppliers array and count
         bank->branches = temp;
         branch->branchID = bank->branchCount;
         bank->branches[bank->branchCount] = *branch;

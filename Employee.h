@@ -7,5 +7,6 @@ typedef struct {
     char name[50];
     char position[50];
 } Employee;
-
+void createEmployee(Employee* employee);
+void showEmployee(Employee employee);
 #endif // !Employee_H

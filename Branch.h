@@ -13,7 +13,7 @@ typedef struct Branch {
     int employeesCount;
 } Branch;
 
-void createNewEmployee(Branch* branch, Employee* employee);
+void addEmployeeToBranch(Branch* branch, Employee* employee);
 
 void addNewCustomer(Branch* branch, Customer* customer);
 

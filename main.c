@@ -54,21 +54,29 @@ void printSubTypes();
 
 void addNewBranch(Bank* bank, Branch* branch) {
     printf("enter name (the name will be 50 words): ");
-
-    fgets(branch->name, 50, stdin); //why does it skip it
+    fgets(branch->name, 50, stdin); 
     branch->name[strcspn(branch->name, "\n")] = '\0';
     createNewBranch(bank, branch);
 }
     
 
 
-void addNewEmployee(Bank* bank) {
-
+void addNewEmployee(Bank* bank,Employee* employee) {
+    int index;
     printf("all bank branches:\n");
     for (int i = 0; i < bank->branchCount; i++) {
         printf("[%d] branch: %s \n", i, bank->branches[i].name);
     }
     printf("\nplease chose the branch you want to add employee:");
+    scanf("%d", &index);
+    if (index<0 && index>bank->branchCount-1){
+        printf("bad input, return to the menu");
+        return;
+    }
+    clearInputBuffer();
+    createEmployee(employee);
+    addEmployeeToBranch(&bank->branches[index], employee);
+    showEmployee(bank->branches[index].employees[0]);
 }
 
     void addNewCustomer(Bank * bank);
@@ -108,6 +116,7 @@ void addNewEmployee(Bank* bank) {
         Bank bank = { 111,NULL,0,0 };
         Branch branch = { 0,"",NULL,NULL,0,0 };
         Customer customer;
+        Employee employee;
 
         // Display the menu
         displayMenu();
@@ -147,7 +156,7 @@ void addNewEmployee(Bank* bank) {
                 break;
 
             case 7:
-                addNewEmployee(&bank);
+                addNewEmployee(&bank,&employee);
                 break;
                 /*
             case 8:

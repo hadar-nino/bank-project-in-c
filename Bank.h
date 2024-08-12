@@ -13,5 +13,6 @@ typedef struct {
     int numberOfEmployee;
 } Bank;
 
+void createBank(Bank* b);
 void addNewBranch(Bank* bank, Branch* branch);
 #endif // Bank_H

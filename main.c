@@ -8,6 +8,7 @@
 #include "Branch.h"
 #include "Loan.h"
 #include "Customer.h"
+#include "Branch.h"
 
 void test() {
 
@@ -28,13 +29,126 @@ void test() {
 	printList(c1);
 }
 
+void test2(Bank* bank) {
+	createBank(bank);
+
+}
+#include <stdio.h>
+
+// Function prototypes
+void sortBranchByType(Branch* branch, int type);
+
+void searchBranchByType(Branch* branch, int type);
+
+void loadTextFile(Bank* bank);
+
+void readTextFile(Bank* bank);
+
+void printSubTypes();
+
+void addNewBranch(Bank* bank) {
+    
+}
+
+void addNewEmployee(Bank* bank);
+
+void addNewCustomer(Bank* bank);
+
+void updateCustomer(Bank* bank);
+
+
+void loadBinaryFileOfEmploye(Bank* bank);
+
+void readBinaryFileOfEmploye(Bank* bank);
+
+Customer* richestCustomer(Branch* branch);
+
+Customer* mostLoansCustomer(Branch* branch);
+
+void displayMenu() {
+    printf("Please choose an option:\n"
+        "[1] Sort branches by type\n"
+        "[2] Search branches by type\n"
+        "[3] Load text file\n"
+        "[4] Read text file\n"
+        "[5] Print subtypes\n"
+        "[6] Add new branch\n"
+        "[7] Add new employee\n"
+        "[8] Add new customer\n"
+        "[9] Update customer\n"
+        "[10] Load binary file of employees\n"
+        "[11] Read binary file of employees\n"
+        "[12] Find richest customer\n"
+        "[13] Find customer with most loans\n"
+        "[0] Exit\n");
+}
+
 int main() {
-	Bank bank = { 0,NULL,0,0 };
-	int s;
+    int choice;
+    Bank bank;
+    Branch branch;
+    Customer customer;
 
-	test();
+    // Display the menu
+    displayMenu();
 
-	free(bank.branches);
-	printf("fix");
-	return 0;
+    // Get user choice
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+    
+    // Process the choice
+    switch (choice) {
+    case 1:
+        // Call function to sort branches by type
+        // Example: sortBranchByType(&branch, type);
+        break;
+    case 2:
+        // Call function to search branches by type
+        // Example: searchBranchByType(&branch, type);
+        break;
+    case 3:
+        // Call function to load a text file
+        // Example: loadTextFile(&bank);
+        break;
+    case 4:
+        // Call function to read a text file
+        // Example: readTextFile(&bank);
+        break;
+    case 5:
+        printSubTypes();
+        break;
+    case 6:
+        addNewBranch(&bank);
+        break;
+    case 7:
+        addNewEmployee(&branch);
+        break;
+    case 8:
+        addNewCustomer(&branch);
+        break;
+    case 9:
+        updateCustomer(&customer);
+        break;
+    case 10:
+        loadBinaryFileOfEmploye(&bank);
+        break;
+    case 11:
+        readBinaryFileOfEmploye(&bank);
+        break;
+    case 12:
+        richestCustomer(&branch);
+        break;
+    case 13:
+        mostLoansCustomer(&branch);
+        break;
+    case 0:
+        printf("Exiting...\n");
+        break;
+    default:
+        printf("Invalid choice. Please try again.\n");
+        break;
+    }
+    
+
+    return 0;
 }

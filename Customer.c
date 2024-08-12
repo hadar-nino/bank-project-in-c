@@ -9,12 +9,15 @@
 #include"CreditCard.h"
 #include"Customer.h"
 
+void createCustomer(Customer* customer) {
+    scanf("enter name (the name will be 100 words)");
+    fgets(customer->name, 100, stdin);
+    customer->name[strcspn(customer->name, "\n")] = '\0';
+    
+}
+
 // Function implementations
 void init(Customer * customer) {
-    if (customer->headOfLoan.key == NULL) {
-        printf("No list to initialize");
-        return;
-    }
     customer->headOfLoan.next = NULL;
     customer->headOfLoan.key = NULL;
 }

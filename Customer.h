@@ -17,11 +17,11 @@ typedef struct Customer {
     int customerID;
     char name[100]; // Allocating enough space for the name
     char address[100];
-    Account* accounts; // Array of Account structures
-    int accountCount;
-    CreditCard* creditCards; // Array of CreditCard structures
-    int creditCardCount;
+    Account account;
+    CreditCard* creditCard; 
 } Customer;
+
+void createCustomer(Customer* customer);
 
 void freeCustomer(Customer* customer);
 void init(Customer* customer);

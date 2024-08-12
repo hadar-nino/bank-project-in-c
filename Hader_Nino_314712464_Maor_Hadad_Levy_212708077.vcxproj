@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Account.c" />
     <ClCompile Include="Bank.c" />
     <ClCompile Include="Branch.c" />
     <ClCompile Include="Customer.c" />

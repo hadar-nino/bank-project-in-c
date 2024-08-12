@@ -6,7 +6,21 @@
 #include <string.h>
 #include "Branch.h"
 
-
+void addNewEmployee(Branch* branch, Employee* employee) {
+    Employee* temp = NULL;
+    temp = (Employee*)realloc(branch->employees, (branch->employeesCount + 1) * sizeof(Employee));
+    if (temp != NULL) {
+        // Update the manager's suppliers array and count
+        branch->employees = temp;
+        employee->employeeID = branch->employeesCount;
+        branch->employees[branch->employeesCount] = *employee;
+        branch->employeesCount++;
+        printf("the supplier added successfully\n");
+    }
+    else {
+        printf("Memory allocation failed\n");
+    }
+}
 
 void addNewCustomer( Branch* branch,Customer* customer) {
     Customer* temp = NULL;
@@ -14,6 +28,7 @@ void addNewCustomer( Branch* branch,Customer* customer) {
     if (temp != NULL) {
         // Update the manager's suppliers array and count
         branch->customers = temp;
+        customer->customerID = branch->customerCount;
         branch->customers[branch->customerCount] = *customer;
         branch->customerCount++;
         printf("the supplier added successfully\n");

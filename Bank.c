@@ -7,6 +7,17 @@
 #include "Bank.h"
 #include "Branch.h"
 
+void createBank(Bank* b) {
+    int num;
+    printf("plaese enter bank id: ");
+    scanf("%d", &num);
+    while (num<0){
+        printf("the id number need to be positive, please enter again: ");
+        scanf("%d", &num);
+    }
+    b->bankID = num;
+
+}
 
 void addNewBranch(Bank* bank, Branch* branch) {
     Branch* temp = NULL;
@@ -14,6 +25,7 @@ void addNewBranch(Bank* bank, Branch* branch) {
     if (temp != NULL) {
         // Update the manager's suppliers array and count
         bank->branches = temp;
+        branch->branchID = bank->branchCount;
         bank->branches[bank->branchCount] = *branch;
         bank->branchCount++;
         printf("the supplier added successfully\n");

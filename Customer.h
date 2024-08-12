@@ -23,8 +23,10 @@ typedef struct Customer {
     int creditCardCount;
 } Customer;
 
-void freeSupermarketManager(Customer* customer);
-void L_init(Customer* customer);
+void freeCustomer(Customer* customer);
+void init(Customer* customer);
+NODE* addLoan(Customer* customer, Loan* loan);
+void printList(Customer customer);
 
 
 #endif // !Customer_H

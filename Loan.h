@@ -9,4 +9,6 @@ typedef struct {
     char endDate[11];
 } Loan;
 
+showLoan(Loan* l);
+
 #endif // !Loan_H

@@ -10,7 +10,7 @@
 #include"Customer.h"
 
 // Function implementations
-void L_init(Customer * customer) {
+void init(Customer * customer) {
     if (customer->headOfLoan.key == NULL) {
         printf("No list to initialize");
         return;
@@ -19,7 +19,7 @@ void L_init(Customer * customer) {
     customer->headOfLoan.key = NULL;
 }
 
-void freeSupermarketManager(Customer* customer) {
+void freeCustomer(Customer* customer) {
     NODE* current = customer->headOfLoan.next; // Start from the first node
     NODE* next;
 
@@ -33,20 +33,17 @@ void freeSupermarketManager(Customer* customer) {
     customer->headOfLoan.next = NULL; // Reset the list head to indicate it's empty
 }
 
-/*
-NODE* addSupermarket(Customer* customer, Loan* loan) {
+
+NODE* addLoan(Customer* customer, Loan* loan) {
     NODE* tmp;
     NODE* current;
     if (!customer) return NULL;
     tmp = (NODE*)malloc(sizeof(NODE)); // new node
-    tmp->key = (Loan*)malloc(sizeof(Loan));
-    strcpy(tmp->key->name, loan->name);
-    strcpy(tmp->key->addresss, loan->addresss);
-    tmp->key->code = loan->code;
     if (tmp != NULL) {
-        // Find the correct position to insert alphabetically by name
-        current = &customer->head;
-        while (current->next != NULL && _stricmp(current->next->key->name, loan->name) < 0) {
+        tmp->key = (Loan*)malloc(sizeof(Loan));
+        memcpy(tmp->key, loan, sizeof(Loan));
+        current = &customer->headOfLoan;
+        while (current->next != NULL) {
             current = current->next;
         }
         // Insert the new node
@@ -56,4 +53,12 @@ NODE* addSupermarket(Customer* customer, Loan* loan) {
     return tmp;
 }
 
-*/
+void printList(Customer customer) {
+    NODE* current = &customer.headOfLoan;
+    if (current->next ==NULL)
+        printf("the list is empty");
+    while (current->next != NULL) {
+        showLoan(current->next->key);
+        current = current->next;
+    }
+}

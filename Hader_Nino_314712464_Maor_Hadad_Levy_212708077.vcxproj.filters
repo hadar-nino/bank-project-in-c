@@ -27,6 +27,9 @@
     <ClCompile Include="Customer.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Loan.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bank.h">

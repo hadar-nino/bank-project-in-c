@@ -130,6 +130,7 @@
     <ClCompile Include="Bank.c" />
     <ClCompile Include="Branch.c" />
     <ClCompile Include="Customer.c" />
+    <ClCompile Include="Loan.c" />
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>

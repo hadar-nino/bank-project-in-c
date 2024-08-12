@@ -10,7 +10,7 @@
 #include"Customer.h"
 
 void createCustomer(Customer* customer) {
-    scanf("enter name (the name will be 100 words)");
+    printf("enter name (the name will be 100 words)");
     fgets(customer->name, 100, stdin);
     customer->name[strcspn(customer->name, "\n")] = '\0';
     

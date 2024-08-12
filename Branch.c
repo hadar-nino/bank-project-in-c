@@ -6,7 +6,7 @@
 #include <string.h>
 #include "Branch.h"
 
-void addNewEmployee(Branch* branch, Employee* employee) {
+void createNewEmployee(Branch* branch, Employee* employee) {
     Employee* temp = NULL;
     temp = (Employee*)realloc(branch->employees, (branch->employeesCount + 1) * sizeof(Employee));
     if (temp != NULL) {

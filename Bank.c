@@ -28,7 +28,7 @@ void createNewBranch(Bank* bank, Branch* branch) {
         branch->branchID = bank->branchCount;
         bank->branches[bank->branchCount] = *branch;
         bank->branchCount++;
-        printf("the supplier added successfully\n");
+        printf("the branch added successfully\n");
     }
     else {
         printf("Memory allocation failed\n");

@@ -9,6 +9,12 @@
 #include "Loan.h"
 #include "Customer.h"
 #include "Branch.h"
+#include "Employee.h"
+
+void clearInputBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
 
 void test() {
 
@@ -46,116 +52,133 @@ void readTextFile(Bank* bank);
 
 void printSubTypes();
 
-void addNewBranch(Bank* bank,Branch* branch) {
-    scanf("enter name (the name will be 100 words)");
-    fgets(branch->name, 50, stdin);
+void addNewBranch(Bank* bank, Branch* branch) {
+    printf("enter name (the name will be 50 words): ");
+
+    fgets(branch->name, 50, stdin); //why does it skip it
     branch->name[strcspn(branch->name, "\n")] = '\0';
     createNewBranch(bank, branch);
-    printf("%s", bank->branches[bank->branchCount].name);
 }
-
-void addNewEmployee(Bank* bank);
-
-void addNewCustomer(Bank* bank);
-
-void updateCustomer(Bank* bank);
-
-
-void loadBinaryFileOfEmploye(Bank* bank);
-
-void readBinaryFileOfEmploye(Bank* bank);
-
-Customer* richestCustomer(Branch* branch);
-
-Customer* mostLoansCustomer(Branch* branch);
-
-void displayMenu() {
-    printf("Please choose an option:\n"
-        "[1] Sort branches by type\n"
-        "[2] Search branches by type\n"
-        "[3] Load text file\n"
-        "[4] Read text file\n"
-        "[5] Print subtypes\n"
-        "[6] Add new branch\n"
-        "[7] Add new employee\n"
-        "[8] Add new customer\n"
-        "[9] Update customer\n"
-        "[10] Load binary file of employees\n"
-        "[11] Read binary file of employees\n"
-        "[12] Find richest customer\n"
-        "[13] Find customer with most loans\n"
-        "[0] Exit\n");
-}
-int main() {
-    int choice;
-    Bank bank;
-    Branch branch = {0,"",NULL,NULL,0,0};
-    Customer customer;
-
-    // Display the menu
-    displayMenu();
-
-    // Get user choice
-    printf("Enter your choice: ");
-    scanf("%d", &choice);
     
-    // Process the choice
-    switch (choice) {
-    /*
-    case 1:
-        // Call function to sort branches by type
-        // Example: sortBranchByType(&branch, type);
-        break;
-    case 2:
-        // Call function to search branches by type
-        // Example: searchBranchByType(&branch, type);
-        break;
-    case 3:
-        // Call function to load a text file
-        // Example: loadTextFile(&bank);
-        break;
-    case 4:
-        // Call function to read a text file
-        // Example: readTextFile(&bank);
-        break;
-    case 5:
-        printSubTypes();
-        break;
-        */
-    case 6:
-        addNewBranch(&bank,&branch);        
-        break;
-        /*
-    case 7:
-        addNewEmployee(&branch);
-        break;
-    case 8:
-        addNewCustomer(&branch);
-        break;
-    case 9:
-        updateCustomer(&customer);
-        break;
-    case 10:
-        loadBinaryFileOfEmploye(&bank);
-        break;
-    case 11:
-        readBinaryFileOfEmploye(&bank);
-        break;
-    case 12:
-        richestCustomer(&branch);
-        break;
-    case 13:
-        mostLoansCustomer(&branch);
-        break;
-        */
-    case 0:
-        printf("Exiting...\n");
-        break;
-    default:
-        printf("Invalid choice. Please try again.\n");
-        break;
+
+
+void addNewEmployee(Bank* bank) {
+
+    printf("all bank branches:\n");
+    for (int i = 0; i < bank->branchCount; i++) {
+        printf("[%d] branch: %s \n", i, bank->branches[i].name);
     }
-    
-
-    return 0;
+    printf("\nplease chose the branch you want to add employee:");
 }
+
+    void addNewCustomer(Bank * bank);
+
+    void updateCustomer(Bank * bank);
+
+
+    void loadBinaryFileOfEmploye(Bank * bank);
+
+    void readBinaryFileOfEmploye(Bank * bank);
+
+    Customer* richestCustomer(Branch * branch);
+
+    Customer* mostLoansCustomer(Branch * branch);
+
+    void displayMenu() {
+        printf("Please choose an option:\n"
+            "[1] Sort branches by type\n"
+            "[2] Search branches by type\n"
+            "[3] Load text file\n"
+            "[4] Read text file\n"
+            "[5] Print subtypes\n"
+            "[6] Add new branch\n"
+            "[7] Add new employee\n"
+            "[8] Add new customer\n"
+            "[9] Update customer\n"
+            "[10] Load binary file of employees\n"
+            "[11] Read binary file of employees\n"
+            "[12] Find richest customer\n"
+            "[13] Find customer with most loans\n"
+            "[0] Exit\n");
+    }
+
+
+    int main() {
+        int choice = 10;
+        Bank bank = { 111,NULL,0,0 };
+        Branch branch = { 0,"",NULL,NULL,0,0 };
+        Customer customer;
+
+        // Display the menu
+        displayMenu();
+
+        // Get user choice
+
+
+        while (choice != 0) {
+            printf("\nEnter your choice: ");
+            scanf("%d", &choice);
+        clearInputBuffer();
+
+            switch (choice) {
+                /*
+                case 1:
+                    // Call function to sort branches by type
+                    // Example: sortBranchByType(&branch, type);
+                    break;
+                case 2:
+                    // Call function to search branches by type
+                    // Example: searchBranchByType(&branch, type);
+                    break;
+                case 3:
+                    // Call function to load a text file
+                    // Example: loadTextFile(&bank);
+                    break;
+                case 4:
+                    // Call function to read a text file
+                    // Example: readTextFile(&bank);
+                    break;
+                case 5:
+                    printSubTypes();
+                    break;
+                    */
+            case 6:
+                addNewBranch(&bank, &branch);
+                break;
+
+            case 7:
+                addNewEmployee(&bank);
+                break;
+                /*
+            case 8:
+                addNewCustomer(&branch);
+                break;
+            case 9:
+                updateCustomer(&customer);
+                break;
+            case 10:
+                loadBinaryFileOfEmploye(&bank);
+                break;
+            case 11:
+                readBinaryFileOfEmploye(&bank);
+                break;
+            case 12:
+                richestCustomer(&branch);
+                break;
+            case 13:
+                mostLoansCustomer(&branch);
+                break;
+                */
+            case 0:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+                break;
+            }
+        }
+
+        return 0;
+    }
+
+

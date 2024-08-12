@@ -15,6 +15,6 @@ typedef struct Branch {
 
 void addEmployeeToBranch(Branch* branch, Employee* employee);
 
-void addNewCustomer(Branch* branch, Customer* customer);
+void addCustomerToBranch(Branch* branch, Customer* customer);
 
 #endif // Branch_H

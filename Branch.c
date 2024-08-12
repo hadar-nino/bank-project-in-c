@@ -22,7 +22,7 @@ void addEmployeeToBranch(Branch* branch, Employee* employee) {
     }
 }
 
-void addNewCustomer( Branch* branch,Customer* customer) {
+void addCustomerToBranch( Branch* branch,Customer* customer) {
     Customer* temp = NULL;
     temp = (Customer*)realloc(branch->customers, (branch->customerCount+ 1) * sizeof(Customer));
     if (temp != NULL) {

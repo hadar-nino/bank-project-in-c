@@ -10,10 +10,12 @@
 #include"Customer.h"
 
 void createCustomer(Customer* customer) {
-    printf("enter name (the name will be 100 words)");
+    printf("enter name (the name will be 100 words): ");
     fgets(customer->name, 100, stdin);
     customer->name[strcspn(customer->name, "\n")] = '\0';
-    
+    printf("enter address (the name will be 100 words): ");
+    fgets(customer->address, 100, stdin);
+    customer->address[strcspn(customer->address, "\n")] = '\0';
 }
 
 // Function implementations

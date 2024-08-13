@@ -12,13 +12,13 @@ typedef struct node {
 } NODE;
 
 typedef struct Customer {
-
+    Account account;
+    CreditCard* creditCard;
     NODE headOfLoan; // Linked list of loans
     int customerID;
     char name[100]; // Allocating enough space for the name
     char address[100];
-    Account account;
-    CreditCard* creditCard; 
+
 } Customer;
 
 void createCustomer(Customer* customer);

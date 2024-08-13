@@ -4,10 +4,10 @@
 #include"Transaction.h"
 
 typedef struct {
-    int accountNumber;
     float balance;
     Transaction** transactions; // Array of pointers to transactions
     int transactionCount;
 } Account;
+void updateAccount(Account* account);
 
 #endif // !Account_H

@@ -10,6 +10,8 @@
 #include "Customer.h"
 #include "Branch.h"
 #include "Employee.h"
+#include "CreditCard.h"
+#include"Account.h"
 
 void clearInputBuffer() {
     int c;
@@ -24,7 +26,7 @@ void test() {
     Loan loan4 = { 1004, 10000.00f, 4.0f, "2024-04-20", "2027-04-20" };
     Loan loan5 = { 1005, 15000.00f, 3.9f, "2024-05-30", "2028-05-30" };
 
-    Customer c1 = { NULL,0,"","",NULL,0,NULL,0 };
+    Customer c1 = { 0,NULL,NULL,NULL,0,"","" };
     Customer* c = &c1;
     init(c);
     addLoan(c, &loan1);
@@ -35,11 +37,12 @@ void test() {
     printList(c1);
 }
 
-void test2(Bank* bank) {
-    createBank(bank);
-
+void test2(Account* a) {
+    for (int i = 0; i < 10; i++) {
+        updateAccount(a);
+        printf("%f", a->balance);
+    }
 }
-#include <stdio.h>
 
 // Function prototypes
 void sortBranchByType(Branch* branch, int type);
@@ -58,8 +61,6 @@ void addNewBranch(Bank* bank, Branch* branch) {
     branch->name[strcspn(branch->name, "\n")] = '\0';
     createNewBranch(bank, branch);
 }
-
-
 
 void addNewEmployee(Bank* bank, Employee* employee) {
     int index;
@@ -119,11 +120,6 @@ void updateCustomer(Bank* bank) {
         printf("bad input, return to the menu");
         return;
     }
-
-
-
-
-
     if (bank->branches[index].customerCount == 0) {
         printf("the branch has no customer please add first in the mnue");
         return;
@@ -137,10 +133,8 @@ void updateCustomer(Bank* bank) {
     if (index2<0 && index2>bank->branches[index].customerCount - 1) {
         printf("bad input, return to the menu");
         return;
-    }
+    }    
 
-
-    
 }
 
 
@@ -172,11 +166,16 @@ void displayMenu() {
 
 
 int main() {
-    int choice = 10;
+    CreditCard creditCard;
+    Account account = { 0,NULL,0 };
+    int choice = 1;
     Bank bank = { 111,NULL,0,0 };
     Branch branch = { 0,"",NULL,NULL,0,0 };
-    Customer customer;
+    Customer customer = { account,&creditCard };
     Employee employee;
+
+    test2(&account);
+
     // Display the menu
     displayMenu();
     // Get user choice

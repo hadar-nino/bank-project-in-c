@@ -109,51 +109,53 @@ Loan* createLoan() {
 
 
 void updateCustomer1(Customer* customer) {
-    int choice;
+    int choice=0;
+    while (choice != 9)
+    {
+        printf("Update Customer\n"
+            "[0] Update name\n"
+            "[1] Update address\n"
+            "[2] Create new transaction\n"
+            "[3] Create new loan\n"
+            "[4] Update credit card\n"
+            "Enter your choice: ");
+        scanf("%d", &choice);
+        clearInputBuffer();
+        switch (choice) {
+        case 0:
+            // Update name
+            printf("enter name (the name will be 100 words): ");
+            fgets(customer->name, 100, stdin);
+            customer->name[strcspn(customer->name, "\n")] = '\0';
+            printf("Customer name updated to: %s\n", customer->name);
+            break;
 
-    printf("Update Customer\n"
-        "[0] Update name\n"
-        "[1] Update address\n"
-        "[2] Create new transaction\n"
-        "[3] Create new loan\n"
-        "[4] Update credit card\n"
-        "Enter your choice: ");
-    scanf("%d", &choice);
-    clearInputBuffer();
-    switch (choice) {
-    case 0:
-        // Update name
-        printf("enter name (the name will be 100 words): ");
-        fgets(customer->name, 100, stdin);
-        customer->name[strcspn(customer->name, "\n")] = '\0';
-        printf("Customer name updated to: %s\n", customer->name);
-        break;
+        case 1:
+            // Update address
+            printf("enter address (the address will be 100 words): ");
+            fgets(customer->address, 100, stdin);
+            customer->address[strcspn(customer->address, "\n")] = '\0';
+            printf("Customer address updated to: %s\n", customer->address);
+            break;
 
-    case 1:
-        // Update address
-        printf("enter address (the name will be 100 words): ");
-        fgets(customer->address, 100, stdin);
-        customer->address[strcspn(customer->address, "\n")] = '\0';
-        printf("Customer address updated to: %s\n", customer->address);
-        break;
+        case 2:
+            updateAccount(&customer->account);
+            break;
 
-    case 2:
-            updateAccount(&customer->account);    
-        break;
+        case 3:
+            // Create new loan
+            printf("Creating new loan for customer %s\n", customer->name);
+            addLoan(customer, createLoan());
+            break;
 
-    case 3:
-        // Create new loan
-        printf("Creating new loan for customer %s\n", customer->name);
-        addLoan(customer,createLoan()); 
-        break;
+        case 4:
 
-    case 4:
-   
-        break;
+            break;
 
-    default:
-        printf("Bad input, returning to the main menu.\n");
-        return;
+        default:
+            printf("Bad input, returning to the main menu.\n");
+            return;
+        }
+        showCustomer(customer);
     }
-    showCustomer(customer);
 }

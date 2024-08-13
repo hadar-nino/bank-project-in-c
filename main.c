@@ -134,7 +134,7 @@ void updateCustomer(Bank* bank) {
         printf("bad input, return to the menu");
         return;
     }      
-    updateCustomer(&bank->branches[index].customers[index2]);
+    updateCustomer1(&bank->branches[index].customers[index2]);
 }
 
 
@@ -174,12 +174,10 @@ int main() {
     Customer customer = { account,&creditCard };
     Employee employee;
 
-    // Display the menu
-    displayMenu();
-    // Get user choice
     while (choice != 0) {
+        displayMenu();    // Display the menu
         printf("\nEnter your choice: ");
-        scanf("%d", &choice);
+        scanf("%d", &choice);    // Get user choice
         clearInputBuffer();
         switch (choice) {
             /*

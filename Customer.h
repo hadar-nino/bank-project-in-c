@@ -20,9 +20,10 @@ typedef struct Customer {
     char address[100];
 
 } Customer;
+void updateCustomer1(Customer* customer);
 
 void createCustomer(Customer* customer);
-
+void showCustomer(Customer* customer);
 void freeCustomer(Customer* customer);
 void init(Customer* customer);
 NODE* addLoan(Customer* customer, Loan* loan);

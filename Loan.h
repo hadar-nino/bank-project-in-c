@@ -2,7 +2,6 @@
 #define Loan_H
 
 typedef struct {
-    int loanID;
     float amount;
     float interestRate;
     char startDate[11];

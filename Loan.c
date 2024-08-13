@@ -10,5 +10,5 @@
 #include"Customer.h"
 
 showLoan(Loan *l) {
-	printf("%d, %f, %f, %s, %s\n", l->loanID, l->amount, l->interestRate, l->startDate, l->endDate);
+	printf("%f, %f, %s, %s\n", l->amount, l->interestRate, l->startDate, l->endDate);
 }

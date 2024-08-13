@@ -55,6 +55,7 @@ NODE* addLoan(Customer* customer, Loan* loan) {
         tmp->next = current->next;
         current->next = tmp;
     }
+    customer->account.balance += loan->amount;
     return tmp;
 }
 
@@ -66,4 +67,93 @@ void printList(Customer customer) {
         showLoan(current->next->key);
         current = current->next;
     }
+}
+
+void showCustomer(Customer* customer) {
+    printf("Customer name: %s, ",customer->name);
+    printf("Customer id: %d, ", customer->customerID);
+    printf("Customer balance: %f, ", customer->account.balance);
+    printf("Customer address: %s", customer->address);
+}
+
+Loan* createLoan() {
+    float amount, interestRate;
+    Loan* temp = malloc(sizeof(Loan));    // Allocate memory for the new Loan
+    if (temp == NULL) {
+        printf("Memory allocation failed\n");
+        return NULL;
+    }
+    printf("Please enter loan amount: ");
+    scanf("%f", &amount);
+    while (amount <= 0) {
+        printf("The loan amount needs to be greater than zero. Please enter again: ");
+        scanf("%f", &amount);
+    }
+    temp->amount = amount;
+    printf("Please enter loan interest rate: ");
+    scanf("%f", &interestRate);
+    while (interestRate < 0) {
+        printf("The loan interest rate needs to be greater than or equal to zero. Please enter again: ");
+        scanf("%f", &interestRate);
+    }
+    temp->interestRate = interestRate;
+    clearInputBuffer();
+    printf("Enter start date (format: YYYY-MM-DD): ");
+    fgets(temp->startDate, sizeof(temp->startDate), stdin);
+    temp->startDate[strcspn(temp->startDate, "\n")] = '\0';
+   printf("Enter end date (format: YYYY-MM-DD): ");
+    fgets(temp->endDate, sizeof(temp->endDate), stdin);
+    temp->endDate[strcspn(temp->endDate, "\n")] = '\0';
+    return temp;
+}
+
+
+void updateCustomer1(Customer* customer) {
+    int choice;
+
+    printf("Update Customer\n"
+        "[0] Update name\n"
+        "[1] Update address\n"
+        "[2] Create new transaction\n"
+        "[3] Create new loan\n"
+        "[4] Update credit card\n"
+        "Enter your choice: ");
+    scanf("%d", &choice);
+    clearInputBuffer();
+    switch (choice) {
+    case 0:
+        // Update name
+        printf("enter name (the name will be 100 words): ");
+        fgets(customer->name, 100, stdin);
+        customer->name[strcspn(customer->name, "\n")] = '\0';
+        printf("Customer name updated to: %s\n", customer->name);
+        break;
+
+    case 1:
+        // Update address
+        printf("enter address (the name will be 100 words): ");
+        fgets(customer->address, 100, stdin);
+        customer->address[strcspn(customer->address, "\n")] = '\0';
+        printf("Customer address updated to: %s\n", customer->address);
+        break;
+
+    case 2:
+            updateAccount(&customer->account);    
+        break;
+
+    case 3:
+        // Create new loan
+        printf("Creating new loan for customer %s\n", customer->name);
+        addLoan(customer,createLoan()); 
+        break;
+
+    case 4:
+   
+        break;
+
+    default:
+        printf("Bad input, returning to the main menu.\n");
+        return;
+    }
+    showCustomer(customer);
 }

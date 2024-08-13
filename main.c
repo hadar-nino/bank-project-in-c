@@ -20,11 +20,11 @@ void clearInputBuffer() {
 
 void test() {
 
-    Loan loan1 = { 1001, 5000.00f, 3.5f, "2024-01-01", "2025-01-01" };
-    Loan loan2 = { 1002, 12000.00f, 4.2f, "2024-02-15", "2026-02-15" };
-    Loan loan3 = { 1003, 7500.00f, 3.8f, "2024-03-10", "2025-03-10" };
-    Loan loan4 = { 1004, 10000.00f, 4.0f, "2024-04-20", "2027-04-20" };
-    Loan loan5 = { 1005, 15000.00f, 3.9f, "2024-05-30", "2028-05-30" };
+    Loan loan1 = {5000.00f, 3.5f, "2024-01-01", "2025-01-01" };
+    Loan loan2 = {12000.00f, 4.2f, "2024-02-15", "2026-02-15" };
+    Loan loan3 = {7500.00f, 3.8f, "2024-03-10", "2025-03-10" };
+    Loan loan4 = {10000.00f, 4.0f, "2024-04-20", "2027-04-20" };
+    Loan loan5 = { 15000.00f, 3.9f, "2024-05-30", "2028-05-30" };
 
     Customer c1 = { 0,NULL,NULL,NULL,0,"","" };
     Customer* c = &c1;
@@ -133,8 +133,8 @@ void updateCustomer(Bank* bank) {
     if (index2<0 && index2>bank->branches[index].customerCount - 1) {
         printf("bad input, return to the menu");
         return;
-    }    
-
+    }      
+    updateCustomer(&bank->branches[index].customers[index2]);
 }
 
 
@@ -173,8 +173,6 @@ int main() {
     Branch branch = { 0,"",NULL,NULL,0,0 };
     Customer customer = { account,&creditCard };
     Employee employee;
-
-    test2(&account);
 
     // Display the menu
     displayMenu();

@@ -74,7 +74,7 @@ void addNewEmployee(Bank* bank, Employee* employee) {
     }
     printf("\nplease chose the branch you want to add employee:");
     scanf("%d", &index);
-    if (index<0 && index>bank->branchCount - 1) {
+    if (index<0 || index>bank->branchCount - 1) {
         printf("bad input, return to the menu");
         return;
     }
@@ -95,7 +95,7 @@ void addNewCustomer(Bank* bank, Customer* customer) {
     }
     printf("\nplease chose the branch you want to add customer:");
     scanf("%d", &index);
-    if (index<0 && index>bank->branchCount - 1) {
+    if (index<0 || index>bank->branchCount - 1) {
         printf("bad input, return to the menu");
         return;
     }
@@ -116,7 +116,7 @@ void updateCustomer(Bank* bank) {
     }
     printf("\nplease chose the branch you want to update a customer:");
     scanf("%d", &index);
-    if (index<0 && index>bank->branchCount - 1) {
+    if (index<0 || index>bank->branchCount - 1) {
         printf("bad input, return to the menu");
         return;
     }
@@ -130,7 +130,7 @@ void updateCustomer(Bank* bank) {
     }
     printf("\nplease chose the customer you want to update:");
     scanf("%d", &index2);
-    if (index2<0 && index2>bank->branches[index].customerCount - 1) {
+    if (index2<0 || index2>bank->branches[index].customerCount - 1) {
         printf("bad input, return to the menu");
         return;
     }      

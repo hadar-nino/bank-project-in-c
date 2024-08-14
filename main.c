@@ -13,28 +13,52 @@
 #include "CreditCard.h"
 #include"Account.h"
 
+#include "Bank.h"
+
+void test(Bank* bank) {
+    // Initialize bank's branch count
+    bank->branchCount = 4;
+
+    // Allocate memory for the branches
+    bank->branches = (Branch*)malloc(bank->branchCount * sizeof(Branch));
+    if (bank->branches == NULL) {
+        printf("Memory allocation failed for branches.\n");
+        return;
+    }
+
+    // Iterate through each branch
+    for (int i = 0; i < bank->branchCount; i++) {
+        // Assign branch ID and name
+        bank->branches[i].branchID = i + 1;
+        sprintf(bank->branches[i].name, "Branch %d", i + 1);
+
+        // Initialize customer count for the branch
+        bank->branches[i].customerCount = 5;
+
+        // Allocate memory for the customers in the branch
+        bank->branches[i].customers = (Customer*)malloc(bank->branches[i].customerCount * sizeof(Customer));
+        if (bank->branches[i].customers == NULL) {
+            printf("Memory allocation failed for customers in branch %d.\n", i + 1);
+            return;
+        }
+
+        // Iterate through each customer in the branch
+        for (int j = 0; j < bank->branches[i].customerCount; j++) {
+            // Assign customer ID, name, and address
+            bank->branches[i].customers[j].customerID = j + 1;
+            sprintf(bank->branches[i].customers[j].name, "Customer %d-%d", i + 1, j + 1);
+            sprintf(bank->branches[i].customers[j].address, "Address %d-%d", i + 1, j + 1);
+
+            // Initialize loan count and linked list head for loans
+            bank->branches[i].customers[j].loanCount = 0;
+            init(&bank->branches[i].customers[j]); // Initialize the linked list head for loans
+        }
+    }
+}
+
 void clearInputBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
-}
-
-void test() {
-
-    Loan loan1 = {5000.00f, 3.5f, "2024-01-01", "2025-01-01" };
-    Loan loan2 = {12000.00f, 4.2f, "2024-02-15", "2026-02-15" };
-    Loan loan3 = {7500.00f, 3.8f, "2024-03-10", "2025-03-10" };
-    Loan loan4 = {10000.00f, 4.0f, "2024-04-20", "2027-04-20" };
-    Loan loan5 = { 15000.00f, 3.9f, "2024-05-30", "2028-05-30" };
-
-    Customer c1 = { 0,NULL,NULL,NULL,0,"","" };
-    Customer* c = &c1;
-    init(c);
-    addLoan(c, &loan1);
-    addLoan(c, &loan2);
-    addLoan(c, &loan3);
-    addLoan(c, &loan4);
-    addLoan(c, &loan5);
-    printList(c1);
 }
 
 
@@ -48,6 +72,11 @@ void loadTextFile(Bank* bank);
 void readTextFile(Bank* bank);
 
 void printSubTypes();
+
+
+void loadBinaryFileOfEmploye(Bank* bank);
+
+void readBinaryFileOfEmploye(Bank* bank);
 
 void addNewBranch(Bank* bank, Branch* branch) {
     printf("enter name (the name will be 50 words): ");
@@ -107,7 +136,7 @@ void updateCustomer(Bank* bank) {
     }
     printf("all customers in the branch:\n");
     for (int i = 0; i < bank->branches[index].customerCount; i++) {
-        printf("[%d] customer: %s \n", i, bank->branches[i].customers[i].name);
+        printf("[%d] customer: %s \n", i, bank->branches[index].customers[i].name);
     }
     printf("\nplease chose the customer you want to update:");
     scanf("%d", &index2);
@@ -118,10 +147,6 @@ void updateCustomer(Bank* bank) {
     updateCustomer1(&bank->branches[index].customers[index2]);
 }
 
-
-void loadBinaryFileOfEmploye(Bank* bank);
-
-void readBinaryFileOfEmploye(Bank* bank);
 
 Customer* richestCustomer(Bank* bank) {
     int indexBranch = 0, indexOfRichestCustomer = 0;
@@ -178,6 +203,9 @@ int main() {
     Branch branch = { 0,"",NULL,NULL,0,0 };
     Customer customer = { account,&creditCard };
     Employee employee;
+
+    test(&bank);
+    printf("%s", bank.branches[0].customers[4]);
 
     while (choice != 0) {
         displayMenu();    // Display the menu

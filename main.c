@@ -133,6 +133,7 @@ Customer* richestCustomer(Bank* bank) {
             }
         }
     }
+    showCustomer(&bank->branches[indexBranch].customers[indexOfRichestCustomer]);
     return &bank->branches[indexBranch].customers[indexOfRichestCustomer];
 }
 
@@ -146,11 +147,12 @@ Customer* mostLoansCustomer(Bank* bank) {
             }
         }
     }
+    showCustomer(&bank->branches[indexBranch].customers[mostLoansCustomer]);
     return &bank->branches[indexBranch].customers[mostLoansCustomer];
 }
 
 void displayMenu() {
-    printf("Please choose an option:\n"
+    printf("\nPlease choose an option:\n"
         "[1] Sort branches by type\n"
         "[2] Search branches by type\n"
         "[3] Load text file\n"

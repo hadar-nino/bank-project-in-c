@@ -16,6 +16,7 @@ void createCustomer(Customer* customer) {
     printf("enter address (the name will be 100 words): ");
     fgets(customer->address, 100, stdin);
     customer->address[strcspn(customer->address, "\n")] = '\0';
+    customer->loanCount = 0;
 }
 
 // Function implementations
@@ -56,6 +57,7 @@ NODE* addLoan(Customer* customer, Loan* loan) {
         current->next = tmp;
     }
     customer->account.balance += loan->amount;
+    customer->loanCount++;
     return tmp;
 }
 

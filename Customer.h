@@ -18,6 +18,7 @@ typedef struct Customer {
     int customerID;
     char name[100]; // Allocating enough space for the name
     char address[100];
+    int loanCount;
 
 } Customer;
 void updateCustomer1(Customer* customer);

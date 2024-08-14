@@ -81,10 +81,6 @@ int branchSelect(Bank* bank) {
     return index;
 }
 
-int customerSelect(Branch* branch) {
-    return 1;
-}
-
 void addNewEmployee(Bank* bank, Employee* employee) {
     int index = branchSelect(bank);
     if (index == -1) {
@@ -96,19 +92,8 @@ void addNewEmployee(Bank* bank, Employee* employee) {
 }
 
 void addNewCustomer(Bank* bank, Customer* customer) {
-    int index;
-    if (bank->branchCount == 0) {
-        printf("the bank has no branches please add first in the mnue");
-        return;
-    }
-    printf("all bank branches:\n");
-    for (int i = 0; i < bank->branchCount; i++) {
-        printf("[%d] branch: %s \n", i, bank->branches[i].name);
-    }
-    printf("\nplease chose the branch you want to add customer:");
-    scanf("%d", &index);
-    if (index<0 || index>bank->branchCount - 1) {
-        printf("bad input, return to the menu");
+    int index = branchSelect(bank);
+    if (index == -1) {
         return;
     }
     clearInputBuffer();
@@ -144,9 +129,31 @@ void loadBinaryFileOfEmploye(Bank* bank);
 
 void readBinaryFileOfEmploye(Bank* bank);
 
-Customer* richestCustomer(Branch* branch);
+Customer* richestCustomer(Bank* bank) {
+    int indexBranch = 0, indexOfRichestCustomer = 0;
+    for (int j = 0; j < bank->branchCount; j++) {
+        for (int i = 0; i < bank->branches[j].customerCount; i++) {
+            if (bank->branches[j].customers[i].account.balance > bank->branches[indexBranch].customers[indexOfRichestCustomer].account.balance) {
+                indexOfRichestCustomer = i;
+                indexBranch = j;
+            }
+        }
+    }
+    return &bank->branches[indexBranch].customers[indexOfRichestCustomer];
+}
 
-Customer* mostLoansCustomer(Branch* branch);
+Customer* mostLoansCustomer(Bank* bank) {
+    int indexBranch = 0, mostLoansCustomer = 0;
+    for (int j = 0; j < bank->branchCount; j++) {
+        for (int i = 0; i < bank->branches[j].customerCount; i++) {
+            if (bank->branches[j].customers[i].loanCount > bank->branches[indexBranch].customers[mostLoansCustomer].loanCount) {
+                mostLoansCustomer = i;
+                indexBranch = j;
+            }
+        }
+    }
+    return &bank->branches[indexBranch].customers[mostLoansCustomer];
+}
 
 void displayMenu() {
     printf("Please choose an option:\n"

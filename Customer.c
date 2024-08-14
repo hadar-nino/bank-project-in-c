@@ -76,6 +76,8 @@ void showCustomer(Customer* customer) {
     printf("Customer id: %d, ", customer->customerID);
     printf("Customer balance: %f, ", customer->account.balance);
     printf("Customer address: %s", customer->address);
+    printf("the list of all loan:\n");
+    printList(*customer);
 }
 
 Loan* createLoan() {

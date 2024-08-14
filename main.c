@@ -37,12 +37,6 @@ void test() {
     printList(c1);
 }
 
-void test2(Account* a) {
-    for (int i = 0; i < 10; i++) {
-        updateAccount(a);
-        printf("%f", a->balance);
-    }
-}
 
 // Function prototypes
 void sortBranchByType(Branch* branch, int type);
@@ -230,13 +224,14 @@ int main() {
         case 11:
             readBinaryFileOfEmploye(&bank);
             break;
+             */
         case 12:
-            richestCustomer(&branch);
+            richestCustomer(&bank);
             break;
         case 13:
-            mostLoansCustomer(&branch);
+            mostLoansCustomer(&bank);
             break;
-            */
+           
         case 0:
             printf("Exiting...\n");
             break;

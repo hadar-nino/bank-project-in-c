@@ -62,20 +62,32 @@ void addNewBranch(Bank* bank, Branch* branch) {
     createNewBranch(bank, branch);
 }
 
-void addNewEmployee(Bank* bank, Employee* employee) {
+int branchSelect(Bank* bank) {
     int index;
     if (bank->branchCount == 0) {
-        printf("the bank has no branches please add first in the mnue");
-        return;
+        printf("the bank has no branches please add first in the menu\n");
+        return -1;
     }
     printf("all bank branches:\n");
     for (int i = 0; i < bank->branchCount; i++) {
         printf("[%d] branch: %s \n", i, bank->branches[i].name);
     }
-    printf("\nplease chose the branch you want to add employee:");
+    printf("\nplease choose a branch: ");
     scanf("%d", &index);
     if (index<0 || index>bank->branchCount - 1) {
-        printf("bad input, return to the menu");
+        printf("bad input, return to the menu\n");
+        return -1;
+    }
+    return index;
+}
+
+int customerSelect(Branch* branch) {
+    return 1;
+}
+
+void addNewEmployee(Bank* bank, Employee* employee) {
+    int index = branchSelect(bank);
+    if (index == -1) {
         return;
     }
     clearInputBuffer();
@@ -105,23 +117,13 @@ void addNewCustomer(Bank* bank, Customer* customer) {
 }
 
 void updateCustomer(Bank* bank) {
-    int index,index2;
-    if (bank->branchCount == 0) {
-        printf("the bank has no customer please add first in the mnue");
+    int index = branchSelect(bank);
+    if (index==-1){
         return;
     }
-    printf("all bank branches:\n");
-    for (int i = 0; i < bank->branchCount; i++) {
-        printf("[%d] branch: %s \n", i, bank->branches[i].name);
-    }
-    printf("\nplease chose the branch you want to update a customer:");
-    scanf("%d", &index);
-    if (index<0 || index>bank->branchCount - 1) {
-        printf("bad input, return to the menu");
-        return;
-    }
+    int index2;
     if (bank->branches[index].customerCount == 0) {
-        printf("the branch has no customer please add first in the mnue");
+        printf("the branch has no customer please add first in the mnue\n");
         return;
     }
     printf("all customers in the branch:\n");
@@ -159,8 +161,8 @@ void displayMenu() {
         "[9] Update customer\n"
         "[10] Load binary file of employees\n"
         "[11] Read binary file of employees\n"
-        "[12] Find richest customer\n"
-        "[13] Find customer with most loans\n"
+        "[12] Find richest customer in branch\n"
+        "[13] Find customer with most loans in branch\n"
         "[0] Exit\n");
 }
 

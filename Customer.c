@@ -1,3 +1,4 @@
+
 #define _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_DEPRECATE  
 #define _CRT_NONSTDC_NO_DEPRECATE
@@ -17,10 +18,21 @@ void createCustomer(Customer* customer) {
     fgets(customer->address, 100, stdin);
     customer->address[strcspn(customer->address, "\n")] = '\0';
     customer->loanCount = 0;
+    createCreditCard(customer->creditCard);
 }
 
+void createCreditCard(CreditCard* creditCard) {
+    strncpy(creditCard->cardNumber, "JJ", sizeof(creditCard->cardNumber) - 1);
+    creditCard->cardNumber[sizeof(creditCard->cardNumber) - 1] = '\0'; // Ensure null-termination
+    creditCard->creditLimit = 1000;
+    creditCard->balance = 12345;
+    strncpy(creditCard->expiryDate, "HBHUB", sizeof(creditCard->expiryDate) - 1);
+    creditCard->expiryDate[sizeof(creditCard->expiryDate) - 1] = '\0'; // Ensure null-termination
+}
+
+
 // Function implementations
-void init(Customer * customer) {
+void init(Customer* customer) {
     customer->headOfLoan.next = NULL;
     customer->headOfLoan.key = NULL;
 }
@@ -35,7 +47,6 @@ void freeCustomer(Customer* customer) {
         free(current);        // Free the node itself
         current = next;       // Move to the next node
     }
-
     customer->headOfLoan.next = NULL; // Reset the list head to indicate it's empty
 }
 
@@ -63,20 +74,29 @@ NODE* addLoan(Customer* customer, Loan* loan) {
 
 void printList(Customer customer) {
     NODE* current = &customer.headOfLoan;
-    if (current->next ==NULL)
+    if (current->next == NULL)
         printf("the list is empty");
+    printf("\n");
     while (current->next != NULL) {
         showLoan(current->next->key);
         current = current->next;
     }
 }
 
+void showCreditCard(CreditCard* creditCard) {
+    printf("\nCredit card number: %s, ", creditCard->cardNumber);
+    printf("Credit card balance: %.2f, ", creditCard->balance);
+    printf("Credit card limit: %.2f, ", creditCard->creditLimit);
+    printf("Credit card expiry date: %s\n", creditCard->expiryDate);
+}
+
 void showCustomer(Customer* customer) {
-    printf("Customer name: %s, ",customer->name);
+    printf("Customer name: %s, ", customer->name);
     printf("Customer id: %d, ", customer->customerID);
     printf("Customer balance: %f, ", customer->account.balance);
     printf("Customer address: %s", customer->address);
-    printf("the list of all loan:\n");
+    showCreditCard(customer->creditCard);
+    printf("\nthe list of all loan:\n");
     printList(*customer);
 }
 
@@ -105,7 +125,7 @@ Loan* createLoan() {
     printf("Enter start date (format: YYYY-MM-DD): ");
     fgets(temp->startDate, sizeof(temp->startDate), stdin);
     temp->startDate[strcspn(temp->startDate, "\n")] = '\0';
-   printf("Enter end date (format: YYYY-MM-DD): ");
+    printf("Enter end date (format: YYYY-MM-DD): ");
     fgets(temp->endDate, sizeof(temp->endDate), stdin);
     temp->endDate[strcspn(temp->endDate, "\n")] = '\0';
     return temp;
@@ -113,7 +133,7 @@ Loan* createLoan() {
 
 
 void updateCustomer1(Customer* customer) {
-    int choice=0;
+    int choice = 0;
     while (choice != 5)
     {
         printf("Update Customer\n"
@@ -153,7 +173,7 @@ void updateCustomer1(Customer* customer) {
             break;
 
         case 4:
-
+            //  createCreditCard(&customer->creditCard);
             break;
 
         default:

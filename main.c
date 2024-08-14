@@ -180,7 +180,7 @@ void displayMenu() {
 
 
 int main() {
-    CreditCard creditCard;
+    CreditCard creditCard = { "",0,0,"" };
     Account account = { 0,NULL,0 };
     int choice = 1;
     Bank bank = { 111,NULL,0,0 };
@@ -188,8 +188,7 @@ int main() {
     Customer customer = { account,&creditCard };
     Employee employee;
 
-    test(&bank);
-    printf("%s", bank.branches[0].customers[4]);
+   // test(&bank);
 
     while (choice != 0) {
         displayMenu();    // Display the menu

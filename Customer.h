@@ -22,7 +22,8 @@ typedef struct Customer {
 
 } Customer;
 void updateCustomer1(Customer* customer);
-
+void createCreditCard(CreditCard* creditCard);
+void showCreditCard(CreditCard* creditCard);
 void createCustomer(Customer* customer);
 void showCustomer(Customer* customer);
 void freeCustomer(Customer* customer);

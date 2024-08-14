@@ -12,7 +12,7 @@ typedef struct node {
 } NODE;
 
 typedef struct Customer {
-    Account account;
+    Account account; 
     CreditCard* creditCard;
     NODE headOfLoan; // Linked list of loans
     int customerID;

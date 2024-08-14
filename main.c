@@ -16,42 +16,26 @@
 #include "Bank.h"
 
 void test(Bank* bank) {
-    // Initialize bank's branch count
     bank->branchCount = 4;
-
-    // Allocate memory for the branches
     bank->branches = (Branch*)malloc(bank->branchCount * sizeof(Branch));
-    if (bank->branches == NULL) {
-        printf("Memory allocation failed for branches.\n");
-        return;
-    }
 
-    // Iterate through each branch
     for (int i = 0; i < bank->branchCount; i++) {
-        // Assign branch ID and name
         bank->branches[i].branchID = i + 1;
         sprintf(bank->branches[i].name, "Branch %d", i + 1);
-
-        // Initialize customer count for the branch
         bank->branches[i].customerCount = 5;
-
-        // Allocate memory for the customers in the branch
         bank->branches[i].customers = (Customer*)malloc(bank->branches[i].customerCount * sizeof(Customer));
-        if (bank->branches[i].customers == NULL) {
-            printf("Memory allocation failed for customers in branch %d.\n", i + 1);
-            return;
-        }
 
-        // Iterate through each customer in the branch
         for (int j = 0; j < bank->branches[i].customerCount; j++) {
-            // Assign customer ID, name, and address
             bank->branches[i].customers[j].customerID = j + 1;
             sprintf(bank->branches[i].customers[j].name, "Customer %d-%d", i + 1, j + 1);
             sprintf(bank->branches[i].customers[j].address, "Address %d-%d", i + 1, j + 1);
-
-            // Initialize loan count and linked list head for loans
             bank->branches[i].customers[j].loanCount = 0;
             init(&bank->branches[i].customers[j]); // Initialize the linked list head for loans
+
+            // Assign a different balance to each customer
+            bank->branches[i].customers[j].account.balance = (i + 1) * 1000 + (j + 1) * 100;
+            bank->branches[i].customers[j].account.transactionCount = 0;
+            bank->branches[i].customers[j].account.transactions = NULL;
         }
     }
 }
@@ -189,8 +173,8 @@ void displayMenu() {
         "[9] Update customer\n"
         "[10] Load binary file of employees\n"
         "[11] Read binary file of employees\n"
-        "[12] Find richest customer in branch\n"
-        "[13] Find customer with most loans in branch\n"
+        "[12] Find richest customer in bank\n"
+        "[13] Find customer with most loans in bank\n"
         "[0] Exit\n");
 }
 

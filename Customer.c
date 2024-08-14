@@ -114,7 +114,7 @@ Loan* createLoan() {
 
 void updateCustomer1(Customer* customer) {
     int choice=0;
-    while (choice != 9)
+    while (choice != 5)
     {
         printf("Update Customer\n"
             "[0] Update name\n"

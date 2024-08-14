@@ -2,7 +2,6 @@
 #define CreditCard_H
 
 typedef struct {
-    int cardID;
     char cardNumber[16];
     float creditLimit;
     float balance;

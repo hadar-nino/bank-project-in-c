@@ -11,6 +11,7 @@ typedef struct {
     int branchCount;
    // int* branchID; // Linked double list of branch IDs (implementation assumed elsewhere)
     int numberOfEmployee;
+    int sort;
 } Bank;
 
 void createBank(Bank* b);

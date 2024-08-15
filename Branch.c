@@ -43,3 +43,21 @@ void showAllEmployee(Branch branch) {
 
     }
 }
+int compareEmployeesCount(Branch* branch1, Branch* branch2) {
+    return branch1->employeesCount - branch2->employeesCount;
+}
+int compareCustomerCount(Branch* branch1, Branch* branch2) {
+    return branch1->customerCount - branch2->customerCount;
+}
+void printBranch(Branch* branch) {
+    printf("branch name: %s, ", branch->name);
+    printf("branch id: %d, ", branch->branchID);
+    printf("branch customer count: %d, ", branch->customerCount);
+    for (int i = 0; i < branch->customerCount; i++) {
+        printEmploee(branch->customers[i]);
+    }
+    printf("branch employee count: %d, ", branch->employeesCount);
+    for (int i = 0; i < branch->employeesCount; i++) {
+        printEmploee(branch->employees[i]);
+    }
+}

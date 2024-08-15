@@ -4,15 +4,24 @@
 #include "Branch.h"
 #include"Branch.h"
 
+typedef struct node1
+{
+    int key;
+    struct node1* next;
+    struct node1* prev;
+}NODE1;
 
 typedef struct {
     int bankID;
     Branch* branches; // Array of Branch structures
     int branchCount;
-   // int* branchID; // Linked double list of branch IDs (implementation assumed elsewhere)
+    NODE1 branchesID;
     int numberOfEmployee;
 } Bank;
 
+void showLInkedlist(NODE1 node);
+void addNewLink(NODE1* node, int id);
+void initlLInkedList(NODE1* node);
 void createBank(Bank* b);
 void createNewBranch(Bank* bank, Branch* branch);
 #endif // Bank_H

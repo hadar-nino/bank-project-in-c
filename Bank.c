@@ -17,7 +17,6 @@ void createBank(Bank* b) {
     }
     b->bankID = num;
     b->sort = 0;
-
 }
 
 void initlLInkedList(NODE1* node) {
@@ -33,7 +32,7 @@ void createNewBranch(Bank* bank, Branch* branch) {
         branch->branchID = bank->branchCount;
         bank->branches[bank->branchCount] = *branch;
         bank->branchCount++;
-        addNewLink(&bank->branchesID, branch->branchID);
+       // addNewLink(&bank->branchesID, branch->branchID); not working good
         printf("the branch added successfully\n");
     }
     else {

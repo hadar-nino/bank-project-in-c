@@ -16,6 +16,7 @@ void createBank(Bank* b) {
         scanf("%d", &num);
     }
     b->bankID = num;
+    b->sort = 0;
 
 }
 

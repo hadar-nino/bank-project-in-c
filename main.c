@@ -47,9 +47,37 @@ void clearInputBuffer() {
 
 
 // Function prototypes
-void sortBranchByType(Branch* branch, int type);
+void sortBranchByType(Bank* bank, int type) {
+    if (type == 0) {
+        qsort(bank, bank->branchCount, sizeof(type), compareEmployeesCount);
+        bank->sort = 1;
+    }
+    else {
+        qsort(bank, bank->branchCount, sizeof(type), compareCustomerCount);
+        bank->sort = 2;
+    }
+}
 
-void searchBranchByType(Branch* branch, int type);
+void searchBranchByType(Bank* bank, int type) {
+    if ((type + 1) != bank->sort) {
+        printf("the branches arent sorted by this type");
+    }
+    else {
+        if (type == 0) {
+            printf("enter the number if employees you want to find by");
+            int numOf;
+            scanf("%d",numOf );
+            //printBranch((Branch*)bsearch(numOf, bank->branches, bank->branchCount, sizeof(Branch), compareEmployeesCount));
+        }
+        if (type == 0) {
+            printf("enter the number if customer you want to find by");
+            int numOf;
+            scanf("%d", numOf);
+            //printBranch((Branch*)bsearch(numOf, bank->branches, bank->branchCount, sizeof(Branch), compareCustomerCount));
+        }
+    }
+
+}
 
 void loadTextFile(Bank* bank);
 

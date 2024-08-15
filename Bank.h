@@ -17,6 +17,7 @@ typedef struct {
     int branchCount;
     NODE1 branchesID;
     int numberOfEmployee;
+    int sort;
 } Bank;
 
 void showLInkedlist(NODE1 node);

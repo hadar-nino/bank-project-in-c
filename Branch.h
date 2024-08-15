@@ -17,4 +17,9 @@ void addEmployeeToBranch(Branch* branch, Employee* employee);
 
 void addCustomerToBranch(Branch* branch, Customer* customer);
 
+int compareEmployeesCount(Branch* branch1,Branch* branch2);
+
+int compareCustomerCount(Branch* branch1, Branch* branch2);
+
+void printBranch(Branch* branch);
 #endif // Branch_H

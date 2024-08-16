@@ -51,29 +51,32 @@ void sortBranchByType(Bank* bank, int type) {
     if (type == 0) {
         qsort(bank, bank->branchCount, sizeof(type), compareEmployeesCount);
         bank->sort = 1;
+        printf("branches sorted");
     }
     else {
         qsort(bank, bank->branchCount, sizeof(type), compareCustomerCount);
         bank->sort = 2;
+        printf("branches sorted");
     }
 }
 
 void searchBranchByType(Bank* bank, int type) {
     if ((type + 1) != bank->sort) {
         printf("the branches arent sorted by this type");
+        return;
     }
     else {
         if (type == 0) {
             printf("enter the number if employees you want to find by");
-            int numOf;
+            int numOf=0;
             scanf("%d",numOf );
-            //printBranch((Branch*)bsearch(numOf, bank->branches, bank->branchCount, sizeof(Branch), compareEmployeesCount));
+            printBranch((Branch*)bsearch(numOf, bank->branches, bank->branchCount, sizeof(Branch), compareEmployeesCount));
         }
-        if (type == 0) {
+        if (type == 1) {
             printf("enter the number if customer you want to find by");
-            int numOf;
+            int numOf=0;
             scanf("%d", numOf);
-            //printBranch((Branch*)bsearch(numOf, bank->branches, bank->branchCount, sizeof(Branch), compareCustomerCount));
+            printBranch((Branch*)bsearch(numOf, bank->branches, bank->branchCount, sizeof(Branch), compareCustomerCount));
         }
     }
 
@@ -215,6 +218,7 @@ int main() {
     Branch branch = { 0,"",NULL,NULL,0,0 };
     Customer customer = { account,&creditCard };
     Employee employee;
+    int type = 0;
 
    // test(&bank);
 
@@ -224,16 +228,22 @@ int main() {
         scanf("%d", &choice);    // Get user choice
         clearInputBuffer();
         switch (choice) {
-            /*
+            
             case 1:
                 // Call function to sort branches by type
-                // Example: sortBranchByType(&branch, type);
+                printf("please enter the type you want to sort by:\n[1] for employee count\n[2] for customer count\n");
+                scanf("%d", &type);
+                type--;
+                sortBranchByType(&branch, type);
                 break;
             case 2:
                 // Call function to search branches by type
-                // Example: searchBranchByType(&branch, type);
+                printf("please enter the type you want to search bye by:\n[1] for employee count\n[2] for customer count\n");
+                scanf("%d", &type);
+                type--;
+                searchBranchByType(&branch, type);
                 break;
-            case 3:
+            /*case 3:
                 // Call function to load a text file
                 // Example: loadTextFile(&bank);
                 break;

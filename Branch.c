@@ -54,10 +54,10 @@ void printBranch(Branch* branch) {
     printf("branch id: %d, ", branch->branchID);
     printf("branch customer count: %d, ", branch->customerCount);
     for (int i = 0; i < branch->customerCount; i++) {
-        printEmploee(branch->customers[i]);
+        showCustomer(&branch->customers[i]);
     }
     printf("branch employee count: %d, ", branch->employeesCount);
     for (int i = 0; i < branch->employeesCount; i++) {
-        printEmploee(branch->employees[i]);
+        showEmployee(&branch->employees[i]);
     }
 }

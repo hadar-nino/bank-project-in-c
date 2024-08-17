@@ -184,7 +184,7 @@ void updateCustomer1(Customer* customer) {
             break;
 
         case 4:
-            createCreditCard(&customer->creditCard);
+            createCreditCard(customer->creditCard);
             break;
 
         default:

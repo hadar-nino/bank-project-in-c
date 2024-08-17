@@ -15,8 +15,7 @@
 
 #include "Bank.h"
 
-void test(Bank* bank) {
-    CreditCard creditCard = { "",0,0,"" };
+void test(Bank* bank,CreditCard* creditCard) {
     Account account = { 0,NULL,0 };
     int choice = 1;
     Branch branch = { 0,"",NULL,NULL,0,0 };
@@ -29,9 +28,9 @@ void test(Bank* bank) {
         (bank, &branch);
 
         for (int j = 0; j < 5; j++) {
-            CreditCard creditCard = { "dk",12,44,"ff" };
+      //      CreditCard creditCard = { "dk",12,44,"ff" };
             Account account = { 0,NULL,0 };
-            Customer customer = { account,&creditCard };
+            Customer customer = { account,creditCard };
             sprintf(customer.name, "Customer %d-%d", i + 1, j + 1);
             sprintf(customer.address, "Address %d-%d", i + 1, j + 1);
             customer.loanCount = 0;
@@ -225,7 +224,7 @@ int main() {
     Employee employee;
     int type = 0;
     initlLInkedList(&bank.branchesID);
-  //  test(&bank);
+    test(&bank, &creditCard);
 
     while (choice != 0) {
         displayMenu();    // Display the menu

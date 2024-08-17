@@ -12,7 +12,7 @@ typedef struct Branch {
     int customerCount;
     int employeesCount;
 } Branch;
-
+void freeBranch(Branch* branch);
 void addEmployeeToBranch(Branch* branch, Employee* employee);
 
 void addCustomerToBranch(Branch* branch, Customer* customer);

@@ -44,3 +44,12 @@ void updateAccount(Account* account) {
         printf("Memory allocation failed.\n");
     }
 }
+
+void freeAccount(Account* a)
+{
+    for (int i = 0; i < a->transactionCount; i++)
+    {
+        free(a->transactions[i]);
+    }
+    a->transactions = NULL;
+}

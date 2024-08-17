@@ -19,8 +19,8 @@ typedef struct Customer {
     char name[100]; // Allocating enough space for the name
     char address[100];
     int loanCount;
-
 } Customer;
+
 void updateCustomer1(Customer* customer);
 void createCreditCard(CreditCard* creditCard);
 void showCreditCard(CreditCard* creditCard);
@@ -30,6 +30,6 @@ void freeCustomer(Customer* customer);
 void init(Customer* customer);
 void addLoan(Customer* customer, Loan* loan);
 void printList(Customer customer);
-
+void freeLoan(Customer* c);
 
 #endif // !Customer_H

@@ -20,9 +20,11 @@ typedef struct {
     int sort;
 } Bank;
 
-void showLInkedlist(NODE1 node);
+void showLInkedlist(NODE1* node);
 void addNewLink(NODE1* node, int id);
 void initlLInkedList(NODE1* node);
 void createBank(Bank* b);
 void createNewBranch(Bank* bank, Branch* branch);
+void freeBank(Bank* bank);
+void freeBranchesID(Bank* bank);
 #endif // Bank_H

@@ -41,16 +41,10 @@ void init(Customer* customer) {
 }
 
 void freeCustomer(Customer* customer) {
-    NODE* current = customer->headOfLoan.next; // Start from the first node
-    NODE* next;
-
-    while (current != NULL) {
-        next = current->next; // Save the next node
-        free(current->key);   // Free the supermarket struct
-        free(current);        // Free the node itself
-        current = next;       // Move to the next node
-    }
-    customer->headOfLoan.next = NULL; // Reset the list head to indicate it's empty
+    if (customer == NULL) return;
+    customer->creditCard = NULL;
+    freeLoan(customer);
+    freeAccount(&customer->account);
 }
 
 
@@ -85,6 +79,20 @@ void printList(Customer customer) {
         current = current->next;
     }
 }
+
+void freeLoan(Customer* c){
+    NODE* current = c->headOfLoan.next; // Start from the first node
+    NODE* next;
+
+    while (current != NULL) {
+        next = current->next; // Save the next node
+        free(current->key);   // Free the struct
+        free(current);        // Free the node itself
+        current = next;       // Move to the next node
+    }
+    c->headOfLoan.next = NULL; // Reset the list head to indicate it's empty
+}
+
 
 void showCreditCard(CreditCard* creditCard) {
     printf("\nCredit card number: %s, ", creditCard->cardNumber);

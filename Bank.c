@@ -40,6 +40,31 @@ void createNewBranch(Bank* bank, Branch* branch) {
     }
 }
 
+void freeBank(Bank* bank)
+{
+    for (int i = 0; i < bank->branchCount; i++)
+    {
+        freeBranch(&bank->branches[i]);
+    }
+    free(bank->branches);
+    bank->branches = NULL;
+    freeBranchesID(bank);
+}
+
+void freeBranchesID(Bank* bank) {
+    NODE1* current = bank->branchesID.next; // Start from the first node
+    NODE1* next;
+
+    while (current != NULL) {
+        next = current->next; // Save the next node
+        free(current);        // Free the node itself  
+        current = next;       // Move to the next node
+    }
+    bank->branchesID.next = NULL;
+    bank->branchesID.prev = NULL;
+}
+
+
 void addNewLink(NODE1* head, int data) {
     NODE1* tmp;
     NODE1* current;

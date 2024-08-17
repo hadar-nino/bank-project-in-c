@@ -6,6 +6,17 @@
 #include <string.h>
 #include "Branch.h"
 
+void freeBranch(Branch* branch)
+{
+    for (int i = 0; i < branch->customerCount; i++){
+        freeCustomer(&branch->customers[i]);
+    }
+    free(branch->customers);
+    branch->customers = NULL;
+    free(branch->employees);
+    branch->employees = NULL;
+}
+
 void addEmployeeToBranch(Branch* branch, Employee* employee) {
     Employee* temp = NULL;
     temp = (Employee*)realloc(branch->employees, (branch->employeesCount + 1) * sizeof(Employee));

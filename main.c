@@ -16,20 +16,26 @@
 #include "Bank.h"
 
 void test(Bank* bank) {
-    bank->branchCount = 4;
-    bank->branches = (Branch*)malloc(bank->branchCount * sizeof(Branch));
+    CreditCard creditCard = { "",0,0,"" };
+    Account account = { 0,NULL,0 };
+    int choice = 1;
+    Branch branch = { 0,"",NULL,NULL,0,0 };
+    Customer customer = { account,&creditCard };
 
-    for (int i = 0; i < bank->branchCount; i++) {
-        bank->branches[i].branchID = i + 1;
-        sprintf(bank->branches[i].name, "Branch %d", i + 1);
-        bank->branches[i].customerCount = 5;
-        bank->branches[i].customers = (Customer*)malloc(bank->branches[i].customerCount * sizeof(Customer));
+    for (int i = 0; i < 4; i++) {
+        Branch branch = { 0,"",NULL,NULL,0,0 };
+        sprintf(branch.name, "Branch %d", i + 1);
+        createNewBranch(bank, &branch);
+        (bank, &branch);
 
-        for (int j = 0; j < bank->branches[i].customerCount; j++) {
-            bank->branches[i].customers[j].customerID = j + 1;
-            sprintf(bank->branches[i].customers[j].name, "Customer %d-%d", i + 1, j + 1);
-            sprintf(bank->branches[i].customers[j].address, "Address %d-%d", i + 1, j + 1);
-            bank->branches[i].customers[j].loanCount = 0;
+        for (int j = 0; j < 5; j++) {
+            CreditCard creditCard = { "dk",12,44,"ff" };
+            Account account = { 0,NULL,0 };
+            Customer customer = { account,&creditCard };
+            sprintf(customer.name, "Customer %d-%d", i + 1, j + 1);
+            sprintf(customer.address, "Address %d-%d", i + 1, j + 1);
+            customer.loanCount = 0;
+            addCustomerToBranch(&bank->branches[i], &customer);
             init(&bank->branches[i].customers[j]); // Initialize the linked list head for loans
 
             // Assign a different balance to each customer
@@ -218,8 +224,8 @@ int main() {
     Customer customer = { account,&creditCard };
     Employee employee;
     int type = 0;
-
-   // test(&bank);
+    initlLInkedList(&bank.branchesID);
+    test(&bank);
 
     while (choice != 0) {
         displayMenu();    // Display the menu
@@ -290,6 +296,7 @@ int main() {
             break;
         }
     }
+    freeBank(&bank);
     return 0;
 }
 

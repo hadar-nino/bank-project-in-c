@@ -9,5 +9,6 @@ typedef struct {
     int transactionCount;
 } Account;
 void updateAccount(Account* account);
+void freeAccount(Account* a);
 
 #endif // !Account_H

@@ -239,7 +239,7 @@ int main() {
     Employee employee;
     int type = 0;
     initlLInkedList(&bank.branchesID);
-   // test(&bank,&branch,&employee);
+    test(&bank,&branch,&employee);
 
     while (choice != 0) {
         displayMenu();    // Display the menu
@@ -310,7 +310,7 @@ int main() {
             break;
         }
     }
-   // printBank(&bank);
+    printBank(&bank);
 
     freeBank(&bank);
     return 0;

@@ -41,6 +41,7 @@ void init(Customer* customer) {
 
 void freeCustomer(Customer* customer) {
     if (customer == NULL) return;
+    free(customer->creditCard);
     customer->creditCard = NULL;
     freeLoan(customer);
     freeAccount(&customer->account);

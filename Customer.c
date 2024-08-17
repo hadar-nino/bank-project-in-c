@@ -22,7 +22,6 @@ void createCustomer(Customer* customer) {
 }
 
 void createCreditCard(CreditCard* creditCard) {
-    int limit, balance;
     printf("enter credit card number (this will be 16 words): ");
     fgets(creditCard->cardNumber, 16, stdin);
     creditCard->cardNumber[strcspn(creditCard->cardNumber, "\n")] = '\0';

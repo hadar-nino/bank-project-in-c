@@ -15,34 +15,44 @@
 
 #include "Bank.h"
 
-void test(Bank* bank,CreditCard* creditCard) {
-    Account account = { 0,NULL,0 };
+void test(Bank* bank, Customer* customer, Branch* branch, Employee* employee) {
     int choice = 1;
-    Branch branch = { 0,"",NULL,NULL,0,0 };
-    Customer customer = { account,&creditCard };
 
     for (int i = 0; i < 4; i++) {
-        Branch branch = { 0,"",NULL,NULL,0,0 };
-        sprintf(branch.name, "Branch %d", i + 1);
-        createNewBranch(bank, &branch);
-        (bank, &branch);
+        int sum;
+        sprintf(branch->name, "Branch %d", i + 1);
+        createNewBranch(bank, branch);
 
         for (int j = 0; j < 5; j++) {
-      //      CreditCard creditCard = { "dk",12,44,"ff" };
-            Account account = { 0,NULL,0 };
-            Customer customer = { account,creditCard };
-            sprintf(customer.name, "Customer %d-%d", i + 1, j + 1);
-            sprintf(customer.address, "Address %d-%d", i + 1, j + 1);
-            customer.loanCount = 0;
-            addCustomerToBranch(&bank->branches[i], &customer);
+            //      CreditCard creditCard = { "dk",12,44,"ff" };
+                 // Account account = { 0,NULL,0 };
+                //  Customer customer = { account,creditCard };
+            sprintf(customer->name, "Customer %d-%d", i + 1, j + 1);
+            sprintf(customer->address, "Address %d-%d", i + 1, j + 1);
+            customer->loanCount = 0;
+            addCustomerToBranch(&bank->branches[i], customer);
             init(&bank->branches[i].customers[j]); // Initialize the linked list head for loans
 
             // Assign a different balance to each customer
-            bank->branches[i].customers[j].account.balance = (i + 1) * 1000 + (j + 1) * 100;
+            sum = (i + 1) * 1000 + (j + 1) * 100;
+            bank->branches[i].customers[j].account.balance = sum;
+            bank->branches[i].customers[j].creditCard->balance = sum * 7;
+            bank->branches[i].customers[j].creditCard->creditLimit = sum / 2;
             bank->branches[i].customers[j].account.transactionCount = 0;
             bank->branches[i].customers[j].account.transactions = NULL;
         }
     }
+    /*
+    for (int i = 0; i < bank->branchCount; i++)
+    {
+        printf("%s:\n", bank->branches[i].name);
+        for (int j = 0; j < bank->branches[i].customerCount; j++)
+        {
+            showCustomer(&bank->branches[i].customers[j]);
+        }
+        printf(" \n");
+    }
+    */
 }
 
 void clearInputBuffer() {
@@ -224,7 +234,7 @@ int main() {
     Employee employee;
     int type = 0;
     initlLInkedList(&bank.branchesID);
-    test(&bank, &creditCard);
+    test(&bank, &customer,&branch,&employee);
 
     while (choice != 0) {
         displayMenu();    // Display the menu

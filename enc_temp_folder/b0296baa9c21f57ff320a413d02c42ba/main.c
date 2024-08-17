@@ -225,7 +225,7 @@ int main() {
     Employee employee;
     int type = 0;
     initlLInkedList(&bank.branchesID);
-  //  test(&bank);
+    test(&bank);
 
     while (choice != 0) {
         displayMenu();    // Display the menu

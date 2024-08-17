@@ -28,7 +28,7 @@ void createCustomer(Customer* customer);
 void showCustomer(Customer* customer);
 void freeCustomer(Customer* customer);
 void init(Customer* customer);
-NODE* addLoan(Customer* customer, Loan* loan);
+void addLoan(Customer* customer, Loan* loan);
 void printList(Customer customer);
 
 

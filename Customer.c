@@ -22,12 +22,15 @@ void createCustomer(Customer* customer) {
 }
 
 void createCreditCard(CreditCard* creditCard) {
-    strncpy(creditCard->cardNumber, "JJ", sizeof(creditCard->cardNumber) - 1);
-    creditCard->cardNumber[sizeof(creditCard->cardNumber) - 1] = '\0'; // Ensure null-termination
+    int limit, balance;
+    printf("enter credit card number (this will be 16 words): ");
+    fgets(creditCard->cardNumber, 16, stdin);
+    creditCard->cardNumber[strcspn(creditCard->cardNumber, "\n")] = '\0';
     creditCard->creditLimit = 1000;
     creditCard->balance = 12345;
-    strncpy(creditCard->expiryDate, "HBHUB", sizeof(creditCard->expiryDate) - 1);
-    creditCard->expiryDate[sizeof(creditCard->expiryDate) - 1] = '\0'; // Ensure null-termination
+    printf("enter credit card expiry date (this will be 6 words): ");
+    fgets(creditCard->expiryDate, 6, stdin);
+    creditCard->expiryDate[strcspn(creditCard->expiryDate, "\n")] = '\0';
 }
 
 
@@ -51,7 +54,7 @@ void freeCustomer(Customer* customer) {
 }
 
 
-NODE* addLoan(Customer* customer, Loan* loan) {
+void addLoan(Customer* customer, Loan* loan) {
     NODE* tmp;
     NODE* current;
     if (!customer)
@@ -70,7 +73,6 @@ NODE* addLoan(Customer* customer, Loan* loan) {
     }
     customer->account.balance += loan->amount;
     customer->loanCount++;
-    return tmp;
 }
 
 void printList(Customer customer) {
@@ -174,7 +176,7 @@ void updateCustomer1(Customer* customer) {
             break;
 
         case 4:
-            //  createCreditCard(&customer->creditCard);
+            createCreditCard(&customer->creditCard);
             break;
 
         default:

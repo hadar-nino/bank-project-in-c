@@ -15,34 +15,7 @@
 
 #include "Bank.h"
 
-void test(Bank* bank, Customer* customer, Branch* branch, Employee* employee) {
-    int choice = 1;
-
-    for (int i = 0; i < 4; i++) {
-        int sum;
-        sprintf(branch->name, "Branch %d", i + 1);
-        createNewBranch(bank, branch);
-
-        for (int j = 0; j < 5; j++) {
-            //      CreditCard creditCard = { "dk",12,44,"ff" };
-                 // Account account = { 0,NULL,0 };
-                //  Customer customer = { account,creditCard };
-            sprintf(customer->name, "Customer %d-%d", i + 1, j + 1);
-            sprintf(customer->address, "Address %d-%d", i + 1, j + 1);
-            customer->loanCount = 0;
-            addCustomerToBranch(&bank->branches[i], customer);
-            init(&bank->branches[i].customers[j]); // Initialize the linked list head for loans
-
-            // Assign a different balance to each customer
-            sum = (i + 1) * 1000 + (j + 1) * 100;
-            bank->branches[i].customers[j].account.balance = sum;
-            bank->branches[i].customers[j].creditCard->balance = sum * 7;
-            bank->branches[i].customers[j].creditCard->creditLimit = sum / 2;
-            bank->branches[i].customers[j].account.transactionCount = 0;
-            bank->branches[i].customers[j].account.transactions = NULL;
-        }
-    }
-    /*
+void printBank(Bank* bank) {
     for (int i = 0; i < bank->branchCount; i++)
     {
         printf("%s:\n", bank->branches[i].name);
@@ -52,7 +25,39 @@ void test(Bank* bank, Customer* customer, Branch* branch, Employee* employee) {
         }
         printf(" \n");
     }
-    */
+}
+
+void test(Bank* bank, Branch* branch, Employee* employee) {
+    int choice = 1;
+
+    for (int i = 0; i < 4; i++) {
+        int sum;
+        sprintf(branch->name, "Branch %d", i + 1);
+        createNewBranch(bank, branch);
+
+        for (int j = 0; j < 5; j++) {
+            //            CreditCard creditCard = { "dk",12,44,"ff" };            
+            Account account = { 0,NULL,0 };
+            Customer customer = { account };
+            customer.creditCard = (CreditCard*)malloc(sizeof(CreditCard));
+            sprintf(customer.name, "Customer %d-%d", i + 1, j + 1);
+            sprintf(customer.address, "Address %d-%d", i + 1, j + 1);
+            customer.loanCount = 0;
+            addCustomerToBranch(&bank->branches[i], &customer);
+            init(&bank->branches[i].customers[j]); // Initialize the linked list head for loans
+
+            // Assign a different balance to each customer
+            sum = (i + 1) * 1000 + (j + 1) * 100;
+            bank->branches[i].customers[j].account.balance = sum;
+            bank->branches[i].customers[j].creditCard->balance = sum * 7;
+            bank->branches[i].customers[j].creditCard->creditLimit = sum / 2;
+            bank->branches[i].customers[j].account.transactionCount = 0;
+            bank->branches[i].customers[j].account.transactions = NULL;
+            sprintf(customer.creditCard->expiryDate, "%d",j);
+            sprintf(customer.creditCard->cardNumber, "Customer %d-%d", i + 1, j + 1);
+        }
+    }
+    printBank(bank);
 }
 
 void clearInputBuffer() {
@@ -145,6 +150,7 @@ void addNewEmployee(Bank* bank, Employee* employee) {
 }
 
 void addNewCustomer(Bank* bank, Customer* customer) {
+    customer->creditCard = (CreditCard*)malloc(sizeof(CreditCard));
     int index = branchSelect(bank);
     if (index == -1) {
         return;
@@ -225,16 +231,15 @@ void displayMenu() {
 }
 
 int main() {
-    CreditCard creditCard = { "",0,0,"" };
     Account account = { 0,NULL,0 };
     int choice = 1;
     Bank bank = { 111,NULL,0,0 };
     Branch branch = { 0,"",NULL,NULL,0,0 };
-    Customer customer = { account,&creditCard };
+    Customer customer = { account };
     Employee employee;
     int type = 0;
     initlLInkedList(&bank.branchesID);
-    test(&bank, &customer,&branch,&employee);
+   // test(&bank,&branch,&employee);
 
     while (choice != 0) {
         displayMenu();    // Display the menu
@@ -305,6 +310,8 @@ int main() {
             break;
         }
     }
+   // printBank(&bank);
+
     freeBank(&bank);
     return 0;
 }

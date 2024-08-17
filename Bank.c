@@ -40,6 +40,10 @@ void createNewBranch(Bank* bank, Branch* branch) {
     }
 }
 
+void freeBank(Bank* bank)
+{
+}
+
 void addNewLink(NODE1* head, int data) {
     NODE1* tmp;
     NODE1* current;

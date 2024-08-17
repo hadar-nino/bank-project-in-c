@@ -54,7 +54,8 @@ void freeCustomer(Customer* customer) {
 NODE* addLoan(Customer* customer, Loan* loan) {
     NODE* tmp;
     NODE* current;
-    if (!customer) return NULL;
+    if (!customer)
+        return NULL;
     tmp = (NODE*)malloc(sizeof(NODE)); // new node
     if (tmp != NULL) {
         tmp->key = (Loan*)malloc(sizeof(Loan));

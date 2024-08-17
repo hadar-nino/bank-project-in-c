@@ -209,7 +209,6 @@ void displayMenu() {
         "[0] Exit\n");
 }
 
-
 int main() {
     CreditCard creditCard = { "",0,0,"" };
     Account account = { 0,NULL,0 };

@@ -7,7 +7,7 @@
 
 // Node
 typedef struct node {
-    Loan* key;
+    void* key;
     struct node* next;
 } NODE;
 

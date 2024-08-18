@@ -12,8 +12,26 @@
 #include "Employee.h"
 #include "CreditCard.h"
 #include"Account.h"
-
 #include "Bank.h"
+
+#define displayMenu(){\
+   printf("\nPlease choose an option:\n"\
+"[1] Sort branches by type\n"\
+"[2] Search branches by type\n"\
+"[3] Load text file\n"\
+"[4] Read text file\n"\
+"[5] Print subtypes\n"\
+"[6] Add new branch\n"\
+"[7] Add new employee\n"\
+"[8] Add new customer\n"\
+"[9] Update customer\n"\
+"[10] Load binary file of employees\n"\
+"[11] Read binary file of employees\n"\
+"[12] Find richest customer in bank\n"\
+"[13] Find customer with most loans in bank\n"\
+"[0] Exit\n");\
+}
+
 
 void printBank(Bank* bank) {
     for (int i = 0; i < bank->branchCount; i++)
@@ -212,23 +230,7 @@ Customer* mostLoansCustomer(Bank* bank) {
     return &bank->branches[indexBranch].customers[mostLoansCustomer];
 }
 
-void displayMenu() {
-    printf("\nPlease choose an option:\n"
-        "[1] Sort branches by type\n"
-        "[2] Search branches by type\n"
-        "[3] Load text file\n"
-        "[4] Read text file\n"
-        "[5] Print subtypes\n"
-        "[6] Add new branch\n"
-        "[7] Add new employee\n"
-        "[8] Add new customer\n"
-        "[9] Update customer\n"
-        "[10] Load binary file of employees\n"
-        "[11] Read binary file of employees\n"
-        "[12] Find richest customer in bank\n"
-        "[13] Find customer with most loans in bank\n"
-        "[0] Exit\n");
-}
+
 
 int main() {
     Account account = { 0,NULL,0 };

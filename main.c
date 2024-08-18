@@ -45,17 +45,6 @@ void freeArr(const void* arr, int size, size_t typeSize, void (*freee)(const voi
         freee((char*)arr + i * typeSize);
 }
 
-void printBank(Bank* bank) {
-    for (int i = 0; i < bank->branchCount; i++)
-    {
-        printf("%s:\n", bank->branches[i].name);
-        for (int j = 0; j < bank->branches[i].customerCount; j++)
-        {
-            showCustomer(&bank->branches[i].customers[j]);
-        }
-        printf(" \n");
-    }
-}
 
 void test(Bank* bank, Branch* branch, Employee* employee) {
     int choice = 1;
@@ -254,7 +243,6 @@ int main() {
     int type = 0;
     initlLInkedList(&bank.branchesID);
     test(&bank,&branch,&employee);
-
     while (choice != 0) {
         displayMenu();    // Display the menu
         printf("\nEnter your choice: ");

@@ -46,12 +46,6 @@ void addCustomerToBranch( Branch* branch,Customer* customer) {
     }
 }
 
-void showAllEmployee(Branch branch) {
-    for (int i = 0; i < branch.employeesCount; i++)
-    {
-
-    }
-}
 int compareEmployeesCount(Branch* branch1, Branch* branch2) {
     return branch1->employeesCount - branch2->employeesCount;
 }
@@ -61,12 +55,8 @@ int compareCustomerCount(Branch* branch1, Branch* branch2) {
 void printBranch(Branch* branch) {
     printf("branch name: %s, ", branch->name);
     printf("branch id: %d, ", branch->branchID);
-    printf("branch customer count: %d, ", branch->customerCount);
-    for (int i = 0; i < branch->customerCount; i++) {
-        showCustomer(&branch->customers[i]);
-    }
-    printf("branch employee count: %d, ", branch->employeesCount);
-    for (int i = 0; i < branch->employeesCount; i++) {
-        showEmployee(&branch->employees[i]);
-    }
+    printf("branch customer count: %d, \n", branch->customerCount);
+    printArr(branch->customers, branch->customerCount, sizeof(Customer), showCustomer);
+    printf("branch employee count: %d, \n", branch->employeesCount);
+    printArr(branch->employees, branch->employeesCount, sizeof(Employee), showEmployee);
 }

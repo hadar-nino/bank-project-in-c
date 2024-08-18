@@ -8,9 +8,7 @@
 
 void freeBranch(Branch* branch)
 {
-    for (int i = 0; i < branch->customerCount; i++){
-        freeCustomer(&branch->customers[i]);
-    }
+    freeArr(branch->customers,branch->customerCount,sizeof(Customer), freeCustomer);
     free(branch->customers);
     branch->customers = NULL;
     free(branch->employees);

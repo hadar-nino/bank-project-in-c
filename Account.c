@@ -50,6 +50,9 @@ void freeAccount(Account* a)
     for (int i = 0; i < a->transactionCount; i++)
     {
         free(a->transactions[i]);
+        a->transactions[i] = NULL;
     }
+    free(a->transactions);
     a->transactions = NULL;
 }
+

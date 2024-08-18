@@ -53,10 +53,30 @@ int compareCustomerCount(Branch* branch1, Branch* branch2) {
     return branch1->customerCount - branch2->customerCount;
 }
 void printBranch(Branch* branch) {
-    printf("branch name: %s, ", branch->name);
-    printf("branch id: %d, ", branch->branchID);
-    printf("branch customer count: %d, \n", branch->customerCount);
-    printArr(branch->customers, branch->customerCount, sizeof(Customer), showCustomer);
-    printf("branch employee count: %d, \n", branch->employeesCount);
-    printArr(branch->employees, branch->employeesCount, sizeof(Employee), showEmployee);
+    if (branch == NULL) {
+        printf("Branch is NULL.\n");
+        return;
+    }
+
+    printf("Branch Name: %s\n", branch->name);
+    printf("Branch ID: %d\n", branch->branchID);
+    printf("Customer Count: %d\n", branch->customerCount);
+
+    if (branch->customerCount > 0) {
+        printf("Customers:\n");
+        printArr(branch->customers, branch->customerCount, sizeof(Customer), showCustomer);
+    }
+    else
+        printf("No customers in this branch.\n");
+
+
+    printf("Employee Count: %d\n", branch->employeesCount);
+
+    if (branch->employeesCount > 0) {
+        printf("Employees:\n");
+        printArr(branch->employees, branch->employeesCount, sizeof(Employee), showEmployee);
+    }
+    else
+        printf("No employees in this branch.\n");
+
 }

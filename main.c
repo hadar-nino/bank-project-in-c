@@ -33,6 +33,18 @@
 }
 
 
+void printArr(const void* arr, int size, size_t typeSize, void (*print)(const void*)) {
+    int i;
+    for (i = 0; i < size; i++)
+        print((char*)arr + i * typeSize);
+}
+
+void freeArr(const void* arr, int size, size_t typeSize, void (*freee)(const void*)) {
+    int i;
+    for (i = 0; i < size; i++)
+        freee((char*)arr + i * typeSize);
+}
+
 void printBank(Bank* bank) {
     for (int i = 0; i < bank->branchCount; i++)
     {

@@ -141,11 +141,6 @@ void loadTextFile(Bank* bank) {
         Branch* branch = &bank->branches[i];
         fprintf(file, "%d %s %d %d\n", branch->branchID, branch->name, branch->customerCount, branch->employeesCount);
 
-        for (int e = 0; e < branch->employeesCount; e++) {
-            Employee* employee = &branch->employees[e];
-            fprintf(file, "%d %d %s %s\n", employee->employeeID, employee->branchID, employee->name, employee->position);
-        }
-
         for (int j = 0; j < branch->customerCount; j++) {
             Customer* customer = &branch->customers[j];
             fprintf(file, "%d %s %s %d\n", customer->customerID, customer->name, customer->address, customer->loanCount);
@@ -206,10 +201,22 @@ void readTextFile(Bank* bank) {
         Branch* branch = &bank->branches[i];
         fscanf(file, "%d %s %d %d\n", &branch->branchID, branch->name, &branch->customerCount, &branch->employeesCount);
 
-        branch->employees = (Employee*)malloc(branch->employeesCount * sizeof(Employee));
-        for (int e = 0; e < branch->employeesCount; e++) {
-            Employee* employee = &branch->employees[e];
-            fscanf(file, "%d %d %s %s\n", &employee->employeeID, &employee->branchID, employee->name, employee->position);
+        if (branch->employeesCount > 0) {
+            branch->employees = (Employee*)malloc(branch->employeesCount * sizeof(Employee));
+
+            // Read employees data from binary file if there are employees
+            FILE* empFile = fopen("employees.bin", "rb");
+            if (!empFile) {
+                printf("Error opening employee file for reading.\n");
+                return;
+            }
+
+            // Read employees data for this branch
+            fread(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
+            fclose(empFile);
+        }
+        else {
+            branch->employees = NULL;
         }
 
         branch->customers = (Customer*)malloc(branch->customerCount * sizeof(Customer));
@@ -238,20 +245,8 @@ void readTextFile(Bank* bank) {
     }
 
     fclose(file);
-
-    FILE* empFile = fopen("employees.bin", "rb");
-    if (!empFile) {
-        printf("Error opening employee file for reading.\n");
-        return;
-    }
-
-    for (int i = 0; i < bank->branchCount; i++) {
-        Branch* branch = &bank->branches[i];
-        fread(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
-    }
-
-    fclose(empFile);
 }
+
 void printSubTypes();
 
 

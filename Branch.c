@@ -8,7 +8,7 @@
 
 void freeBranch(Branch* branch)
 {
-    freeArr(branch->customers,branch->customerCount,sizeof(Customer), freeCustomer);
+    processArr(branch->customers,branch->customerCount,sizeof(Customer), freeCustomer);
     free(branch->customers);
     branch->customers = NULL;
     free(branch->employees);
@@ -64,7 +64,7 @@ void printBranch(Branch* branch) {
 
     if (branch->customerCount > 0) {
         printf("Customers:\n");
-        printArr(branch->customers, branch->customerCount, sizeof(Customer), showCustomer);
+        processArr(branch->customers, branch->customerCount, sizeof(Customer), showCustomer);
     }
     else
         printf("No customers in this branch.\n");
@@ -74,7 +74,7 @@ void printBranch(Branch* branch) {
 
     if (branch->employeesCount > 0) {
         printf("Employees:\n");
-        printArr(branch->employees, branch->employeesCount, sizeof(Employee), showEmployee);
+        processArr(branch->employees, branch->employeesCount, sizeof(Employee), showEmployee);
     }
     else
         printf("No employees in this branch.\n");

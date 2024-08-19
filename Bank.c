@@ -42,7 +42,7 @@ void createNewBranch(Bank* bank, Branch* branch) {
 
 void freeBank(Bank* bank)
 {
-    freeArr(bank->branches, bank->branchCount, sizeof(Branch), freeBranch);
+    processArr(bank->branches, bank->branchCount, sizeof(Branch), freeBranch);
     free(bank->branches);
     bank->branches = NULL;
     freeBranchesID(bank);
@@ -94,5 +94,5 @@ void showLInkedlist(NODE1* node) {
 }
 
 void printBank(Bank* bank) {
-    printArr(bank->branches, bank->branchCount, sizeof(Branch), printBranch);
+    processArr(bank->branches, bank->branchCount, sizeof(Branch), printBranch);
 }

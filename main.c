@@ -32,19 +32,12 @@
 "[0] Exit\n");\
 }
 
-
-void printArr(const void* arr, int size, size_t typeSize, void (*print)(const void*)) {
+//using this function to print for free each element of a list
+void processArr(const void* arr, int size, size_t typeSize, void (*process)(const void*)) {
     int i;
     for (i = 0; i < size; i++)
-        print((char*)arr + i * typeSize);
+        process((char*)arr + i * typeSize);
 }
-
-void freeArr(const void* arr, int size, size_t typeSize, void (*freee)(const void*)) {
-    int i;
-    for (i = 0; i < size; i++)
-        freee((char*)arr + i * typeSize);
-}
-
 
 void test(Bank* bank, Branch* branch, Employee* employee) {
     int choice = 1;
@@ -120,6 +113,7 @@ void searchBranchByType(Bank* bank, int type) {
     }
 
 }
+
 void loadTextFile(Bank* bank) {
     FILE* file = fopen("bankInfo.txt", "w");
     if (!file) {
@@ -161,6 +155,7 @@ void loadTextFile(Bank* bank) {
             }
         }
     }
+
 
     fclose(file);
    FILE* empFile = fopen("employees.bin", "wb");

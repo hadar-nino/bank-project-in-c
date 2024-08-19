@@ -128,10 +128,8 @@ void loadTextFile(Bank* bank) {
         return;
     }
 
-    // Save Bank fields
     fprintf(file, "%d %d %d %d %d\n", bank->bankID, bank->branchCount, bank->numberOfEmployee, bank->sort, bank->branchesID.key);
 
-    // Save linked list of branches ID
     NODE1* current = &bank->branchesID;
     while (current) {
         fprintf(file, "%d ", current->key);

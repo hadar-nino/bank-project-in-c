@@ -121,9 +121,114 @@ void searchBranchByType(Bank* bank, int type) {
 
 }
 
-void loadTextFile(Bank* bank);
+void loadTextFile(Bank* bank) {
+    FILE* file = fopen("bankInfo", "w");
+    if (!file) {
+        printf("Error opening file for writing.\n");
+        return;
+    }
 
-void readTextFile(Bank* bank);
+    // Save Bank fields
+    fprintf(file, "%d %d %d %d %d\n", bank->bankID, bank->branchCount, bank->numberOfEmployee, bank->sort, bank->branchesID.key);
+
+    // Save linked list of branches ID
+    NODE1* current = &bank->branchesID;
+    while (current) {
+        fprintf(file, "%d ", current->key);
+        current = current->next;
+    }
+    fprintf(file, "\n");
+    for (int i = 0; i < bank->branchCount; i++) {
+        Branch* branch = &bank->branches[i];
+        fprintf(file, "%d %s %d %d\n", branch->branchID, branch->name, branch->customerCount, branch->employeesCount);
+
+ 
+        for (int e = 0; e < branch->employeesCount; e++) {
+            Employee* employee = &branch->employees[e];
+            fprintf(file, "%d %d %s %s\n", employee->employeeID, employee->branchID, employee->name, employee->position);
+        }
+
+        for (int j = 0; j < branch->customerCount; j++) {
+            Customer* customer = &branch->customers[j];
+            fprintf(file, "%d %s %s %d\n", customer->customerID, customer->name, customer->address, customer->loanCount);
+
+            fprintf(file, "%f %d\n", customer->account.balance, customer->account.transactionCount);
+            for (int k = 0; k < customer->account.transactionCount; k++) {
+                Transaction* transaction = customer->account.transactions[k];
+                fprintf(file, "%s %f\n", transaction->date, transaction->amount);
+            }
+
+            fprintf(file, "%s %f %f %s\n", customer->creditCard->cardNumber, customer->creditCard->creditLimit, customer->creditCard->balance, customer->creditCard->expiryDate);
+
+            NODE* loanNode = customer->headOfLoan.next;
+            while (loanNode) {
+                Loan* loan = (Loan*)loanNode->key;
+                fprintf(file, "%f %f %s %s\n", loan->amount, loan->interestRate, loan->startDate, loan->endDate);
+                loanNode = loanNode->next;
+            }
+        }
+    }
+
+    fclose(file);
+}
+
+void readTextFile(Bank* bank) {
+    FILE* file = fopen("bankInfo", "r");
+    if (!file) {
+        printf("Error opening file for reading.\n");
+        return;
+    }
+
+    fscanf(file, "%d %d %d %d %d\n", &bank->bankID, &bank->branchCount, &bank->numberOfEmployee, &bank->sort, &bank->branchesID.key);
+
+    initlLInkedList(&bank->branchesID);
+    NODE1* current = &bank->branchesID;
+    int branchID;
+    while (fscanf(file, "%d", &branchID) == 1) {
+        addNewLink(current, branchID);
+        current = current->next;
+    }
+
+    bank->branches = (Branch*)malloc(bank->branchCount * sizeof(Branch));
+
+    for (int i = 0; i < bank->branchCount; i++) {
+        Branch* branch = &bank->branches[i];
+        fscanf(file, "%d %s %d %d\n", &branch->branchID, branch->name, &branch->customerCount, &branch->employeesCount);
+
+        branch->employees = (Employee*)malloc(branch->employeesCount * sizeof(Employee));
+
+        for (int e = 0; e < branch->employeesCount; e++) {
+            Employee* employee = &branch->employees[e];
+            fscanf(file, "%d %d %s %s\n", &employee->employeeID, &employee->branchID, employee->name, employee->position);
+        }
+
+        branch->customers = (Customer*)malloc(branch->customerCount * sizeof(Customer));
+
+        for (int j = 0; j < branch->customerCount; j++) {
+            Customer* customer = &branch->customers[j];
+            fscanf(file, "%d %s %s %d\n", &customer->customerID, customer->name, customer->address, &customer->loanCount);
+
+            fscanf(file, "%f %d\n", &customer->account.balance, &customer->account.transactionCount);
+            customer->account.transactions = (Transaction**)malloc(customer->account.transactionCount * sizeof(Transaction*));
+            for (int k = 0; k < customer->account.transactionCount; k++) {
+                customer->account.transactions[k] = (Transaction*)malloc(sizeof(Transaction));
+                fscanf(file, "%s %f\n", customer->account.transactions[k]->date, &customer->account.transactions[k]->amount);
+            }
+
+            customer->creditCard = (CreditCard*)malloc(sizeof(CreditCard));
+            fscanf(file, "%s %f %f %s\n", customer->creditCard->cardNumber, &customer->creditCard->creditLimit, &customer->creditCard->balance, customer->creditCard->expiryDate);
+
+            init(&customer->headOfLoan);
+            for (int l = 0; l < customer->loanCount; l++) {
+                Loan* loan = (Loan*)malloc(sizeof(Loan));
+                fscanf(file, "%f %f %s %s\n", &loan->amount, &loan->interestRate, loan->startDate, loan->endDate);
+                addLoan(customer, loan);
+            }
+        }
+    }
+
+    fclose(file);
+}
 
 void printSubTypes();
 
@@ -264,15 +369,15 @@ int main() {
                 type--;
                 searchBranchByType(&branch, type);
                 break;
-            /*case 3:
+            case 3:
                 // Call function to load a text file
-                // Example: loadTextFile(&bank);
+                loadTextFile(&bank);
                 break;
             case 4:
                 // Call function to read a text file
-                // Example: readTextFile(&bank);
+                readTextFile(&bank);
                 break;
-            case 5:
+            /*case 5:
                 printSubTypes();
                 break;
                 */

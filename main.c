@@ -184,10 +184,11 @@ void readTextFile(Bank* bank) {
 
     initlLInkedList(&bank->branchesID);
     NODE1* current = &bank->branchesID;
-    int branchID;
-    while (fscanf(file, "%d", &branchID) == 1) {
+    int branchID=0;
+    for (int i = 0; i < bank->branchCount; i++) {
         addNewLink(current, branchID);
         current = current->next;
+        branchID++;
     }
 
     bank->branches = (Branch*)malloc(bank->branchCount * sizeof(Branch));

@@ -32,7 +32,10 @@ void createNewBranch(Bank* bank, Branch* branch) {
         branch->branchID = bank->branchCount;
         bank->branches[bank->branchCount] = *branch;
         bank->branchCount++;
-        addNewLink(&bank->branchesID, branch->branchID);
+        if (branch->branchID == 0)
+            bank->branchesID.key = 0;
+        else
+            addNewLink(&bank->branchesID, branch->branchID);
         printf("the branch added successfully\n");
     }
     else {
@@ -63,8 +66,8 @@ void freeBranchesID(Bank* bank) {
 
 
 void addNewLink(NODE1* head, int data) {
-    NODE1* tmp;
-    NODE1* current;
+    NODE1* tmp=NULL;
+    NODE1* current=NULL;
     if (!head)
         return NULL;
     tmp = (NODE1*)malloc(sizeof(NODE1)); // new node

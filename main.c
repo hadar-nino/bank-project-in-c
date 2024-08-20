@@ -2,7 +2,7 @@
 #define _CRT_SECURE_NO_DEPRECATE  
 #define _CRT_NONSTDC_NO_DEPRECATE
 #include <stdio.h>
-#include <stdlib.h>	
+#include <stdlib.h>
 #include <string.h>
 #include "Bank.h"
 #include "Branch.h"
@@ -65,7 +65,7 @@ void test(Bank* bank, Branch* branch, Employee* employee) {
             bank->branches[i].customers[j].creditCard->creditLimit = sum / 2;
             bank->branches[i].customers[j].account.transactionCount = 0;
             bank->branches[i].customers[j].account.transactions = NULL;
-            sprintf(customer.creditCard->expiryDate, "%d",j);
+            sprintf(customer.creditCard->expiryDate, "%d", j);
             sprintf(customer.creditCard->cardNumber, "Customer %d-%d", i + 1, j + 1);
         }
     }
@@ -100,13 +100,13 @@ void searchBranchByType(Bank* bank, int type) {
     else {
         if (type == 0) {
             printf("enter the number if employees you want to find by");
-            int numOf=0;
-            scanf("%d",numOf );
+            int numOf = 0;
+            scanf("%d", numOf);
             printBranch((Branch*)bsearch(numOf, bank->branches, bank->branchCount, sizeof(Branch), compareEmployeesCount));
         }
         if (type == 1) {
             printf("enter the number if customer you want to find by");
-            int numOf=0;
+            int numOf = 0;
             scanf("%d", numOf);
             printBranch((Branch*)bsearch(numOf, bank->branches, bank->branchCount, sizeof(Branch), compareCustomerCount));
         }
@@ -121,31 +121,27 @@ void loadTextFile(Bank* bank) {
         return;
     }
 
-    fprintf(file, "%d %d %d %d %d\n", bank->bankID, bank->branchCount, bank->numberOfEmployee, bank->sort, bank->branchesID.key);
+    fprintf(file, "%d %d %d %d\n", bank->bankID, bank->branchCount, bank->numberOfEmployee, bank->sort);
 
-    NODE1* current = &bank->branchesID;
-    while (current) {
-        fprintf(file, "%d ", current->key);
-        current = current->next;
-    }
     fprintf(file, "\n");
 
     // Write branch and employee data to text file
     for (int i = 0; i < bank->branchCount; i++) {
         Branch* branch = &bank->branches[i];
-        fprintf(file, "%d %s %d %d\n", branch->branchID, branch->name, branch->customerCount, branch->employeesCount);
+        fprintf(file, "%d %d %s\n", branch->customerCount, branch->employeesCount, branch->name);
 
         for (int j = 0; j < branch->customerCount; j++) {
             Customer* customer = &branch->customers[j];
-            fprintf(file, "%d %s %s %d\n", customer->customerID, customer->name, customer->address, customer->loanCount);
+            fprintf(file, "%s \n", customer->name);
+            fprintf(file, "%d %d %s\n", customer->customerID, customer->loanCount, customer->address);
 
             fprintf(file, "%f %d\n", customer->account.balance, customer->account.transactionCount);
             for (int k = 0; k < customer->account.transactionCount; k++) {
                 Transaction* transaction = customer->account.transactions[k];
-                fprintf(file, "%s %f\n", transaction->date, transaction->amount);
+                fprintf(file, "%f %s\n", transaction->amount, transaction->date);
             }
-
-            fprintf(file, "%s %f %f %s\n", customer->creditCard->cardNumber, customer->creditCard->creditLimit, customer->creditCard->balance, customer->creditCard->expiryDate);
+            fprintf(file, "%s\n", customer->creditCard->cardNumber);
+            fprintf(file, "%f %f %s\n", customer->creditCard->creditLimit, customer->creditCard->balance, customer->creditCard->expiryDate);
 
             NODE* loanNode = customer->headOfLoan.next;
             while (loanNode) {
@@ -158,7 +154,7 @@ void loadTextFile(Bank* bank) {
 
 
     fclose(file);
-   FILE* empFile = fopen("employees.bin", "wb");
+    FILE* empFile = fopen("employees.bin", "wb");
     if (!empFile) {
         printf("Error opening employee file for writing.\n");
         return;
@@ -180,66 +176,104 @@ void readTextFile(Bank* bank) {
         return;
     }
 
-    fscanf(file, "%d %d %d %d %d\n", &bank->bankID, &bank->branchCount, &bank->numberOfEmployee, &bank->sort, &bank->branchesID.key);
+    fscanf(file, "%d %d %d %d\n", &bank->bankID, &bank->branchCount, &bank->numberOfEmployee, &bank->sort);
 
+    int numOfBranch = bank->branchCount;
+    bank->branchCount = 0;
     initlLInkedList(&bank->branchesID);
-    NODE1* current = &bank->branchesID;
-    int branchID=0;
-    for (int i = 0; i < bank->branchCount; i++) {
-        addNewLink(current, branchID);
-        current = current->next;
-        branchID++;
+    Branch* branch = NULL;
+    for (int i = 0; i < numOfBranch; i++) {
+        branch = (Branch*)malloc(sizeof(Branch));
+        if (branch != NULL) {
+            fscanf(file, "%d %d\n", &branch->customerCount, &branch->employeesCount);
+            fgets(branch->name, sizeof(branch->name), file);
+            branch->name[strcspn(branch->name, "\n")] = '\0';
+            if (branch->employeesCount > 0) {
+                branch->employees = (Employee*)malloc(branch->employeesCount * sizeof(Employee));
+
+                // Read employees data from binary file if there are employees
+                FILE* empFile = fopen("employees.bin", "rb");
+                if (!empFile) {
+                    printf("Error opening employee file for reading.\n");
+                    return;
+                }
+
+                // Read employees data for this branch
+                fread(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
+                fclose(empFile);
+            }
+            else {
+                branch->employees = NULL;
+            }
+            branch->customers = (Customer*)malloc(branch->customerCount * sizeof(Customer));
+
+            for (int j = 0; j < branch->customerCount; j++) {
+                if ((branch->customerCount - 1) == j && i == (numOfBranch - 1))
+                {
+                    printf("pp");
+                }
+                Customer* customer = &branch->customers[j];
+
+                // Read the customer's name, including spaces
+                fgets(customer->name, sizeof(customer->name), file);
+                customer->name[strcspn(customer->name, "\n")] = '\0'; // Remove the newline character
+
+                // Read the customer's ID and loan count
+                fscanf(file, "%d %d\n", &customer->customerID, &customer->loanCount);
+
+                // Read the customer's address, including spaces
+                fgets(customer->address, sizeof(customer->address), file);
+                customer->address[strcspn(customer->address, "\n")] = '\0'; // Remove the newline character
+
+                // Read the customer's account balance and transaction count
+                fscanf(file, "%f %d\n", &customer->account.balance, &customer->account.transactionCount);
+
+                // Allocate memory for the transactions array
+                customer->account.transactions = NULL;
+                if (customer->account.transactionCount > 0) {
+                    customer->account.transactions = (Transaction**)malloc(customer->account.transactionCount * sizeof(Transaction*));
+                    if (customer->account.transactions == NULL) {
+                        printf("Memory allocation failed for transactions.\n");
+                        return; // Handle error or exit the function
+                    }
+
+                    // Read each transaction's date and amount
+                    for (int k = 0; k < customer->account.transactionCount; k++) {
+                        customer->account.transactions[k] = (Transaction*)malloc(sizeof(Transaction));
+                        if (customer->account.transactions[k] == NULL) {
+                            printf("Memory allocation failed for transaction %d.\n", k);
+                            return; // Handle error or exit the function
+                        }
+                        fscanf(file, "%s %f\n", customer->account.transactions[k]->date, &customer->account.transactions[k]->amount);
+                    }
+                }
+
+                // Allocate memory for the customer's credit card and read the details
+                customer->creditCard = (CreditCard*)malloc(sizeof(CreditCard));
+                if (customer->creditCard == NULL) {
+                    printf("Memory allocation failed for credit card.\n");
+                    return; // Handle error or exit the function
+                }
+                fgets(customer->creditCard->cardNumber, sizeof(customer->creditCard->cardNumber), file);
+                customer->creditCard->cardNumber[strcspn(customer->creditCard->cardNumber, "\n")] = '\0';
+
+                fscanf(file, "%f %f %s\n", &customer->creditCard->creditLimit, &customer->creditCard->balance, customer->creditCard->expiryDate);
+
+
+             //   init(&customer->headOfLoan);
+                customer->headOfLoan.key = NULL;
+                customer->headOfLoan.next = NULL;
+                for (int l = 0; l < customer->loanCount; l++) {
+                    Loan* loan = (Loan*)malloc(sizeof(Loan));
+                    fscanf(file, "%f %f %s %s\n", &loan->amount, &loan->interestRate, loan->startDate, loan->endDate);
+                    addLoan(customer, loan);
+                }
+            }
+            createNewBranch(bank, branch);
+        }
+        else
+            printf("Memory allocation for branch failed.\n");
     }
-
-    bank->branches = (Branch*)malloc(bank->branchCount * sizeof(Branch));
-
-    for (int i = 0; i < bank->branchCount; i++) {
-        Branch* branch = &bank->branches[i];
-        fscanf(file, "%d %s %d %d\n", &branch->branchID, branch->name, &branch->customerCount, &branch->employeesCount);
-
-        if (branch->employeesCount > 0) {
-            branch->employees = (Employee*)malloc(branch->employeesCount * sizeof(Employee));
-
-            // Read employees data from binary file if there are employees
-            FILE* empFile = fopen("employees.bin", "rb");
-            if (!empFile) {
-                printf("Error opening employee file for reading.\n");
-                return;
-            }
-
-            // Read employees data for this branch
-            fread(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
-            fclose(empFile);
-        }
-        else {
-            branch->employees = NULL;
-        }
-
-        branch->customers = (Customer*)malloc(branch->customerCount * sizeof(Customer));
-
-        for (int j = 0; j < branch->customerCount; j++) {
-            Customer* customer = &branch->customers[j];
-            fscanf(file, "%d %s %s %d\n", &customer->customerID, customer->name, customer->address, &customer->loanCount);
-
-            fscanf(file, "%f %d\n", &customer->account.balance, &customer->account.transactionCount);
-            customer->account.transactions = (Transaction**)malloc(customer->account.transactionCount * sizeof(Transaction*));
-            for (int k = 0; k < customer->account.transactionCount; k++) {
-                customer->account.transactions[k] = (Transaction*)malloc(sizeof(Transaction));
-                fscanf(file, "%s %f\n", customer->account.transactions[k]->date, &customer->account.transactions[k]->amount);
-            }
-
-            customer->creditCard = (CreditCard*)malloc(sizeof(CreditCard));
-            fscanf(file, "%s %f %f %s\n", customer->creditCard->cardNumber, &customer->creditCard->creditLimit, &customer->creditCard->balance, customer->creditCard->expiryDate);
-
-            init(&customer->headOfLoan);
-            for (int l = 0; l < customer->loanCount; l++) {
-                Loan* loan = (Loan*)malloc(sizeof(Loan));
-                fscanf(file, "%f %f %s %s\n", &loan->amount, &loan->interestRate, loan->startDate, loan->endDate);
-                addLoan(customer, loan);
-            }
-        }
-    }
-
     fclose(file);
 }
 
@@ -299,7 +333,7 @@ void addNewCustomer(Bank* bank, Customer* customer) {
 
 void updateCustomer(Bank* bank) {
     int index = branchSelect(bank);
-    if (index==-1){
+    if (index == -1) {
         return;
     }
     int index2;
@@ -316,7 +350,7 @@ void updateCustomer(Bank* bank) {
     if (index2<0 || index2>bank->branches[index].customerCount - 1) {
         printf("bad input, return to the menu");
         return;
-    }      
+    }
     updateCustomer1(&bank->branches[index].customers[index2]);
 }
 
@@ -360,36 +394,37 @@ int main() {
     Employee employee;
     int type = 0;
     initlLInkedList(&bank.branchesID);
-    test(&bank,&branch,&employee);
+  //  test(&bank, &branch, &employee);
     while (choice != 0) {
         displayMenu();    // Display the menu
         printf("\nEnter your choice: ");
         scanf("%d", &choice);    // Get user choice
         clearInputBuffer();
         switch (choice) {
-            
-            case 1:
-                // Call function to sort branches by type
-                printf("please enter the type you want to sort by:\n[1] for employee count\n[2] for customer count\n");
-                scanf("%d", &type);
-                type--;
-                sortBranchByType(&branch, type);
-                break;
-            case 2:
-                // Call function to search branches by type
-                printf("please enter the type you want to search bye by:\n[1] for employee count\n[2] for customer count\n");
-                scanf("%d", &type);
-                type--;
-                searchBranchByType(&branch, type);
-                break;
-            case 3:
-                // Call function to load a text file
-                loadTextFile(&bank);
-                break;
-            case 4:
-                // Call function to read a text file
-                readTextFile(&bank);
-                break;
+
+        case 1:
+            // Call function to sort branches by type
+            printf("please enter the type you want to sort by:\n[1] for employee count\n[2] for customer count\n");
+            scanf("%d", &type);
+            type--;
+            sortBranchByType(&branch, type);
+            break;
+        case 2:
+            // Call function to search branches by type
+            printf("please enter the type you want to search bye by:\n[1] for employee count\n[2] for customer count\n");
+            scanf("%d", &type);
+            type--;
+            searchBranchByType(&branch, type);
+            break;
+        case 3:
+            // Call function to load a text file
+            loadTextFile(&bank);
+            break;
+        case 4:
+            // Call function to read a text file
+            readTextFile(&bank);
+            printBank(&bank);
+            break;
             /*case 5:
                 printSubTypes();
                 break;
@@ -401,9 +436,9 @@ int main() {
         case 7:
             addNewEmployee(&bank, &employee);
             break;
-            
+
         case 8:
-            addNewCustomer(&bank,&customer);
+            addNewCustomer(&bank, &customer);
             break;
         case 9:
             updateCustomer(&bank);
@@ -421,7 +456,7 @@ int main() {
         case 13:
             mostLoansCustomer(&bank);
             break;
-           
+
         case 0:
             printf("Exiting...\n");
             break;
@@ -435,5 +470,3 @@ int main() {
     freeBank(&bank);
     return 0;
 }
-
-

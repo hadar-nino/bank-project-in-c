@@ -57,10 +57,10 @@ void addLoan(Customer* customer, Loan* loan) {
         tmp->key = (Loan*)malloc(sizeof(Loan));
         memcpy(tmp->key, loan, sizeof(Loan));
         current = &customer->headOfLoan;
-        while (current->next != NULL) {
+        for(int i=0;i<customer->loanCount;i++) {
             current = current->next;
         }
-        // Insert the new node
+        // Insert the new Node
         tmp->next = current->next;
         current->next = tmp;
     }

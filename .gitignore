@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/enc_temp_folder/e61e253dfde81c1dfd172b542dd379a/main.c
+/enc_temp_folder/abff7c514396b7afd2bbbf199aedcc37/Bank.c
+/.gitignore
+/.gitignore

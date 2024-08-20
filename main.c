@@ -260,9 +260,7 @@ void readTextFile(Bank* bank) {
                 fscanf(file, "%f %f %s\n", &customer->creditCard->creditLimit, &customer->creditCard->balance, customer->creditCard->expiryDate);
 
 
-             //   init(&customer->headOfLoan);
-                customer->headOfLoan.key = NULL;
-                customer->headOfLoan.next = NULL;
+                init(customer);
                 for (int l = 0; l < customer->loanCount; l++) {
                     Loan* loan = (Loan*)malloc(sizeof(Loan));
                     fscanf(file, "%f %f %s %s\n", &loan->amount, &loan->interestRate, loan->startDate, loan->endDate);

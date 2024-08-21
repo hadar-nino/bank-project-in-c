@@ -259,7 +259,7 @@ void readTextFile(Bank* bank) {
                 for (int l = 0; l < customer->loanCount; l++) {
                     Loan* loan = (Loan*)malloc(sizeof(Loan));
                     fscanf(file, "%f %f %s %s\n", &loan->amount, &loan->interestRate, loan->startDate, loan->endDate);
-                    addLoan(customer, loan);
+                    addLoan(customer, loan,0);
                 }
             }
             createNewBranch(bank, branch);

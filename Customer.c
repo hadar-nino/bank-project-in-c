@@ -47,7 +47,7 @@ void freeCustomer(Customer* customer) {
 }
 
 
-void addLoan(Customer* customer, Loan* loan) {
+void addLoan(Customer* customer, Loan* loan,int readCheck) {
     NODE* tmp;
     NODE* current;
     if (!customer)
@@ -63,8 +63,10 @@ void addLoan(Customer* customer, Loan* loan) {
         // Insert the new Node
         tmp->next = current->next;
         current->next = tmp;
-        customer->account.balance += loan->amount;
-        customer->loanCount++;
+        if (readCheck == 1) {
+            customer->account.balance += loan->amount;
+            customer->loanCount++;
+        }
     }
 }
 
@@ -180,7 +182,7 @@ void updateCustomer1(Customer* customer) {
         case 3:
             // Create new loan
             printf("Creating new loan for customer %s\n", customer->name);
-            addLoan(customer, createLoan());
+            addLoan(customer, createLoan(),1);
             Loan* l = NULL;
             if (customer->loanCount==prevLoanCount+1)
             {

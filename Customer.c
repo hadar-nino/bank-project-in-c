@@ -57,15 +57,15 @@ void addLoan(Customer* customer, Loan* loan) {
         tmp->key = (Loan*)malloc(sizeof(Loan));
         memcpy(tmp->key, loan, sizeof(Loan));
         current = &customer->headOfLoan;
-        for(int i=0;i<customer->loanCount;i++) {
+        for (int i = 0; i < customer->loanCount; i++) {
             current = current->next;
         }
         // Insert the new Node
         tmp->next = current->next;
         current->next = tmp;
+        customer->account.balance += loan->amount;
+        customer->loanCount++;
     }
-    customer->account.balance += loan->amount;
-    customer->loanCount++;
 }
 
 void printList(Customer customer) {
@@ -146,6 +146,7 @@ void updateCustomer1(Customer* customer) {
     int choice = 0;
     while (choice != 5)
     {
+        int prevLoanCount = customer->loanCount;
         printf("Update Customer\n"
             "[0] Update name\n"
             "[1] Update address\n"
@@ -180,6 +181,11 @@ void updateCustomer1(Customer* customer) {
             // Create new loan
             printf("Creating new loan for customer %s\n", customer->name);
             addLoan(customer, createLoan());
+            Loan* l = NULL;
+            if (customer->loanCount==prevLoanCount+1)
+            {
+
+            }
             break;
 
         case 4:

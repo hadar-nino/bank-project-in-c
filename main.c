@@ -164,7 +164,6 @@ void loadTextFile(Bank* bank) {
         Branch* branch = &bank->branches[i];
         fwrite(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
     }
-
     fclose(empFile);
 }
 
@@ -208,10 +207,6 @@ void readTextFile(Bank* bank) {
             branch->customers = (Customer*)malloc(branch->customerCount * sizeof(Customer));
 
             for (int j = 0; j < branch->customerCount; j++) {
-                if ((branch->customerCount - 1) == j && i == (numOfBranch - 1))
-                {
-                    printf("pp");
-                }
                 Customer* customer = &branch->customers[j];
 
                 // Read the customer's name, including spaces
@@ -392,7 +387,7 @@ int main() {
     Employee employee;
     int type = 0;
     initlLInkedList(&bank.branchesID);
-  //  test(&bank, &branch, &employee);
+   // test(&bank, &branch, &employee);
     while (choice != 0) {
         displayMenu();    // Display the menu
         printf("\nEnter your choice: ");

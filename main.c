@@ -436,7 +436,7 @@ int main() {
     Employee employee;
     int type = 0;
     initlLInkedList(&bank.branchesID);
-  //  test(&bank, &branch, &employee);
+    //  test(&bank, &branch, &employee);
     while (choice != 0) {
         displayMenu();    // Display the menu
         printf("\nEnter your choice: ");
@@ -451,6 +451,7 @@ int main() {
             type--;
             sortBranchByType(&branch, type);
             break;
+        
         case 2:
             // Call function to search branches by type
             printf("please enter the type you want to search bye by:\n[1] for employee count\n[2] for customer count\n");
@@ -458,31 +459,37 @@ int main() {
             type--;
             searchBranchByType(&branch, type);
             break;
+        
         case 3:
             // Call function to load a text file
             loadTextFile(&bank);
             break;
+        
         case 4:
             // Call function to read a text file
             readTextFile(&bank);
             break;
-            case 5:
-                printSubTypes(&bank);
-                break;                
+        
+        case 5:
+            printSubTypes(&bank);
+            break;
+        
         case 6:
             addNewBranch(&bank, &branch);
             break;
-
+        
         case 7:
             addNewEmployee(&bank, &employee);
             break;
-
+        
         case 8:
             addNewCustomer(&bank, &customer);
             break;
+        
         case 9:
             updateCustomer(&bank);
-            break;/*
+            break;
+            /*
         case 10:
             loadBinaryFile(&bank);
             break;
@@ -493,6 +500,7 @@ int main() {
         case 12:
             richestCustomer(&bank);
             break;
+
         case 13:
             mostLoansCustomer(&bank);
             break;

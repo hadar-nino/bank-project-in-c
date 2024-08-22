@@ -277,7 +277,41 @@ void readTextFile(Bank* bank) {
     fclose(file);
 }
 
-void printSubTypes();
+void printSubTypes(Bank* bank) {
+    int choice = 1, index, index2;
+    while (choice != 0)
+    {
+        printf("\n[1] print bank\n"
+            "[2] print branch\n"
+            "[3] print employee\n"
+            "[4] print customer\n"
+            "[0] exit");
+
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);    // Get user choice
+        clearInputBuffer();
+        switch (choice) {
+        case 1:
+            printBank(bank);
+            break;
+        case 2:
+            index = branchSelect(bank);
+            if (index == -1) {
+                return;
+            }
+            printBranch(&bank->branches[index]);
+            break;
+        case 4:
+            index = branchSelect(bank);
+            if (index == -1)
+                return;
+            index2 = CustomerSelect(&bank->branches[index]);
+            if (index2 == -1)
+                return;
+            showCustomer(&bank->branches[index].customers[index2]);
+        }
+    }
+}
 
 
 void loadBinaryFile(Bank* bank);
@@ -310,6 +344,25 @@ int branchSelect(Bank* bank) {
     return index;
 }
 
+int CustomerSelect(Branch* branch) {
+    int index;
+    if (branch->customerCount == 0) {
+        printf("the branch has no customer please add first in the mnue\n");
+        return;
+    }
+    printf("all customers in the branch:\n");
+    for (int i = 0; i < branch->customerCount; i++) {
+        printf("[%d] customer: %s \n", i, branch->customers[i].name);
+    }
+    printf("\nplease chose a customer:");
+    scanf("%d", &index);
+    if (index<0 || index>branch->customerCount - 1) {
+        printf("bad input, return to the menu");
+        return-1;
+    }
+    return index;
+}
+
 void addNewEmployee(Bank* bank, Employee* employee) {
     int index = branchSelect(bank);
     if (index == -1) {
@@ -331,26 +384,15 @@ void addNewCustomer(Bank* bank, Customer* customer) {
     addCustomerToBranch(&bank->branches[index], customer);
 }
 
+
+
 void updateCustomer(Bank* bank) {
     int index = branchSelect(bank);
-    if (index == -1) {
+    if (index == -1)
         return;
-    }
-    int index2;
-    if (bank->branches[index].customerCount == 0) {
-        printf("the branch has no customer please add first in the mnue\n");
+    int index2 = CustomerSelect(&bank->branches[index]);
+    if (index2 == -1)
         return;
-    }
-    printf("all customers in the branch:\n");
-    for (int i = 0; i < bank->branches[index].customerCount; i++) {
-        printf("[%d] customer: %s \n", i, bank->branches[index].customers[i].name);
-    }
-    printf("\nplease chose the customer you want to update:");
-    scanf("%d", &index2);
-    if (index2<0 || index2>bank->branches[index].customerCount - 1) {
-        printf("bad input, return to the menu");
-        return;
-    }
     updateCustomer1(&bank->branches[index].customers[index2]);
 }
 
@@ -425,8 +467,7 @@ int main() {
             readTextFile(&bank);
             break;
             case 5:
-                printBank(&bank);
-//                printSubTypes();
+                printSubTypes(&bank);
                 break;                
         case 6:
             addNewBranch(&bank, &branch);

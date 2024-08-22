@@ -394,7 +394,7 @@ int main() {
     Employee employee;
     int type = 0;
     initlLInkedList(&bank.branchesID);
-   // test(&bank, &branch, &employee);
+  //  test(&bank, &branch, &employee);
     while (choice != 0) {
         displayMenu();    // Display the menu
         printf("\nEnter your choice: ");
@@ -423,12 +423,11 @@ int main() {
         case 4:
             // Call function to read a text file
             readTextFile(&bank);
-            printBank(&bank);
             break;
-            /*case 5:
-                printSubTypes();
-                break;
-                */
+            case 5:
+                printBank(&bank);
+//                printSubTypes();
+                break;                
         case 6:
             addNewBranch(&bank, &branch);
             break;
@@ -465,8 +464,6 @@ int main() {
             break;
         }
     }
-    printBank(&bank);
-
     freeBank(&bank);
     return 0;
 }

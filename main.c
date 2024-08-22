@@ -131,22 +131,20 @@ void loadTextFile(Bank* bank) {
         fprintf(file, "%d %d %s\n", branch->customerCount, branch->employeesCount, branch->name);
 
         for (int j = 0; j < branch->customerCount; j++) {
-            Customer* customer = &branch->customers[j];
-            fprintf(file, "%s \n", customer->name);
-            fprintf(file, "%d %d %s\n", customer->customerID, customer->loanCount, customer->address);
+            Customer* customer = &branch->customers[j];            
+            fprintf(file, "%s\n%d %d %s\n", customer->name, customer->customerID, customer->loanCount, customer->address);
 
             fprintf(file, "%f %d\n", customer->account.balance, customer->account.transactionCount);
             for (int k = 0; k < customer->account.transactionCount; k++) {
                 Transaction* transaction = customer->account.transactions[k];
                 fprintf(file, "%f %s\n", transaction->amount, transaction->date);
             }
-            fprintf(file, "%s\n", customer->creditCard->cardNumber);
-            fprintf(file, "%f %f %s\n", customer->creditCard->creditLimit, customer->creditCard->balance, customer->creditCard->expiryDate);
+            fprintf(file, "%s\n%f %f %s\n", customer->creditCard->cardNumber, customer->creditCard->creditLimit, customer->creditCard->balance, customer->creditCard->expiryDate);
 
             NODE* loanNode = customer->headOfLoan.next;
             while (loanNode) {
                 Loan* loan = (Loan*)loanNode->key;
-                fprintf(file, "%s\n %f %f %s\n", loan->startDate, loan->amount, loan->interestRate, loan->endDate);
+                fprintf(file, "%s\n%f %f %s\n", loan->startDate, loan->amount, loan->interestRate, loan->endDate);
                 loanNode = loanNode->next;
             }
         }
@@ -215,7 +213,7 @@ void readTextFile(Bank* bank) {
 
                 // Read the customer's ID and loan count
                 int loanCount;
-                fscanf(file, "%d %d\n", &customer->customerID, &loanCount);
+                fscanf(file, "%d %d", &customer->customerID, &loanCount);
                 customer->loanCount = 0;
 
                 // Read the customer's address, including spaces

@@ -63,6 +63,7 @@ void addLoan(Customer* customer, Loan* loan) {
         // Insert the new Node
         tmp->next = current->next;
         current->next = tmp;
+        customer->loanCount++;
     }
 }
 
@@ -184,7 +185,6 @@ void updateCustomer1(Customer* customer) {
                 break;           
             addLoan(customer,loan);
             customer->account.balance += loan->amount;
-            customer->loanCount++;
             break;
 
         case 4:

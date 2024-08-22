@@ -146,7 +146,7 @@ void loadTextFile(Bank* bank) {
             NODE* loanNode = customer->headOfLoan.next;
             while (loanNode) {
                 Loan* loan = (Loan*)loanNode->key;
-                fprintf(file, "%f %f %s %s\n", loan->amount, loan->interestRate, loan->startDate, loan->endDate);
+                fprintf(file, "%s\n %f %f %s\n", loan->startDate, loan->amount, loan->interestRate, loan->endDate);
                 loanNode = loanNode->next;
             }
         }
@@ -214,7 +214,9 @@ void readTextFile(Bank* bank) {
                 customer->name[strcspn(customer->name, "\n")] = '\0'; // Remove the newline character
 
                 // Read the customer's ID and loan count
-                fscanf(file, "%d %d\n", &customer->customerID, &customer->loanCount);
+                int loanCount;
+                fscanf(file, "%d %d\n", &customer->customerID, &loanCount);
+                customer->loanCount = 0;
 
                 // Read the customer's address, including spaces
                 fgets(customer->address, sizeof(customer->address), file);
@@ -256,10 +258,17 @@ void readTextFile(Bank* bank) {
 
 
                 init(customer);
-                for (int l = 0; l < customer->loanCount; l++) {
+                for (int l = 0; l < loanCount; l++) {
                     Loan* loan = (Loan*)malloc(sizeof(Loan));
-                    fscanf(file, "%f %f %s %s\n", &loan->amount, &loan->interestRate, loan->startDate, loan->endDate);
-                    addLoan(customer, loan,0);
+
+                    fgets(loan->startDate, sizeof(loan->startDate), file);
+                    loan->startDate[strcspn(loan->startDate, "\n")] = '\0';
+
+                    fscanf(file, "%f %f", &loan->amount, &loan->interestRate, loan->startDate);
+                    fgets(loan->endDate, sizeof(loan->endDate), file);
+                    loan->endDate[strcspn(loan->endDate, "\n")] = '\0';
+                    
+                    addLoan(customer, loan);
                 }
             }
             createNewBranch(bank, branch);

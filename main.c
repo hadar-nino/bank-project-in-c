@@ -273,9 +273,9 @@ void readTextFile(Bank* bank) {
 void printSubTypes();
 
 
-void loadBinaryFileOfEmploye(Bank* bank);
+void loadBinaryFile(Bank* bank);
 
-void readBinaryFileOfEmploye(Bank* bank);
+void readBinaryFile(Bank* bank);
 
 void addNewBranch(Bank* bank, Branch* branch) {
     printf("enter name (the name will be 50 words): ");
@@ -437,10 +437,10 @@ int main() {
             updateCustomer(&bank);
             break;/*
         case 10:
-            loadBinaryFileOfEmploye(&bank);
+            loadBinaryFile(&bank);
             break;
         case 11:
-            readBinaryFileOfEmploye(&bank);
+            readBinaryFile(&bank);
             break;
              */
         case 12:

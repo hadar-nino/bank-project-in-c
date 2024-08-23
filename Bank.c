@@ -27,20 +27,21 @@ void initlLInkedList(NODE1* node) {
 void createNewBranch(Bank* bank, Branch* branch) {
     Branch* temp = NULL;
     temp = (Branch*)realloc(bank->branches, (bank->branchCount + 1) * sizeof(Branch));
-    if (temp != NULL) {
-        bank->branches = temp;
-        branch->branchID = bank->branchCount;
-        bank->branches[bank->branchCount] = *branch;
-        bank->branchCount++;
-        if (branch->branchID == 0)
-            bank->branchesID.key = 0;
-        else
-            addNewLink(&bank->branchesID, branch->branchID);
-        printf("the branch added successfully\n");
-    }
-    else {
+
+    if (temp == NULL) {
         printf("Memory allocation failed\n");
+        return; //is this ok? the function is void
     }
+
+    bank->branches = temp;
+    branch->branchID = bank->branchCount;
+    bank->branches[bank->branchCount] = *branch;
+    bank->branchCount++;
+    if (branch->branchID == 0)
+        bank->branchesID.key = 0;
+    else
+        addNewLink(&bank->branchesID, branch->branchID);
+    printf("the branch added successfully\n");
 }
 
 void freeBank(Bank* bank)
@@ -66,22 +67,26 @@ void freeBranchesID(Bank* bank) {
 
 
 void addNewLink(NODE1* head, int data) {
-    NODE1* tmp=NULL;
-    NODE1* current=NULL;
+    NODE1* tmp = NULL;
+    NODE1* current = NULL;
     if (!head)
         return NULL;
     tmp = (NODE1*)malloc(sizeof(NODE1)); // new node
-    if (tmp != NULL) {
-        tmp->key = data;
-        current = head;
-        while (current->next != NULL) {
-            current = current->next;
-        }
-        // Insert the new node
-        tmp->next = NULL;
-        current->next = tmp;
-        tmp->prev = current;
+
+    if (tmp == NULL) {
+        printf("Memory allocation failed\n");
+        return;
     }
+
+    tmp->key = data;
+    current = head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    // Insert the new node
+    tmp->next = NULL;
+    current->next = tmp;
+    tmp->prev = current;
 }
 
 

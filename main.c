@@ -39,11 +39,12 @@ void processArr(const void* arr, int size, size_t typeSize, void (*process)(cons
         process((char*)arr + i * typeSize);
 }
 
-void test(Bank* bank, Branch* branch, Employee* employee) {
+void test(Bank* bank, Branch* branch) {
     int choice = 1;
 
     for (int i = 0; i < 4; i++) {
         int sum;
+        int count = 0;
         sprintf(branch->name, "Branch %d", i + 1);
         createNewBranch(bank, branch);
 
@@ -67,6 +68,13 @@ void test(Bank* bank, Branch* branch, Employee* employee) {
             bank->branches[i].customers[j].account.transactions = NULL;
             sprintf(customer.creditCard->expiryDate, "%d", j);
             sprintf(customer.creditCard->cardNumber, "Customer %d-%d", i + 1, j + 1);
+
+            Employee employee;
+            sprintf(employee.name, "employee %d-%d", i + 1, j + 1);
+            sprintf(employee.position, "position %d-%d", i + 1, j + 1);
+            employee.branchID = i;
+            employee.employeeID = count++;
+            addEmployeeToBranch(&bank->branches[i], &employee);
         }
     }
     printBank(bank);
@@ -314,9 +322,11 @@ void printSubTypes(Bank* bank) {
 }
 
 
-void loadBinaryFile(Bank* bank);
+void loadBinaryFile(Bank* bank){
 
-void readBinaryFile(Bank* bank);
+}
+
+void readBinaryFile(Bank* bank){}
 
 void addNewBranch(Bank* bank, Branch* branch) {
     printf("enter name (the name will be 50 words): ");
@@ -436,7 +446,7 @@ int main() {
     Employee employee;
     int type = 0;
     initlLInkedList(&bank.branchesID);
-    //  test(&bank, &branch, &employee);
+ //   test(&bank, &branch);
     while (choice != 0) {
         displayMenu();    // Display the menu
         printf("\nEnter your choice: ");

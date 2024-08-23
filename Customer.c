@@ -48,23 +48,31 @@ void freeCustomer(Customer* customer) {
 
 
 void addLoan(Customer* customer, Loan* loan) {
-    NODE* tmp;
-    NODE* current;
+    NODE* tmp=NULL;
+    NODE* current=NULL;
     if (!customer)
         return NULL;
     tmp = (NODE*)malloc(sizeof(NODE)); // new node
-    if (tmp != NULL) {
-        tmp->key = (Loan*)malloc(sizeof(Loan));
-        memcpy(tmp->key, loan, sizeof(Loan));
-        current = &customer->headOfLoan;
-        for (int i = 0; i < customer->loanCount; i++) {
-            current = current->next;
-        }
-        // Insert the new Node
-        tmp->next = current->next;
-        current->next = tmp;
-        customer->loanCount++;
+    if (tmp == NULL) {
+        printf("Memory allocation failed\n");
+        return;
     }
+
+    tmp->key = NULL;
+    tmp->key = (Loan*)malloc(sizeof(Loan));
+    if (tmp->key == NULL) {
+        printf("Memory allocation failed\n");
+        return;
+    }
+    memcpy(tmp->key, loan, sizeof(Loan));
+    current = &customer->headOfLoan;
+    for (int i = 0; i < customer->loanCount; i++) {
+        current = current->next;
+    }
+    // Insert the new Node
+    tmp->next = current->next;
+    current->next = tmp;
+    customer->loanCount++;
 }
 
 void printList(Customer customer) {

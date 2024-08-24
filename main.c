@@ -109,13 +109,13 @@ void searchBranchByType(Bank* bank, int type) {
         if (type == 0) {
             printf("enter the number if employees you want to find by");
             int numOf = 0;
-            scanf("%d", numOf);
+            scanf("%d", &numOf);
             printBranch((Branch*)bsearch(numOf, bank->branches, bank->branchCount, sizeof(Branch), compareEmployeesCount));
         }
         if (type == 1) {
             printf("enter the number if customer you want to find by");
             int numOf = 0;
-            scanf("%d", numOf);
+            scanf("%d", &numOf);
             printBranch((Branch*)bsearch(numOf, bank->branches, bank->branchCount, sizeof(Branch), compareCustomerCount));
         }
     }
@@ -446,7 +446,7 @@ int main() {
     Employee employee;
     int type = 0;
     initlLInkedList(&bank.branchesID);
- //   test(&bank, &branch);
+    test(&bank, &branch);
     while (choice != 0) {
         displayMenu();    // Display the menu
         printf("\nEnter your choice: ");

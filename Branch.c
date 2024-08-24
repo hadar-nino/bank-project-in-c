@@ -46,10 +46,14 @@ void addCustomerToBranch( Branch* branch,Customer* customer) {
     }
 }
 
-int compareEmployeesCount(Branch* branch1, Branch* branch2) {
+int compareEmployeesCount(const void* a, const void* b) {
+    const Branch* branch1 = (const Branch*)a;
+    const Branch* branch2 = (const Branch*)b;
     return branch1->employeesCount - branch2->employeesCount;
 }
-int compareCustomerCount(Branch* branch1, Branch* branch2) {
+int compareCustomerCount(const void* a, const void* b) {
+    const Branch* branch1 = (const Branch*)a;
+    const Branch* branch2 = (const Branch*)b;
     return branch1->customerCount - branch2->customerCount;
 }
 void printBranch(Branch* branch) {

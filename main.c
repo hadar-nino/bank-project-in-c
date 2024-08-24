@@ -78,40 +78,51 @@ void clearInputBuffer() {
 }
 
 
-// Function prototypes
 void sortBranchByType(Bank* bank, int type) {
     if (type == 0) {
-        qsort(bank, bank->branchCount, sizeof(type), compareEmployeesCount);
+        qsort(bank->branches, bank->branchCount, sizeof(Branch), compareEmployeesCount);
         bank->sort = 1;
-        printf("branches sorted");
+        printf("Branches sorted by employee count.\n");
     }
     else {
-        qsort(bank, bank->branchCount, sizeof(type), compareCustomerCount);
+        qsort(bank->branches, bank->branchCount, sizeof(Branch), compareCustomerCount);
         bank->sort = 2;
-        printf("branches sorted");
+        printf("Branches sorted by customer count.\n");
     }
 }
 
 void searchBranchByType(Bank* bank, int type) {
     if ((type + 1) != bank->sort) {
-        printf("the branches arent sorted by this type");
+        printf("The branches aren't sorted by this type.\n");
         return;
     }
     else {
+        int numOf = 0;
         if (type == 0) {
-            printf("enter the number if employees you want to find by");
-            int numOf = 0;
-            scanf("%d", numOf);
-            printBranch((Branch*)bsearch(numOf, bank->branches, bank->branchCount, sizeof(Branch), compareEmployeesCount));
+            printf("Enter the number of employees you want to find by: ");
+            scanf("%d", &numOf);
+            Branch key = { .employeesCount = numOf };
+            Branch* result = (Branch*)bsearch(&key, bank->branches, bank->branchCount, sizeof(Branch), compareEmployeesCount);
+            if (result != NULL) {
+                printBranch(result);
+            }
+            else {
+                printf("Branch not found.\n");
+            }
         }
-        if (type == 1) {
-            printf("enter the number if customer you want to find by");
-            int numOf = 0;
-            scanf("%d", numOf);
-            printBranch((Branch*)bsearch(numOf, bank->branches, bank->branchCount, sizeof(Branch), compareCustomerCount));
+        else if (type == 1) {
+            printf("Enter the number of customers you want to find by: ");
+            scanf("%d", &numOf);
+            Branch key = { .customerCount = numOf };
+            Branch* result = (Branch*)bsearch(&key, bank->branches, bank->branchCount, sizeof(Branch), compareCustomerCount);
+            if (result != NULL) {
+                printBranch(result);
+            }
+            else {
+                printf("Branch not found.\n");
+            }
         }
     }
-
 }
 
 void loadTextFile(Bank* bank) {
@@ -125,7 +136,6 @@ void loadTextFile(Bank* bank) {
 
     fprintf(file, "\n");
 
-    // Write branch and employee data to text file
     for (int i = 0; i < bank->branchCount; i++) {
         Branch* branch = &bank->branches[i];
         fprintf(file, "%d %d %s\n", branch->customerCount, branch->employeesCount, branch->name);
@@ -387,7 +397,7 @@ int main() {
     Employee employee;
     int type = 0;
     initlLInkedList(&bank.branchesID);
-   // test(&bank, &branch, &employee);
+    test(&bank, &branch, &employee);
     while (choice != 0) {
         displayMenu();    // Display the menu
         printf("\nEnter your choice: ");
@@ -400,14 +410,14 @@ int main() {
             printf("please enter the type you want to sort by:\n[1] for employee count\n[2] for customer count\n");
             scanf("%d", &type);
             type--;
-            sortBranchByType(&branch, type);
+            sortBranchByType(&bank, type);
             break;
         case 2:
             // Call function to search branches by type
             printf("please enter the type you want to search bye by:\n[1] for employee count\n[2] for customer count\n");
             scanf("%d", &type);
             type--;
-            searchBranchByType(&branch, type);
+            searchBranchByType(&bank, type);
             break;
         case 3:
             // Call function to load a text file

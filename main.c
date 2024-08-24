@@ -136,7 +136,7 @@ void loadTextFile(Bank* bank) {
     // Write branch and employee data to text file
     for (int i = 0; i < bank->branchCount; i++) {
         Branch* branch = &bank->branches[i];
-        fprintf(file, "%d %d %s\n", branch->customerCount, branch->employeesCount, branch->name);
+        fprintf(file, "%d %d %d %s\n",branch->branchID, branch->customerCount, branch->employeesCount, branch->name);
 
         for (int j = 0; j < branch->customerCount; j++) {
             Customer* customer = &branch->customers[j];            
@@ -182,105 +182,115 @@ void readTextFile(Bank* bank) {
     }
 
     fscanf(file, "%d %d %d %d\n", &bank->bankID, &bank->branchCount, &bank->numberOfEmployee, &bank->sort);
+    bank->branches = NULL;
+    if (bank->branchCount > 0)
+    {
+        bank->branches = (Branch*)malloc(bank->branchCount * sizeof(Branch));
+        if (bank->branches != NULL)
+        {
+            initlLInkedList(&bank->branchesID);
+            for (int i = 0; i < bank->branchCount; i++) {
+                Branch* branch = &bank->branches[i];
+                if (branch != NULL) {
+                    fscanf(file, "%d %d %d\n",&branch->branchID, &branch->customerCount, &branch->employeesCount);
+                    fgets(branch->name, sizeof(branch->name), file);
+                    branch->name[strcspn(branch->name, "\n")] = '\0';
+                    if (i == 0)
+                        bank->branchesID.key = branch->branchID;
+                    else
+                        addNewLink(&bank->branchesID, branch->branchID);
 
-    int numOfBranch = bank->branchCount;
-    bank->branchCount = 0;
-    initlLInkedList(&bank->branchesID);
-    Branch* branch = NULL;
-    for (int i = 0; i < numOfBranch; i++) {
-        branch = (Branch*)malloc(sizeof(Branch));
-        if (branch != NULL) {
-            fscanf(file, "%d %d\n", &branch->customerCount, &branch->employeesCount);
-            fgets(branch->name, sizeof(branch->name), file);
-            branch->name[strcspn(branch->name, "\n")] = '\0';
-            if (branch->employeesCount > 0) {
-                branch->employees = (Employee*)malloc(branch->employeesCount * sizeof(Employee));
+                    if (branch->employeesCount > 0) {
+                        branch->employees = (Employee*)malloc(branch->employeesCount * sizeof(Employee));
 
-                // Read employees data from binary file if there are employees
-                FILE* empFile = fopen("employees.bin", "rb");
-                if (!empFile) {
-                    printf("Error opening employee file for reading.\n");
-                    return;
-                }
+                        // Read employees data from binary file if there are employees
+                        FILE* empFile = fopen("employees.bin", "rb");
+                        if (!empFile) {
+                            printf("Error opening employee file for reading.\n");
+                            return;
+                        }
 
-                // Read employees data for this branch
-                fread(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
-                fclose(empFile);
-            }
-            else {
-                branch->employees = NULL;
-            }
-            branch->customers = (Customer*)malloc(branch->customerCount * sizeof(Customer));
-
-            for (int j = 0; j < branch->customerCount; j++) {
-                Customer* customer = &branch->customers[j];
-
-                // Read the customer's name, including spaces
-                fgets(customer->name, sizeof(customer->name), file);
-                customer->name[strcspn(customer->name, "\n")] = '\0'; // Remove the newline character
-
-                // Read the customer's ID and loan count
-                int loanCount;
-                fscanf(file, "%d %d", &customer->customerID, &loanCount);
-                customer->loanCount = 0;
-
-                // Read the customer's address, including spaces
-                fgets(customer->address, sizeof(customer->address), file);
-                customer->address[strcspn(customer->address, "\n")] = '\0'; // Remove the newline character
-
-                // Read the customer's account balance and transaction count
-                fscanf(file, "%f %d\n", &customer->account.balance, &customer->account.transactionCount);
-
-                // Allocate memory for the transactions array
-                customer->account.transactions = NULL;
-                if (customer->account.transactionCount > 0) {
-                    customer->account.transactions = (Transaction**)malloc(customer->account.transactionCount * sizeof(Transaction*));
-                    if (customer->account.transactions == NULL) {
-                        printf("Memory allocation failed for transactions.\n");
-                        return; // Handle error or exit the function
+                        // Read employees data for this branch
+                        fread(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
+                        fclose(empFile);
                     }
+                    else {
+                        branch->employees = NULL;
+                    }
+                    branch->customers = (Customer*)malloc(branch->customerCount * sizeof(Customer));
 
-                    // Read each transaction's date and amount
-                    for (int k = 0; k < customer->account.transactionCount; k++) {
-                        customer->account.transactions[k] = (Transaction*)malloc(sizeof(Transaction));
-                        if (customer->account.transactions[k] == NULL) {
-                            printf("Memory allocation failed for transaction %d.\n", k);
+                    for (int j = 0; j < branch->customerCount; j++) {
+                        Customer* customer = &branch->customers[j];
+
+                        // Read the customer's name, including spaces
+                        fgets(customer->name, sizeof(customer->name), file);
+                        customer->name[strcspn(customer->name, "\n")] = '\0'; // Remove the newline character
+
+                        // Read the customer's ID and loan count
+                        int loanCount;
+                        fscanf(file, "%d %d", &customer->customerID, &loanCount);
+                        customer->loanCount = 0;
+
+                        // Read the customer's address, including spaces
+                        fgets(customer->address, sizeof(customer->address), file);
+                        customer->address[strcspn(customer->address, "\n")] = '\0'; // Remove the newline character
+
+                        // Read the customer's account balance and transaction count
+                        fscanf(file, "%f %d\n", &customer->account.balance, &customer->account.transactionCount);
+
+                        // Allocate memory for the transactions array
+                        customer->account.transactions = NULL;
+                        if (customer->account.transactionCount > 0) {
+                            customer->account.transactions = (Transaction**)malloc(customer->account.transactionCount * sizeof(Transaction*));
+                            if (customer->account.transactions == NULL) {
+                                printf("Memory allocation failed for transactions.\n");
+                                return; // Handle error or exit the function
+                            }
+
+                            // Read each transaction's date and amount
+                            for (int k = 0; k < customer->account.transactionCount; k++) {
+                                customer->account.transactions[k] = (Transaction*)malloc(sizeof(Transaction));
+                                if (customer->account.transactions[k] == NULL) {
+                                    printf("Memory allocation failed for transaction %d.\n", k);
+                                    return; // Handle error or exit the function
+                                }
+                                fscanf(file, "%s %f\n", customer->account.transactions[k]->date, &customer->account.transactions[k]->amount);
+                            }
+                        }
+
+                        // Allocate memory for the customer's credit card and read the details
+                        customer->creditCard = (CreditCard*)malloc(sizeof(CreditCard));
+                        if (customer->creditCard == NULL) {
+                            printf("Memory allocation failed for credit card.\n");
                             return; // Handle error or exit the function
                         }
-                        fscanf(file, "%s %f\n", customer->account.transactions[k]->date, &customer->account.transactions[k]->amount);
+                        fgets(customer->creditCard->cardNumber, sizeof(customer->creditCard->cardNumber), file);
+                        customer->creditCard->cardNumber[strcspn(customer->creditCard->cardNumber, "\n")] = '\0';
+
+                        fscanf(file, "%f %f %s\n", &customer->creditCard->creditLimit, &customer->creditCard->balance, customer->creditCard->expiryDate);
+
+
+                        init(customer);
+                        for (int l = 0; l < loanCount; l++) {
+                            Loan* loan = (Loan*)malloc(sizeof(Loan));
+
+                            fgets(loan->startDate, sizeof(loan->startDate), file);
+                            loan->startDate[strcspn(loan->startDate, "\n")] = '\0';
+
+                            fscanf(file, "%f %f", &loan->amount, &loan->interestRate, loan->startDate);
+                            fgets(loan->endDate, sizeof(loan->endDate), file);
+                            loan->endDate[strcspn(loan->endDate, "\n")] = '\0';
+
+                            addLoan(customer, loan);
+                        }
                     }
                 }
-
-                // Allocate memory for the customer's credit card and read the details
-                customer->creditCard = (CreditCard*)malloc(sizeof(CreditCard));
-                if (customer->creditCard == NULL) {
-                    printf("Memory allocation failed for credit card.\n");
-                    return; // Handle error or exit the function
-                }
-                fgets(customer->creditCard->cardNumber, sizeof(customer->creditCard->cardNumber), file);
-                customer->creditCard->cardNumber[strcspn(customer->creditCard->cardNumber, "\n")] = '\0';
-
-                fscanf(file, "%f %f %s\n", &customer->creditCard->creditLimit, &customer->creditCard->balance, customer->creditCard->expiryDate);
-
-
-                init(customer);
-                for (int l = 0; l < loanCount; l++) {
-                    Loan* loan = (Loan*)malloc(sizeof(Loan));
-
-                    fgets(loan->startDate, sizeof(loan->startDate), file);
-                    loan->startDate[strcspn(loan->startDate, "\n")] = '\0';
-
-                    fscanf(file, "%f %f", &loan->amount, &loan->interestRate, loan->startDate);
-                    fgets(loan->endDate, sizeof(loan->endDate), file);
-                    loan->endDate[strcspn(loan->endDate, "\n")] = '\0';
-                    
-                    addLoan(customer, loan);
-                }
+                else
+                    printf("Memory allocation for branch failed.\n");
             }
-            createNewBranch(bank, branch);
         }
         else
-            printf("Memory allocation for branch failed.\n");
+            printf("Memory allocation failed.\n");
     }
     fclose(file);
 }
@@ -446,7 +456,7 @@ int main() {
     Employee employee;
     int type = 0;
     initlLInkedList(&bank.branchesID);
-    test(&bank, &branch);
+  //  test(&bank, &branch);
     while (choice != 0) {
         displayMenu();    // Display the menu
         printf("\nEnter your choice: ");

@@ -15,6 +15,9 @@ void createBank(Bank* b) {
         printf("the id number need to be positive, please enter again: ");
         scanf("%d", &num);
     }
+    b->branchCount = 0;
+    b->branches = NULL;
+    b->numberOfEmployee = 0;
     b->bankID = num;
     b->sort = 0;
 }
@@ -30,7 +33,7 @@ void createNewBranch(Bank* bank, Branch* branch) {
 
     if (temp == NULL) {
         printf("Memory allocation failed\n");
-        return; //is this ok? the function is void
+        return; 
     }
 
     bank->branches = temp;

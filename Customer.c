@@ -58,10 +58,6 @@ void addLoan(Customer* customer, Loan* loan) {
         return;
     }
     tmp->key = loan;
-    if (tmp->key == NULL) {
-        printf("Memory allocation failed\n");
-        return;
-    }
     current = &customer->headOfLoan;
     for (int i = 0; i < customer->loanCount; i++) {
         current = current->next;

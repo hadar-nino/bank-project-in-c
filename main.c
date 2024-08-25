@@ -750,50 +750,6 @@ Customer* mostLoansCustomer(Bank* bank) {
     return &bank->branches[indexBranch].customers[mostLoansCustomer];
 }
 
-void test1(Customer* c1, Customer* c2) {
-    FILE* file = fopen("Info.txt", "w");
-    if (!file) {
-        printf("Error opening file for writing.\n");
-        return;
-    }
-
-    fwrite(c1->name, sizeof(char), 100, file); 
-    fclose(file);
-
-    FILE* file1 = fopen("Info.bin", "rb");
-    if (!file) {
-        printf("Error opening file for reading.\n");
-        return;
-    }
-
-    fread(c2->name, sizeof(char), 100, file); // fix this
-    fclose(file1);
-}
-
-void test2(Customer* c1, Customer* c2) {
-    // Write customer data to text file
-    FILE* file = fopen("Info.bin", "w");
-    if (!file) {
-        printf("Error opening file for writing.\n");
-        return;
-    }
-
-    fwrite(c1->name, sizeof(char), 100, file); // Write name with null terminator
-    fclose(file);
-
-    // Read customer data from binary file
-    FILE* file1 = fopen("Info.bin", "rb");
-    if (!file1) {
-        printf("Error opening file for reading.\n");
-        return;
-    }
-
-    // Read customer name from binary file
-    fread(c2->name, sizeof(char), 100, file1); // Read up to 100 characters, should handle null terminator
-    fclose(file1);
-}
-
-
 int main() {
     Account account = { 0,NULL,0 };
     int choice = 1;

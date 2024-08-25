@@ -146,10 +146,10 @@ void loadTextFile(Bank* bank) {
 
     for (int i = 0; i < bank->branchCount; i++) {
         Branch* branch = &bank->branches[i];
-        fprintf(file, "%d %d %d %s\n",branch->branchID, branch->customerCount, branch->employeesCount, branch->name);
+        fprintf(file, "%d %d %d %s\n", branch->branchID, branch->customerCount, branch->employeesCount, branch->name);
 
         for (int j = 0; j < branch->customerCount; j++) {
-            Customer* customer = &branch->customers[j];            
+            Customer* customer = &branch->customers[j];
             fprintf(file, "%s\n%d %d %s\n", customer->name, customer->customerID, customer->loanCount, customer->address);
 
             fprintf(file, "%f %d\n", customer->account.balance, customer->account.transactionCount);
@@ -166,22 +166,13 @@ void loadTextFile(Bank* bank) {
                 loanNode = loanNode->next;
             }
         }
+
+        for (int u = 0; u < branch->employeesCount; u++)
+        {
+            fprintf(file, "%s\n%d %d %s\n", branch->employees[u].name, branch->employees[u].employeeID, branch->employees[u].branchID, branch->employees[u].position);
+        }
     }
-
-
     fclose(file);
-    FILE* empFile = fopen("employees.bin", "wb");
-    if (!empFile) {
-        printf("Error opening employee file for writing.\n");
-        return;
-    }
-
-    for (int i = 0; i < bank->branchCount; i++) {
-        Branch* branch = &bank->branches[i];
-        fwrite(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
-    }
-    fclose(empFile);
-    printf("\nThe files were loaded successfully\n");
 }
 
 
@@ -209,21 +200,6 @@ void readTextFile(Bank* bank) {
                     bank->branchesID.key = branch->branchID;
                 else
                     addNewLink(&bank->branchesID, branch->branchID);
-
-                branch->employees = NULL;
-                if (branch->employeesCount > 0) {
-                    branch->employees = (Employee*)malloc(branch->employeesCount * sizeof(Employee));
-
-                    // Read employees data from binary file if there are employees
-                    FILE* empFile = fopen("employees.bin", "rb");
-                    if (!empFile) {
-                        printf("Error opening employee file for reading.\n");
-                        return;
-                    }
-                    // Read employees data for this branch
-                    fread(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
-                    fclose(empFile);                    
-                }
 
                 branch->customers = (Customer*)malloc(branch->customerCount * sizeof(Customer));
 
@@ -291,6 +267,18 @@ void readTextFile(Bank* bank) {
 
                         addLoan(customer, loan);
                     }
+                }
+
+                branch->employees = (Employee*)malloc(branch->customerCount * sizeof(Employee));
+                for (int u = 0; u < branch->employeesCount; u++)
+                {                    
+                    fgets(branch->employees[u].name, sizeof(branch->employees[u].name), file);
+                    branch->employees[u].name[strcspn(branch->employees[u].name, "\n")] = '\0';
+
+                    fscanf(file, "%d %d", &branch->employees[u].employeeID, &branch->employees[u].branchID);
+
+                    fgets(branch->employees[u].position, sizeof(branch->employees[u].position), file);
+                    branch->employees[u].position[strcspn(branch->employees[u].position, "\n")] = '\0';                
                 }
             }
         }
@@ -420,6 +408,7 @@ void loadBinaryFile(Bank* bank) {
             }
         }
     }
+
 
     fclose(file);
 
@@ -800,7 +789,7 @@ int main() {
     Employee employee;
     int type = 0;
     initlLInkedList(&bank.branchesID);
-  //  test(&bank, &branch);
+    test(&bank, &branch);
 
     Customer c = { account,NULL,{NULL,NULL},333,"bob 4 5 n obo" };//is this ok
     Customer c1 = { account,NULL,{NULL,NULL}};//is this ok

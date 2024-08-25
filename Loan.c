@@ -9,6 +9,6 @@
 #include"CreditCard.h"
 #include"Customer.h"
 
-showLoan(Loan *l) {
+showLoan(const Loan *l) {
 	printf("%f, %f, %s, %s\n", l->amount, l->interestRate, l->startDate, l->endDate);
 }

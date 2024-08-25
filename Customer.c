@@ -47,7 +47,7 @@ void freeCustomer(Customer* customer) {
 }
 
 
-void addLoan(Customer* customer, Loan* loan) {
+void addLoan(Customer* customer,const Loan* loan) {
     NODE* tmp=NULL;
     NODE* current=NULL;
     if (!customer)
@@ -68,7 +68,7 @@ void addLoan(Customer* customer, Loan* loan) {
     customer->loanCount++;
 }
 
-void printList(Customer customer) {
+void printList(const Customer customer) {
     NODE* current = &customer.headOfLoan;
     if (current->next == NULL)
         printf("the list is empty");
@@ -93,14 +93,14 @@ void freeLoan(Customer* c){
 }
 
 
-void showCreditCard(CreditCard* creditCard) {
+void showCreditCard(const CreditCard* creditCard) {
     printf("\nCredit card number: %s, ", creditCard->cardNumber);
     printf("Credit card balance: %.2f, ", creditCard->balance);
     printf("Credit card limit: %.2f, ", creditCard->creditLimit);
     printf("Credit card expiry date: %s\n", creditCard->expiryDate);
 }
 
-void showCustomer(Customer* customer) {
+void showCustomer(const Customer* customer) {
     printf("Customer name: %s, ", customer->name);
     printf("Customer id: %d, ", customer->customerID);
     printf("Customer balance: %f, ", customer->account.balance);

@@ -93,7 +93,7 @@ void addNewLink(NODE1* head, int data) {
 }
 
 
-void showLInkedlist(NODE1* node) {
+void showLInkedlist(const NODE1* node) {
     NODE* current = &node;
     if (current->next == NULL)
         printf("the list is empty");
@@ -104,6 +104,6 @@ void showLInkedlist(NODE1* node) {
     }
 }
 
-void printBank(Bank* bank) {
+void printBank(const Bank* bank) {
     processArr(bank->branches, bank->branchCount, sizeof(Branch), printBranch);
 }

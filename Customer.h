@@ -24,13 +24,13 @@ typedef struct Customer {
 
 void updateCustomer1(Customer* customer);
 void createCreditCard(CreditCard* creditCard);
-void showCreditCard(CreditCard* creditCard);
+void showCreditCard(const CreditCard* creditCard);
 void createCustomer(Customer* customer);
-void showCustomer(Customer* customer);
+void showCustomer(const Customer* customer);
 void freeCustomer(Customer* customer);
 void init(Customer* customer);
-void addLoan(Customer* customer, Loan* loan);
-void printList(Customer customer);
+void addLoan(Customer* customer,const Loan* loan);
+void printList(const Customer customer);
 void freeLoan(Customer* c);
 
 #endif // !Customer_H

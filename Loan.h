@@ -8,6 +8,6 @@ typedef struct {
     char endDate[11];
 } Loan;
 
-showLoan(Loan* l);
+showLoan(const Loan* l);
 
 #endif // !Loan_H

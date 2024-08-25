@@ -55,7 +55,7 @@ int compareCustomerCount(const void* a, const void* b) {
     const Branch* branch2 = (const Branch*)b;
     return branch1->customerCount - branch2->customerCount;
 }
-void printBranch(Branch* branch) {
+void printBranch(const Branch* branch) {
     if (branch == NULL) {
         printf("Branch is NULL.\n");
         return;

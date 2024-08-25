@@ -15,6 +15,6 @@ void createEmployee(Employee* employee) {
     employee->position[strcspn(employee->position, "\n")] = '\0';
 }
 
-void showEmployee(Employee* employee) {
+void showEmployee(const Employee* employee) {
     printf("employee id: %d, employee name: %s, Branch id: %d, employee position: %s\n\n", employee->employeeID, employee->name, employee->branchID, employee->position);
 }

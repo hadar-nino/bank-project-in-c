@@ -20,8 +20,8 @@ typedef struct {
     int sort;
 } Bank;
 
-void printBank(Bank* bank);
-void showLInkedlist(NODE1* node);
+void printBank(const Bank* bank);
+void showLInkedlist(const NODE1* node);
 void addNewLink(NODE1* node, int id);
 void initlLInkedList(NODE1* node);
 void createBank(Bank* b);

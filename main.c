@@ -32,7 +32,18 @@
 "[0] Exit\n");\
 }
 
-//using this function to print for free each element of a list
+/**
+ * processArr
+ * Input:
+ *  - arr: Pointer to an array of any data type
+ *  - size: Number of elements in the array
+ *  - typeSize: Size of each element in bytes
+ *  - process: Function pointer to a function that processes each element
+ * Output: None
+ * Description:
+ *  Iterates over an array and applies a processing function to each element.
+ */
+
 void processArr(const void* arr, int size, size_t typeSize, void (*process)(const void*)) {
     int i;
     for (i = 0; i < size; i++)
@@ -80,11 +91,28 @@ void test(Bank* bank, Branch* branch) {
     printBank(bank);
 }
 
+/**
+ * clearInputBuffer
+ * Input: None
+ * Output: None
+ * Description:
+ *  Clears the input buffer to remove any remaining characters after user input.
+ */
+
 void clearInputBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
+/**
+ * sortBranchByType
+ * Input: 
+ *  - bank: Pointer to a Bank structure
+ *  - type: Integer indicating sort type (0 for employee count, 1 for customer count)
+ * Output: None
+ * Description: 
+ *  Sorts the branches of a bank based on the specified type, either by employee count or customer count.
+ */
 
 void sortBranchByType(Bank* bank, int type) {
     if (type == 0) {
@@ -98,6 +126,16 @@ void sortBranchByType(Bank* bank, int type) {
         printf("Branches sorted by customer count.\n");
     }
 }
+
+/**
+ * searchBranchByType
+ * Input:
+ *  - bank: Pointer to a Bank structure
+ *  - type: Integer indicating search type (0 for employee count, 1 for customer count)
+ * Output: None
+ * Description:
+ *  Searches for a branch based on the specified type and criteria, and prints the branch details if found.
+ */
 
 void searchBranchByType(Bank* bank, int type) {
     if ((type + 1) != bank->sort) {
@@ -132,6 +170,15 @@ void searchBranchByType(Bank* bank, int type) {
         }
     }
 }
+
+/**
+ * loadTextFile
+ * Input:
+ *  - bank: Pointer to a Bank structure
+ * Output: None
+ * Description:
+ *  Writes the bank's data, including branches, customers, accounts, transactions, and employees, to a text file.
+ */
 
 void loadTextFile(Bank* bank) {
     FILE* file = fopen("bankInfo.txt", "w");
@@ -176,6 +223,14 @@ void loadTextFile(Bank* bank) {
     printf("\nThe text files were loaded successfully\n");
 }
 
+/**
+ * readTextFile
+ * Input:
+ *  - bank: Pointer to a Bank structure
+ * Output: None
+ * Description:
+ *  Reads the bank's data from a text file and populates the bank structure with branches, customers, accounts, transactions, and employees.
+ */
 
 void readTextFile(Bank* bank) {
     FILE* file = fopen("bankInfo.txt", "r");
@@ -304,6 +359,15 @@ void readTextFile(Bank* bank) {
     printf("\nThe text files were read successfully\n");
 }
 
+/**
+ * printSubTypes
+ * Input:
+ *  - bank: Pointer to a Bank structure
+ * Output: None
+ * Description:
+ *  Provides a menu for printing details of the bank, branches, employees, and customers.
+ */
+
 void printSubTypes(const Bank* bank) {
     int choice = 1, index, index2;
     while (choice != 0)
@@ -340,6 +404,14 @@ void printSubTypes(const Bank* bank) {
     }
 }
 
+/**
+ * loadBinaryFile
+ * Input:
+ *  - bank: Pointer to a Bank structure
+ * Output: None
+ * Description:
+ *  Writes the bank's data, including branches, customers, and employees, to a binary file for persistent storage.
+ */
 
 void loadBinaryFile(Bank* bank) {
     FILE* file = fopen("bankInfo.bin", "wb");
@@ -442,6 +514,13 @@ void loadBinaryFile(Bank* bank) {
     printf("\nThe binary files were loaded successfully\n");
 }
 
+/* readBinaryFile
+ * Input: A pointer to a Bank structure (Bank* bank).
+ * Output: None (void function).
+ * What the Function Does: Reads the bank, branch, customer, employee, transaction, loan, and credit card data from binary files
+ * (bankInfo.bin and employees.bin) and populates the Bank structure accordingly.
+ * It also dynamically allocates memory for branches, customers, employees, transactions, loans, and credit cards.
+ */
 
 void readBinaryFile(Bank* bank) {
     FILE* file = fopen("bankInfo.bin", "rb");
@@ -643,6 +722,11 @@ void readBinaryFile(Bank* bank) {
     printf("\nThe binary files were read successfully\n");
 }
 
+/* addNewBranch
+ * Input: A pointer to a Bank structure (Bank* bank) and a pointer to a Branch structure (Branch* branch).
+ * Output: None (void function).
+ * What the Function Does: Prompts the user to enter a branch name and then adds a new branch to the bank using createNewBranch function.
+ */
 
 void addNewBranch(Bank* bank, Branch* branch) {
     printf("enter name (the name will be 50 words): ");
@@ -650,6 +734,13 @@ void addNewBranch(Bank* bank, Branch* branch) {
     branch->name[strcspn(branch->name, "\n")] = '\0';
     createNewBranch(bank, branch);
 }
+
+/* branchSelect
+ * Input: A constant pointer to a Bank structure (const Bank* bank).
+ * Output: Returns the index of the selected branch, or -1 if no branches are available or input is invalid.
+ * What the Function Does: Displays all branches of the bank and prompts the user to select one by entering its index.
+ */
+
 
 int branchSelect(const Bank* bank) {
     int index;
@@ -670,6 +761,12 @@ int branchSelect(const Bank* bank) {
     return index;
 }
 
+/* CustomerSelect
+ * Input: A constant pointer to a Branch structure (const Branch* branch).
+ * Output: Returns the index of the selected customer, or -1 if no customers are available or input is invalid.
+ * What the Function Does: Displays all customers in the branch and prompts the user to select one by entering its index.
+ */
+
 int CustomerSelect(const Branch* branch) {
     int index;
     if (branch->customerCount == 0) {
@@ -689,6 +786,12 @@ int CustomerSelect(const Branch* branch) {
     return index;
 }
 
+/* addNewEmployee
+ * Input: A pointer to a Bank structure (Bank* bank) and a pointer to an Employee structure (Employee* employee).
+ * Output: None (void function).
+ * What the Function Does: Prompts the user to select a branch and then adds a new employee to that branch.
+ */
+
 void addNewEmployee(Bank* bank, Employee* employee) {
     int index = branchSelect(bank);
     if (index == -1) {
@@ -698,6 +801,12 @@ void addNewEmployee(Bank* bank, Employee* employee) {
     createEmployee(employee);
     addEmployeeToBranch(&bank->branches[index], employee);
 }
+
+/* addNewCustomer
+ * Input: A pointer to a Bank structure (Bank* bank) and a pointer to a Customer structure (Customer* customer).
+ * Output: None (void function).
+ * What the Function Does: Prompts the user to select a branch and then adds a new customer to that branch.
+ */
 
 void addNewCustomer(Bank* bank, Customer* customer) {
     customer->creditCard = (CreditCard*)malloc(sizeof(CreditCard));
@@ -710,7 +819,11 @@ void addNewCustomer(Bank* bank, Customer* customer) {
     addCustomerToBranch(&bank->branches[index], customer);
 }
 
-
+/* updateCustomer
+  * Input: A pointer to a Bank structure (Bank* bank).
+  * Output: None (void function).
+  * What the Function Does: Prompts the user to select a branch and a customer, then updates the selected customer's information.
+  */
 
 void updateCustomer(Bank* bank) {
     int index = branchSelect(bank);
@@ -722,6 +835,11 @@ void updateCustomer(Bank* bank) {
     updateCustomer1(&bank->branches[index].customers[index2]);
 }
 
+/* richestCustomer
+    * Input: A constant pointer to a Bank structure (const Bank* bank).
+    * Output: Returns a pointer to the Customer structure of the richest customer in the bank.
+    * What the Function Does: Finds and displays the customer with the highest account balance across all branches of the bank.
+    */
 
 Customer* richestCustomer(const Bank* bank) {
     int indexBranch = 0, indexOfRichestCustomer = 0;
@@ -736,6 +854,12 @@ Customer* richestCustomer(const Bank* bank) {
     showCustomer(&bank->branches[indexBranch].customers[indexOfRichestCustomer]);
     return &bank->branches[indexBranch].customers[indexOfRichestCustomer];
 }
+
+/* mostLoansCustomer
+ * Input: A constant pointer to a Bank structure (const Bank* bank).
+ * Output: Returns a pointer to the Customer structure of the customer with the most loans in the bank.
+ * What the Function Does: Finds and displays the customer with the highest number of loans across all branches of the bank.
+ */
 
 Customer* mostLoansCustomer(const Bank* bank) {
     int indexBranch = 0, mostLoansCustomer = 0;

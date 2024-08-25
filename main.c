@@ -303,7 +303,7 @@ void readTextFile(Bank* bank) {
     printf("\nThe files were read successfully\n");
 }
 
-void printSubTypes(Bank* bank) {
+void printSubTypes(const Bank* bank) {
     int choice = 1, index, index2;
     while (choice != 0)
     {
@@ -650,7 +650,7 @@ void addNewBranch(Bank* bank, Branch* branch) {
     createNewBranch(bank, branch);
 }
 
-int branchSelect(Bank* bank) {
+int branchSelect(const Bank* bank) {
     int index;
     if (bank->branchCount == 0) {
         printf("the bank has no branches please add first in the menu\n");
@@ -669,7 +669,7 @@ int branchSelect(Bank* bank) {
     return index;
 }
 
-int CustomerSelect(Branch* branch) {
+int CustomerSelect(const Branch* branch) {
     int index;
     if (branch->customerCount == 0) {
         printf("the branch has no customer please add first in the mnue\n");
@@ -722,7 +722,7 @@ void updateCustomer(Bank* bank) {
 }
 
 
-Customer* richestCustomer(Bank* bank) {
+Customer* richestCustomer(const Bank* bank) {
     int indexBranch = 0, indexOfRichestCustomer = 0;
     for (int j = 0; j < bank->branchCount; j++) {
         for (int i = 0; i < bank->branches[j].customerCount; i++) {
@@ -736,7 +736,7 @@ Customer* richestCustomer(Bank* bank) {
     return &bank->branches[indexBranch].customers[indexOfRichestCustomer];
 }
 
-Customer* mostLoansCustomer(Bank* bank) {
+Customer* mostLoansCustomer(const Bank* bank) {
     int indexBranch = 0, mostLoansCustomer = 0;
     for (int j = 0; j < bank->branchCount; j++) {
         for (int i = 0; i < bank->branches[j].customerCount; i++) {

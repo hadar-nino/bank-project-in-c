@@ -173,6 +173,7 @@ void loadTextFile(Bank* bank) {
         }
     }
     fclose(file);
+    printf("\nThe text files were loaded successfully\n");
 }
 
 
@@ -300,7 +301,7 @@ void readTextFile(Bank* bank) {
             printf("Memory allocation failed.\n");
     }
     fclose(file);
-    printf("\nThe files were read successfully\n");
+    printf("\nThe text files were read successfully\n");
 }
 
 void printSubTypes(const Bank* bank) {
@@ -438,7 +439,7 @@ void loadBinaryFile(Bank* bank) {
         fwrite(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
     }
     fclose(empFile);
-    printf("\nThe files were loaded successfully\n");
+    printf("\nThe binary files were loaded successfully\n");
 }
 
 

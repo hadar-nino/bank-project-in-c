@@ -150,7 +150,7 @@ void loadTextFile(Bank* bank) {
 
         for (int j = 0; j < branch->customerCount; j++) {
             Customer* customer = &branch->customers[j];
-            fprintf(file, "%s\n%d %d %s\n", customer->name, customer->customerID, customer->loanCount, customer->address);
+            fprintf(file, "%s\n%d %d\n%s\n", customer->name, customer->customerID, customer->loanCount, customer->address);
 
             fprintf(file, "%f %d\n", customer->account.balance, customer->account.transactionCount);
             for (int k = 0; k < customer->account.transactionCount; k++) {
@@ -169,7 +169,7 @@ void loadTextFile(Bank* bank) {
 
         for (int u = 0; u < branch->employeesCount; u++)
         {
-            fprintf(file, "%s\n%d %d %s\n", branch->employees[u].name, branch->employees[u].employeeID, branch->employees[u].branchID, branch->employees[u].position);
+            fprintf(file, "%s\n%d %d\n%s\n", branch->employees[u].name, branch->employees[u].employeeID, branch->employees[u].branchID, branch->employees[u].position);
         }
     }
     fclose(file);
@@ -212,7 +212,7 @@ void readTextFile(Bank* bank) {
 
                     // Read the customer's ID and loan count
                     int loanCount;
-                    fscanf(file, "%d %d", &customer->customerID, &loanCount);
+                    fscanf(file, "%d %d\n", &customer->customerID, &loanCount);
                     customer->loanCount = 0;
 
                     // Read the customer's address, including spaces
@@ -275,7 +275,7 @@ void readTextFile(Bank* bank) {
                     fgets(branch->employees[u].name, sizeof(branch->employees[u].name), file);
                     branch->employees[u].name[strcspn(branch->employees[u].name, "\n")] = '\0';
 
-                    fscanf(file, "%d %d", &branch->employees[u].employeeID, &branch->employees[u].branchID);
+                    fscanf(file, "%d %d\n", &branch->employees[u].employeeID, &branch->employees[u].branchID);
 
                     fgets(branch->employees[u].position, sizeof(branch->employees[u].position), file);
                     branch->employees[u].position[strcspn(branch->employees[u].position, "\n")] = '\0';                

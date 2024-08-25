@@ -25,8 +25,8 @@
 "[7] Add new employee\n"\
 "[8] Add new customer\n"\
 "[9] Update customer\n"\
-"[10] Load binary file of employees\n"\
-"[11] Read binary file of employees\n"\
+"[10] Load binary file\n"\
+"[11] Read binary file\n"\
 "[12] Find richest customer in bank\n"\
 "[13] Find customer with most loans in bank\n"\
 "[0] Exit\n");\
@@ -222,7 +222,7 @@ void readTextFile(Bank* bank) {
                     }
                     // Read employees data for this branch
                     fread(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
-                    fclose(empFile);
+                    fclose(empFile);                    
                 }
 
                 branch->customers = (Customer*)malloc(branch->customerCount * sizeof(Customer));
@@ -338,11 +338,307 @@ void printSubTypes(Bank* bank) {
 }
 
 
-void loadBinaryFile(Bank* bank){
+void loadBinaryFile(Bank* bank) {
+    FILE* file = fopen("bankInfo.bin", "wb");
+    if (!file) {
+        printf("Error opening file for writing.\n");
+        return;
+    }
 
+    // Write bank info
+    fwrite(&bank->bankID, sizeof(int), 1, file);
+    fwrite(&bank->branchCount, sizeof(int), 1, file);
+    fwrite(&bank->numberOfEmployee, sizeof(int), 1, file);
+    fwrite(&bank->sort, sizeof(int), 1, file);
+
+    for (int i = 0; i < bank->branchCount; i++) {
+        Branch* branch = &bank->branches[i];
+
+        // Write branch info
+        fwrite(&branch->branchID, sizeof(int), 1, file);
+        fwrite(&branch->customerCount, sizeof(int), 1, file);
+        fwrite(&branch->employeesCount, sizeof(int), 1, file);
+
+
+        fwrite(branch->name, sizeof(char), 50, file); // Assuming name is a fixed-size array
+
+        for (int j = 0; j < branch->customerCount; j++) {
+            Customer* customer = &branch->customers[j];
+
+            // Write customer info
+            int nameLength = strlen(customer->name) + 1; // Include null terminator
+            fwrite(&nameLength, sizeof(int), 1, file);
+            fwrite(customer->name, sizeof(char), nameLength, file);
+            fwrite(&customer->customerID, sizeof(int), 1, file);
+            fwrite(&customer->loanCount, sizeof(int), 1, file);
+
+            int addressLength = strlen(customer->address) + 1; // Include null terminator
+            fwrite(&addressLength, sizeof(int), 1, file);
+            fwrite(customer->address, sizeof(char), addressLength, file);
+
+            // Write account info
+            fwrite(&customer->account.balance, sizeof(float), 1, file);
+            fwrite(&customer->account.transactionCount, sizeof(int), 1, file);
+
+            // Write transactions
+            for (int k = 0; k < customer->account.transactionCount; k++) {
+                Transaction* transaction = customer->account.transactions[k];
+                fwrite(&transaction->amount, sizeof(float), 1, file);
+
+                int dateLength = strlen(transaction->date) + 1; // Include null terminator
+                fwrite(&dateLength, sizeof(int), 1, file);
+                fwrite(transaction->date, sizeof(char), dateLength, file);
+            }
+
+            // Write credit card info
+            int cardNumberLength = strlen(customer->creditCard->cardNumber) + 1; // Include null terminator
+            fwrite(&cardNumberLength, sizeof(int), 1, file);
+            fwrite(customer->creditCard->cardNumber, sizeof(char), cardNumberLength, file);
+            fwrite(&customer->creditCard->creditLimit, sizeof(float), 1, file);
+            fwrite(&customer->creditCard->balance, sizeof(float), 1, file);
+
+            int expiryDateLength = strlen(customer->creditCard->expiryDate) + 1; // Include null terminator
+            fwrite(&expiryDateLength, sizeof(int), 1, file);
+            fwrite(customer->creditCard->expiryDate, sizeof(char), expiryDateLength, file);
+
+            // Write loans
+            NODE* loanNode = customer->headOfLoan.next;
+            while (loanNode) {
+                Loan* loan = (Loan*)loanNode->key;
+
+                int startDateLength = strlen(loan->startDate) + 1; // Include null terminator
+                fwrite(&startDateLength, sizeof(int), 1, file);
+                fwrite(loan->startDate, sizeof(char), startDateLength, file);
+                fwrite(&loan->amount, sizeof(float), 1, file);
+                fwrite(&loan->interestRate, sizeof(float), 1, file);
+
+                int endDateLength = strlen(loan->endDate) + 1; // Include null terminator
+                fwrite(&endDateLength, sizeof(int), 1, file);
+                fwrite(loan->endDate, sizeof(char), endDateLength, file);
+
+                loanNode = loanNode->next;
+            }
+        }
+    }
+
+    fclose(file);
+
+    FILE* empFile = fopen("employees.bin", "wb");
+    if (!empFile) {
+        printf("Error opening employee file for writing.\n");
+        return;
+    }
+
+    // Write employees to binary file
+    for (int i = 0; i < bank->branchCount; i++) {
+        Branch* branch = &bank->branches[i];
+        fwrite(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
+    }
+    fclose(empFile);
+    printf("\nThe files were loaded successfully\n");
 }
 
-void readBinaryFile(Bank* bank){}
+
+void readBinaryFile(Bank* bank) {
+    FILE* file = fopen("bankInfo.bin", "rb");
+    if (!file) {
+        printf("Error opening file for reading.\n");
+        return;
+    }
+
+    // Read bank info
+    fread(&bank->bankID, sizeof(int), 1, file);
+    fread(&bank->branchCount, sizeof(int), 1, file);
+    fread(&bank->numberOfEmployee, sizeof(int), 1, file);
+    fread(&bank->sort, sizeof(int), 1, file);
+
+    bank->branches = NULL;
+    if (bank->branchCount > 0) {
+        bank->branches = (Branch*)malloc(bank->branchCount * sizeof(Branch));
+        if (bank->branches == NULL) {
+            printf("Memory allocation failed for branches.\n");
+            fclose(file);
+            return;
+        }
+
+        initlLInkedList(&bank->branchesID);  // Initialize the linked list for branch IDs
+
+        for (int i = 0; i < bank->branchCount; i++) {
+            Branch* branch = &bank->branches[i];
+            fread(&branch->branchID, sizeof(int), 1, file);
+            fread(&branch->customerCount, sizeof(int), 1, file);
+            fread(&branch->employeesCount, sizeof(int), 1, file);
+            fread(branch->name, sizeof(char), 50, file);  // Assuming name is a fixed-size array
+
+            branch->name[strcspn(branch->name, "\n")] = '\0';  // Ensure null termination
+
+            if (i == 0)
+                bank->branchesID.key = branch->branchID;
+            else
+                addNewLink(&bank->branchesID, branch->branchID);
+
+            branch->employees = NULL;
+            if (branch->employeesCount > 0) {
+                branch->employees = (Employee*)malloc(branch->employeesCount * sizeof(Employee));
+                if (branch->employees == NULL) {
+                    printf("Memory allocation failed for employees.\n");
+                    fclose(file);
+                    return;
+                }
+
+                // Read employees data from binary file if there are employees
+                FILE* empFile = fopen("employees.bin", "rb");
+                if (!empFile) {
+                    printf("Error opening employee file for reading.\n");
+                    fclose(file);
+                    return;
+                }
+
+                fread(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
+                fclose(empFile);
+            }
+
+            branch->customers = (Customer*)malloc(branch->customerCount * sizeof(Customer));
+            if (branch->customers == NULL) {
+                printf("Memory allocation failed for customers.\n");
+                fclose(file);
+                return;
+            }
+
+            for (int j = 0; j < branch->customerCount; j++) {
+                Customer* customer = &branch->customers[j];
+
+                // Read customer data   
+                int len;
+                fread(&len, sizeof(int), 1, file);
+                fread(customer->name, sizeof(char), len, file);  // Assuming name is a fixed-size array
+                
+                int loanCount;
+                fread(&customer->customerID, sizeof(int), 1, file);
+                fread(&loanCount, sizeof(int), 1, file);
+                fread(&len, sizeof(int), 1, file);
+                fread(customer->address, sizeof(char), len, file);  // Assuming name is a fixed-size array
+
+                            
+                // Read account info
+                fread(&customer->account.balance, sizeof(float), 1, file);
+                fread(&customer->account.transactionCount, sizeof(int), 1, file);
+
+                customer->account.transactions = NULL;
+                if (customer->account.transactionCount > 0) {
+                    customer->account.transactions = (Transaction**)malloc(customer->account.transactionCount * sizeof(Transaction*));
+                    if (customer->account.transactions == NULL) {
+                        printf("Memory allocation failed for transactions.\n");
+                        fclose(file);
+                        return;
+                    }
+
+                    // Read transactions
+                    for (int k = 0; k < customer->account.transactionCount; k++) {
+                        customer->account.transactions[k] = (Transaction*)malloc(sizeof(Transaction));
+                        if (customer->account.transactions[k] == NULL) {
+                            printf("Memory allocation failed for transaction %d.\n", k);
+                            fclose(file);
+                            return;
+                        }
+                        fread(&customer->account.transactions[k]->amount, sizeof(float), 1, file);
+
+                        int dateLength;
+                        fread(&dateLength, sizeof(int), 1, file);
+                        if (customer->account.transactions[k]->date == NULL) {
+                            printf("Memory allocation failed for transaction date.\n");
+                            fclose(file);
+                            return;
+                        }
+                        fread(customer->account.transactions[k]->date, sizeof(char), dateLength, file);
+                        customer->account.transactions[k]->date[dateLength - 1] = '\0';  // Ensure null termination
+                    }
+                }
+
+                // Read credit card info
+                customer->creditCard = (CreditCard*)malloc(sizeof(CreditCard));
+                if (customer->creditCard == NULL) {
+                    printf("Memory allocation failed for credit card.\n");
+                    fclose(file);
+                    return;
+                }
+                
+                int cardNumberLength;
+                fread(&cardNumberLength, sizeof(int), 1, file);
+                if (customer->creditCard->cardNumber == NULL) {
+                    printf("Memory allocation failed for card number.\n");
+                    fclose(file);
+                    return;
+                }
+                fread(customer->creditCard->cardNumber, sizeof(char), cardNumberLength, file);
+                customer->creditCard->cardNumber[cardNumberLength - 1] = '\0';  // Ensure null termination
+
+                fread(&customer->creditCard->creditLimit, sizeof(float), 1, file);
+                fread(&customer->creditCard->balance, sizeof(float), 1, file);
+
+                int expiryDateLength;
+                fread(&expiryDateLength, sizeof(int), 1, file);
+                if (customer->creditCard->expiryDate == NULL) {
+                    printf("Memory allocation failed for expiry date.\n");
+                    fclose(file);
+                    return;
+                }
+                fread(customer->creditCard->expiryDate, sizeof(char), expiryDateLength, file);
+                customer->creditCard->expiryDate[expiryDateLength - 1] = '\0';  // Ensure null termination
+
+                // Initialize loan linked list
+                customer->headOfLoan.key = NULL;
+                customer->headOfLoan.next = NULL;
+                NODE* lastLoanNode = &customer->headOfLoan;
+                customer->loanCount = 0;
+                // Read loans
+                for (int l = 0; l < loanCount; l++) {
+                    Loan* loan = (Loan*)malloc(sizeof(Loan));
+                    if (loan == NULL) {
+                        printf("Memory allocation failed for loan.\n");
+                        fclose(file);
+                        return;
+                    }
+
+                    int startDateLength;
+                    fread(&startDateLength, sizeof(int), 1, file);
+                    fread(loan->startDate, sizeof(char), startDateLength, file);
+                    loan->startDate[startDateLength - 1] = '\0';  // Ensure null termination
+
+                    fread(&loan->amount, sizeof(float), 1, file);
+                    fread(&loan->interestRate, sizeof(float), 1, file);
+
+                    int endDateLength;
+                    fread(&endDateLength, sizeof(int), 1, file);
+                    fread(loan->endDate, sizeof(char), endDateLength, file);
+                    loan->endDate[endDateLength - 1] = '\0';  // Ensure null termination
+
+                    addLoan(customer, loan);                    
+                }
+            }
+        }
+    }
+
+    fclose(file);
+
+    // Reading employees binary file
+    FILE* empFile = fopen("employees.bin", "rb");
+    if (!empFile) {
+        printf("Error opening employee file for reading.\n");
+        return;
+    }
+
+    for (int i = 0; i < bank->branchCount; i++) {
+        Branch* branch = &bank->branches[i];
+        if (branch->employeesCount > 0) {
+            fread(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
+        }
+    }
+
+    fclose(empFile);
+    printf("\nThe binary files were read successfully\n");
+}
+
 
 void addNewBranch(Bank* bank, Branch* branch) {
     printf("enter name (the name will be 50 words): ");
@@ -451,6 +747,48 @@ Customer* mostLoansCustomer(Bank* bank) {
     return &bank->branches[indexBranch].customers[mostLoansCustomer];
 }
 
+void test1(Customer* c1, Customer* c2) {
+    FILE* file = fopen("Info.txt", "w");
+    if (!file) {
+        printf("Error opening file for writing.\n");
+        return;
+    }
+
+    fwrite(c1->name, sizeof(char), 100, file); 
+    fclose(file);
+
+    FILE* file1 = fopen("Info.bin", "rb");
+    if (!file) {
+        printf("Error opening file for reading.\n");
+        return;
+    }
+
+    fread(c2->name, sizeof(char), 100, file); // fix this
+    fclose(file1);
+}
+
+void test2(Customer* c1, Customer* c2) {
+    // Write customer data to text file
+    FILE* file = fopen("Info.bin", "w");
+    if (!file) {
+        printf("Error opening file for writing.\n");
+        return;
+    }
+
+    fwrite(c1->name, sizeof(char), 100, file); // Write name with null terminator
+    fclose(file);
+
+    // Read customer data from binary file
+    FILE* file1 = fopen("Info.bin", "rb");
+    if (!file1) {
+        printf("Error opening file for reading.\n");
+        return;
+    }
+
+    // Read customer name from binary file
+    fread(c2->name, sizeof(char), 100, file1); // Read up to 100 characters, should handle null terminator
+    fclose(file1);
+}
 
 
 int main() {
@@ -463,6 +801,11 @@ int main() {
     int type = 0;
     initlLInkedList(&bank.branchesID);
   //  test(&bank, &branch);
+
+    Customer c = { account,NULL,{NULL,NULL},333,"bob 4 5 n obo" };//is this ok
+    Customer c1 = { account,NULL,{NULL,NULL}};//is this ok
+    test2(&c,&c1);
+    
     while (choice != 0) {
         displayMenu();    // Display the menu
         printf("\nEnter your choice: ");
@@ -515,14 +858,15 @@ int main() {
         case 9:
             updateCustomer(&bank);
             break;
-            /*
+            
         case 10:
             loadBinaryFile(&bank);
             break;
+
         case 11:
             readBinaryFile(&bank);
             break;
-             */
+             
         case 12:
             richestCustomer(&bank);
             break;

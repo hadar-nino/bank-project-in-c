@@ -760,10 +760,6 @@ int main() {
     int type = 0;
     initlLInkedList(&bank.branchesID);
     test(&bank, &branch);
-
-    Customer c = { account,NULL,{NULL,NULL},333,"bob 4 5 n obo" };//is this ok
-    Customer c1 = { account,NULL,{NULL,NULL}};//is this ok
-    test2(&c,&c1);
     
     while (choice != 0) {
         displayMenu();    // Display the menu

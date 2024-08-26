@@ -214,7 +214,6 @@ void updateCustomer1(Customer* customer) {
     int choice = 0;
     while (choice != 5)
     {
-        int prevLoanCount = customer->loanCount;
         printf("Update Customer\n"
             "[0] Update name\n"
             "[1] Update address\n"

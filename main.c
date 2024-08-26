@@ -932,7 +932,7 @@ int main() {
     Employee employee;
     int type = 0;
     initlLInkedList(&bank.branchesID);
-    test(&bank, &branch);
+   // test(&bank, &branch);
     
     while (choice != 0) {
         displayMenu();    // Display the menu

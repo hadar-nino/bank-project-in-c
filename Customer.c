@@ -27,9 +27,12 @@ void createCreditCard(CreditCard* creditCard) {
     creditCard->cardNumber[strcspn(creditCard->cardNumber, "\n")] = '\0';
     creditCard->creditLimit = 1000;
     creditCard->balance = 12345;
-    printf("enter credit card expiry date (this will be 6 words): ");
-    fgets(creditCard->expiryDate, 6, stdin);
-    creditCard->expiryDate[strcspn(creditCard->expiryDate, "\n")] = '\0';
+    while (!isValidDate(creditCard->expiryDate)))
+    {
+        printf("enter credit card expiry date (this will be 6 words): ");
+        fgets(creditCard->expiryDate, sizeof(creditCard->expiryDate), stdin);
+        creditCard->expiryDate[strcspn(creditCard->expiryDate, "\n")] = '\0';
+    }
 }
 
 
@@ -137,6 +140,7 @@ Loan* createLoan() {
         fgets(temp->startDate, sizeof(temp->startDate), stdin);
         temp->startDate[strcspn(temp->startDate, "\n")] = '\0';
     }
+    clearInputBuffer();
     while (!isValidDate(temp->endDate)) {
         printf("Enter end date (format: YYYY-MM-DD): ");
         fgets(temp->endDate, sizeof(temp->endDate), stdin);
@@ -144,6 +148,8 @@ Loan* createLoan() {
     }
     return temp;
 }
+
+
 int isValidDate(const char* date) {
     if (strlen(date) != 10) {
         return 0;

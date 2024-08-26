@@ -28,7 +28,7 @@
 "[10] Load binary file\n"\
 "[11] Read binary file\n"\
 "[12] Find richest customer in bank\n"\
-"[13] Find customer with most loans in bank\n"\
+"[13] Fire employee\n"\
 "[0] Exit\n");\
 }
 
@@ -771,7 +771,7 @@ int CustomerSelect(const Branch* branch) {
     int index;
     if (branch->customerCount == 0) {
         printf("the branch has no customer please add first in the mnue\n");
-        return;
+        return-1;
     }
     printf("all customers in the branch:\n");
     for (int i = 0; i < branch->customerCount; i++) {
@@ -855,24 +855,72 @@ Customer* richestCustomer(const Bank* bank) {
     return &bank->branches[indexBranch].customers[indexOfRichestCustomer];
 }
 
-/* mostLoansCustomer
- * Input: A constant pointer to a Bank structure (const Bank* bank).
- * Output: Returns a pointer to the Customer structure of the customer with the most loans in the bank.
- * What the Function Does: Finds and displays the customer with the highest number of loans across all branches of the bank.
+/* EmployeeSelect
+ * Input: A constant pointer to a Branch structure (const Branch* branch).
+ * Output: Returns the index of the selected employee, or -1 if no customers are available or input is invalid.
+ * What the Function Does: Displays all employee in the branch and prompts the user to select one by entering its index.
  */
 
-Customer* mostLoansCustomer(const Bank* bank) {
-    int indexBranch = 0, mostLoansCustomer = 0;
-    for (int j = 0; j < bank->branchCount; j++) {
-        for (int i = 0; i < bank->branches[j].customerCount; i++) {
-            if (bank->branches[j].customers[i].loanCount > bank->branches[indexBranch].customers[mostLoansCustomer].loanCount) {
-                mostLoansCustomer = i;
-                indexBranch = j;
-            }
-        }
+int EmployeeSelect(const Branch* branch) {
+    int index;
+    if (branch->employeesCount == 0) {
+        printf("the branch has no employees please add first in the mnue\n");
+        return-1;
     }
-    showCustomer(&bank->branches[indexBranch].customers[mostLoansCustomer]);
-    return &bank->branches[indexBranch].customers[mostLoansCustomer];
+    printf("all employees in the branch:\n");
+    for (int i = 0; i < branch->employeesCount; i++) {
+        printf("[%d] employees: %s \n", i, branch->employees[i].name);
+    }
+    printf("\nplease chose a employees:");
+    scanf("%d", &index);
+    if (index<0 || index>branch->employeesCount - 1) {
+        printf("bad input, return to the menu");
+        return-1;
+    }
+    return index;
+}
+
+/**
+ * Input: A pointer to a Bank structure (Bank* bank).
+ * Output: None (void function).
+ * What the Function Does: Allows the user to select a branch and an employee within that branch to fire.
+ * It removes the selected employee from the branch's employee list by overwriting the employee's data with the last employee's data,
+ * then reallocates the memory to shrink the list by one employee, effectively removing the selected employee.
+ */
+
+void fireEmployee(Bank* bank) {
+    int branchIndex = branchSelect(bank);
+    if (branchIndex == -1)
+        return;
+    int employeeIndex = EmployeeSelect(&bank->branches[branchIndex]);
+    if (employeeIndex == -1)
+        return;
+
+    Branch* branch = &bank->branches[branchIndex]; // Get the selected branch
+
+    if (branch->employeesCount==1)
+    {
+        free(branch->employees);
+        branch->employees = NULL;
+        printf("The employee has been fired and the staff list has been updated.");
+        branch->employeesCount--;
+        return;
+    }
+
+    Employee* employeeToFire = &branch->employees[employeeIndex]; // Get a pointer to the employee to be fired
+    if (employeeIndex != branch->employeesCount - 1) {
+        // Move the last employee's data to the position of the employee to be fired
+        Employee* lastEmployeeInBranch = &branch->employees[branch->employeesCount - 1];
+        memcpy(employeeToFire, lastEmployeeInBranch, sizeof(Employee));
+    }
+
+    branch->employeesCount--;
+    // Resize the employees array
+    Employee* temp = (Employee*)realloc(branch->employees, branch->employeesCount * sizeof(Employee));
+    if (temp != NULL) {
+        branch->employees = temp; // Update the pointer if realloc succeeds    
+        printf("The employee has been fired and the staff list has been updated.");
+    }
 }
 
 int main() {
@@ -951,8 +999,8 @@ int main() {
             richestCustomer(&bank);
             break;
 
-        case 13:
-            mostLoansCustomer(&bank);
+        case 13:            
+            fireEmployee(&bank);
             break;
 
         case 0:

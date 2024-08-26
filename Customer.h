@@ -32,5 +32,6 @@ void init(Customer* customer);
 void addLoan(Customer* customer,const Loan* loan);
 void printList(const Customer customer);
 void freeLoan(Customer* c);
+int isValidDate(const char* date);
 
 #endif // !Customer_H

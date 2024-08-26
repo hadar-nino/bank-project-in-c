@@ -132,14 +132,65 @@ Loan* createLoan() {
     }
     temp->interestRate = interestRate;
     clearInputBuffer();
-    printf("Enter start date (format: YYYY-MM-DD): ");
-    fgets(temp->startDate, sizeof(temp->startDate), stdin);
-    temp->startDate[strcspn(temp->startDate, "\n")] = '\0';
-    printf("Enter end date (format: YYYY-MM-DD): ");
-    fgets(temp->endDate, sizeof(temp->endDate), stdin);
-    temp->endDate[strcspn(temp->endDate, "\n")] = '\0';
+    while (!isValidDate(temp->startDate)) {
+        printf("Enter start date (format: YYYY-MM-DD): ");
+        fgets(temp->startDate, sizeof(temp->startDate), stdin);
+        temp->startDate[strcspn(temp->startDate, "\n")] = '\0';
+    }
+    while (!isValidDate(temp->endDate)) {
+        printf("Enter end date (format: YYYY-MM-DD): ");
+        fgets(temp->endDate, sizeof(temp->endDate), stdin);
+        temp->endDate[strcspn(temp->endDate, "\n")] = '\0';
+    }
     return temp;
 }
+int isValidDate(const char* date) {
+    if (strlen(date) != 10) {
+        return 0;
+    }
+    for (int i = 0; i < 10; i++) {
+        if (i == 4 || i == 7) {
+            if (date[i] != '-') {
+                return 0;
+            }
+        }
+        else {
+            if (!isdigit(date[i])) {
+                return 0; 
+            }
+        }
+    }
+
+    
+    int year = atoi(&date[0]);
+    int month = atoi(&date[5]);
+    int day = atoi(&date[8]);
+
+    if (year < 1000 || year > 9999) {
+        return 0;  
+    }
+    if (month < 1 || month > 12) {
+        return 0; 
+    }
+    if (day < 1 || day > 31) {
+        return 0;  //
+    }
+
+    int daysInMonth[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+    if (month == 2) {
+        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+            daysInMonth[1] = 29;  
+        }
+    }
+
+    if (day > daysInMonth[month - 1]) {
+        return 0;
+    }
+
+    return 1;
+}
+
 
 
 void updateCustomer1(Customer* customer) {

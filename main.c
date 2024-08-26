@@ -933,6 +933,7 @@ int main() {
     int type = 0;
     initlLInkedList(&bank.branchesID);
     test(&bank, &branch);
+    createLoan();
     
     while (choice != 0) {
         displayMenu();    // Display the menu

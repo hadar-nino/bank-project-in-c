@@ -244,7 +244,7 @@ void readTextFile(Bank* bank) {
     if (bank->branchCount > 0)
     {
         bank->branches = (Branch*)malloc(bank->branchCount * sizeof(Branch));
-        if (bank->branches == NULL)
+        if (bank->branches != NULL)
         {
             initlLInkedList(&bank->branchesID);
             for (int i = 0; i < bank->branchCount; i++) {

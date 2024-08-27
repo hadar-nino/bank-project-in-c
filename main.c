@@ -202,7 +202,7 @@ void loadTextFile(Bank* bank) {
             fprintf(file, "%f %d\n", customer->account.balance, customer->account.transactionCount);
             for (int k = 0; k < customer->account.transactionCount; k++) {
                 Transaction* transaction = customer->account.transactions[k];
-                fprintf(file, "%s\n%f\n", transaction->amount, transaction->date);
+                fprintf(file, "%s\n%f\n", transaction->date, transaction->amount);
             }
             fprintf(file, "%s\n%s\n%f %f\n", customer->creditCard->cardNumber, customer->creditCard->expiryDate, customer->creditCard->creditLimit, customer->creditCard->balance);
 

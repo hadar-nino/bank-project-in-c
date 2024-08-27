@@ -11,9 +11,11 @@
 void updateAccount(Account* account) {
     float amount;
     char date[11];
-    printf("\nEnter transaction date (YYYY-MM-DD): ");    // Prompt the user to enter the transaction date
-    fgets(date, 11, stdin);
-    date[strcspn(date, "\n")] = '\0';  // Remove the newline character if present
+    while (!isValidDate(date)) {
+        printf("\nEnter transaction date (YYYY-MM-DD): ");    // Prompt the user to enter the transaction date
+        fgets(date, 11, stdin);
+        date[strcspn(date, "\n")] = '\0';  // Remove the newline character if present
+    }
     printf("\nEnter transaction amount: ");    // Prompt the user to enter the transaction amount
     scanf("%f", &amount);
     account->balance += amount;

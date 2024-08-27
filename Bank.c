@@ -44,7 +44,7 @@ void createNewBranch(Bank* bank, Branch* branch) {
     if (branch->branchID == 0)
         bank->branchesID->key = 0;
     else
-        addNewLink(&bank->branchesID, branch->branchID);
+        addNewLink(bank->branchesID, branch->branchID);
     printf("the branch added successfully\n");
 }
 

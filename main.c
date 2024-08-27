@@ -244,7 +244,7 @@ void readTextFile(Bank* bank) {
     if (bank->branchCount > 0)
     {
         bank->branches = (Branch*)malloc(bank->branchCount * sizeof(Branch));
-        if (bank->branches != NULL)
+        if (bank->branches == NULL)
         {
             initlLInkedList(&bank->branchesID);
             for (int i = 0; i < bank->branchCount; i++) {
@@ -436,6 +436,9 @@ void loadBinaryFile(Bank* bank) {
 
 
         fwrite(branch->name, sizeof(char), 50, file); // Assuming name is a fixed-size array
+        
+        fwrite(branch->employees, sizeof(Employee), branch->employeesCount, file);
+
 
         for (int j = 0; j < branch->customerCount; j++) {
             Customer* customer = &branch->customers[j];
@@ -495,22 +498,7 @@ void loadBinaryFile(Bank* bank) {
             }
         }
     }
-
-
     fclose(file);
-
-    FILE* empFile = fopen("employees.bin", "wb");
-    if (!empFile) {
-        printf("Error opening employee file for writing.\n");
-        return;
-    }
-
-    // Write employees to binary file
-    for (int i = 0; i < bank->branchCount; i++) {
-        Branch* branch = &bank->branches[i];
-        fwrite(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
-    }
-    fclose(empFile);
     printf("\nThe binary files were loaded successfully\n");
 }
 
@@ -541,6 +529,7 @@ void readBinaryFile(Bank* bank) {
         if (bank->branches == NULL) {
             printf("Memory allocation failed for branches.\n");
             fclose(file);
+            freeBank(bank);
             return;
         }
 
@@ -554,32 +543,25 @@ void readBinaryFile(Bank* bank) {
             fread(branch->name, sizeof(char), 50, file);  // Assuming name is a fixed-size array
 
             branch->name[strcspn(branch->name, "\n")] = '\0';  // Ensure null termination
+            
+            branch->employees = NULL;
+            if (branch->employeesCount>0)
+            {
+                branch->employees = (Employee*)malloc(sizeof(Employee) * branch->employeesCount);
+                if (branch->employees ==NULL)
+                {
+                    printf("Memory allocation failed.\n");
+                    freeBank(bank);
+                    return;
+                }
+                fread(branch->employees, sizeof(Employee), branch->employeesCount, file);
+            }
+
 
             if (i == 0)
                 bank->branchesID.key = branch->branchID;
             else
                 addNewLink(&bank->branchesID, branch->branchID);
-
-            branch->employees = NULL;
-            if (branch->employeesCount > 0) {
-                branch->employees = (Employee*)malloc(branch->employeesCount * sizeof(Employee));
-                if (branch->employees == NULL) {
-                    printf("Memory allocation failed for employees.\n");
-                    fclose(file);
-                    return;
-                }
-
-                // Read employees data from binary file if there are employees
-                FILE* empFile = fopen("employees.bin", "rb");
-                if (!empFile) {
-                    printf("Error opening employee file for reading.\n");
-                    fclose(file);
-                    return;
-                }
-
-                fread(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
-                fclose(empFile);
-            }
 
             branch->customers = (Customer*)malloc(branch->customerCount * sizeof(Customer));
             if (branch->customers == NULL) {
@@ -703,22 +685,6 @@ void readBinaryFile(Bank* bank) {
     }
 
     fclose(file);
-
-    // Reading employees binary file
-    FILE* empFile = fopen("employees.bin", "rb");
-    if (!empFile) {
-        printf("Error opening employee file for reading.\n");
-        return;
-    }
-
-    for (int i = 0; i < bank->branchCount; i++) {
-        Branch* branch = &bank->branches[i];
-        if (branch->employeesCount > 0) {
-            fread(branch->employees, sizeof(Employee), branch->employeesCount, empFile);
-        }
-    }
-
-    fclose(empFile);
     printf("\nThe binary files were read successfully\n");
 }
 

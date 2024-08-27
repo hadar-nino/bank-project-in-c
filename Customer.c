@@ -27,7 +27,7 @@ void createCreditCard(CreditCard* creditCard) {
     creditCard->cardNumber[strcspn(creditCard->cardNumber, "\n")] = '\0';
     creditCard->creditLimit = 1000;
     creditCard->balance = 12345;
-    while (!isValidDate(creditCard->expiryDate,"0000-00-00"))
+    while (!isValidDate(creditCard->expiryDate))
     {
         printf("enter credit card expiry date (format: YYYY-MM-DD): ");
         fgets(creditCard->expiryDate, sizeof(creditCard->expiryDate), stdin);
@@ -135,13 +135,13 @@ Loan* createLoan() {
     }
     temp->interestRate = interestRate;
     clearInputBuffer();
-    while (!isValidDate(temp->startDate,"0000-00-00")) {
+    while (!isValidDate(temp->startDate)) {
         printf("Enter start date (format: YYYY-MM-DD): ");
         fgets(temp->startDate, sizeof(temp->startDate), stdin);
         temp->startDate[strcspn(temp->startDate, "\n")] = '\0';
     }
     clearInputBuffer();
-    while (!isValidDate(temp->endDate,temp->startDate)) {
+    while (!isValidDate(temp->endDate)&& !isDateBiggerThenOldDate(temp->endDate, temp->startDate)) {
         printf("Enter end date (format: YYYY-MM-DD): ");
         fgets(temp->endDate, sizeof(temp->endDate), stdin);
         temp->endDate[strcspn(temp->endDate, "\n")] = '\0';
@@ -150,7 +150,7 @@ Loan* createLoan() {
 }
 
 
-int isValidDate(const char* date, const char* date2) {
+int isValidDate(const char* date) {
     if (strlen(date) != 10) {
         return 0;
     }
@@ -171,27 +171,6 @@ int isValidDate(const char* date, const char* date2) {
     int year = atoi(&date[0]);
     int month = atoi(&date[5]);
     int day = atoi(&date[8]);
-    int year2 = atoi(&date2[0]);
-    int month2 = atoi(&date2[5]);
-    int day2 = atoi(&date2[8]);
-    if (year < year2) {
-        return 0;
-    }
-    if (month < month2) {
-        return 0;
-    }
-    if (day < day2) {
-        return 0;
-    }
-    if (year < 1000 || year > 9999) {
-        return 0;  
-    }
-    if (month < 1 || month > 12) {
-        return 0; 
-    }
-    if (day < 1 || day > 31) {
-        return 0;  
-    }
 
     int daysInMonth[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
@@ -208,6 +187,35 @@ int isValidDate(const char* date, const char* date2) {
     return 1;
 }
 
+int isDateBiggerThenOldDate(const char* date, const char* date2) {
+
+    int year = atoi(&date[0]);
+    int month = atoi(&date[5]);
+    int day = atoi(&date[8]);
+    int year2 = atoi(&date2[0]);
+    int month2 = atoi(&date2[5]);
+    int day2 = atoi(&date2[8]);
+    if (year < year2) {
+        return 0;
+    }
+    if (month < month2) {
+        return 0;
+    }
+    if (day < day2) {
+        return 0;
+    }
+    if (year < 1000 || year > 9999) {
+        return 0;
+    }
+    if (month < 1 || month > 12) {
+        return 0;
+    }
+    if (day < 1 || day > 31) {
+        return 0;
+    }
+
+    return 1;
+}
 
 
 void updateCustomer1(Customer* customer) {

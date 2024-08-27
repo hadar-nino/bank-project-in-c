@@ -33,5 +33,6 @@ void addLoan(Customer* customer,const Loan* loan);
 void printList(const Customer customer);
 void freeLoan(Customer* c);
 int isValidDate(const char* date);
+int isDateBiggerThenOldDate(const char* date, const char* date2);
 
 #endif // !Customer_H

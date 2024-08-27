@@ -150,7 +150,7 @@ Loan* createLoan() {
 
     if (!isDateBiggerThenOldDate(temp->endDate, temp->startDate))
     {
-        printf("loan failed the start date cant be greater than end date\n");
+        printf("the start date cant be greater than end date\n");
         return NULL;
     }
     return temp;

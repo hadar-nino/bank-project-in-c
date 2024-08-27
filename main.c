@@ -253,7 +253,7 @@ void readTextFile(Bank* bank) {
                 fgets(branch->name, sizeof(branch->name), file);
                 branch->name[strcspn(branch->name, "\n")] = '\0';
                 if (i == 0)
-                    bank->branchesID.key = branch->branchID;
+                    bank->branchesID->key = branch->branchID;
                 else
                     addNewLink(&bank->branchesID, branch->branchID);
                 if (branch->customerCount > 0) {
@@ -559,7 +559,7 @@ void readBinaryFile(Bank* bank) {
 
 
             if (i == 0)
-                bank->branchesID.key = branch->branchID;
+                bank->branchesID->key = branch->branchID;
             else
                 addNewLink(&bank->branchesID, branch->branchID);
 
@@ -897,7 +897,7 @@ int main() {
     Customer customer = { account };
     Employee employee;
     int type = 0;
-    initlLInkedList(&bank.branchesID);
+    initlLInkedList(&bank);
    // test(&bank, &branch);
     
     while (choice != 0) {

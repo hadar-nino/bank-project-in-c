@@ -22,9 +22,10 @@ void createBank(Bank* b) {
     b->sort = 0;
 }
 
-void initlLInkedList(NODE1* node) {
-    node->next = NULL;
-    node->prev = NULL;
+void initlLInkedList(Bank*bank) {
+    bank->branchesID = (NODE1*)malloc(sizeof(NODE1));
+    bank->branchesID->next = NULL;
+    bank->branchesID->prev = NULL;
 }
 
 void createNewBranch(Bank* bank, Branch* branch) {
@@ -41,7 +42,7 @@ void createNewBranch(Bank* bank, Branch* branch) {
     bank->branches[bank->branchCount] = *branch;
     bank->branchCount++;
     if (branch->branchID == 0)
-        bank->branchesID.key = 0;
+        bank->branchesID->key = 0;
     else
         addNewLink(&bank->branchesID, branch->branchID);
     printf("the branch added successfully\n");
@@ -56,7 +57,7 @@ void freeBank(Bank* bank)
 }
 
 void freeBranchesID(Bank* bank) {
-    NODE1* current = bank->branchesID.next; // Start from the first node
+    NODE1* current = bank->branchesID; // Start from the first node
     NODE1* next;
 
     while (current != NULL) {
@@ -64,8 +65,8 @@ void freeBranchesID(Bank* bank) {
         free(current);        // Free the node itself  
         current = next;       // Move to the next node
     }
-    bank->branchesID.next = NULL;
-    bank->branchesID.prev = NULL;
+    bank->branchesID->next = NULL;
+    bank->branchesID->prev = NULL;
 }
 
 

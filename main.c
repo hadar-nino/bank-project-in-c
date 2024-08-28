@@ -246,7 +246,7 @@ void readTextFile(Bank* bank) {
         bank->branches = (Branch*)malloc(bank->branchCount * sizeof(Branch));
         if (bank->branches != NULL)
         {
-            initlLInkedList(&bank->branchesID);
+            initlLInkedList(bank);
             for (int i = 0; i < bank->branchCount; i++) {
                 Branch* branch = &bank->branches[i];
                 fscanf(file, "%d %d %d\n", &branch->branchID, &branch->customerCount, &branch->employeesCount);
@@ -912,12 +912,12 @@ int main() {
     Account account = { 0,NULL,0 };
     int choice = 1;
     Bank bank;
-    createBank(&bank);
+ //   createBank(&bank);
     Branch branch = { 0,"",NULL,NULL,0,0 };
     Customer customer = { account };
     Employee employee;
     int type = 0;
-    test(&bank, &branch);
+ //   test(&bank, &branch);
     
     while (choice != 0) {
         displayMenu();    // Display the menu

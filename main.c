@@ -552,7 +552,7 @@ void readBinaryFile(Bank* bank) {
             return;
         }
 
-        initlLInkedList(&bank->branchesID);  // Initialize the linked list for branch IDs
+        initlLInkedList(bank);  // Initialize the linked list for branch IDs
 
         for (int i = 0; i < bank->branchCount; i++) {
             Branch* branch = &bank->branches[i];

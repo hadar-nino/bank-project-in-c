@@ -16,7 +16,6 @@ typedef struct {
     Branch* branches; // Array of Branch structures
     int branchCount;
     NODE1* branchesID;
-    int numberOfEmployee;
     int sort;
 } Bank;
 

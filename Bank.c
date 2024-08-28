@@ -17,7 +17,6 @@ void createBank(Bank* b) {
     }
     b->branchCount = 0;
     b->branches = NULL;
-    b->numberOfEmployee = 0;
     b->bankID = num;
     b->sort = 0;
     initlLInkedList(b);

@@ -187,7 +187,7 @@ void loadTextFile(Bank* bank) {
         return;
     }
 
-    fprintf(file, "%d %d %d %d\n", bank->bankID, bank->branchCount, bank->numberOfEmployee, bank->sort);
+    fprintf(file, "%d %d %d\n", bank->bankID, bank->branchCount, bank->sort);
 
     fprintf(file, "\n");
 
@@ -239,7 +239,7 @@ void readTextFile(Bank* bank) {
         return;
     }
 
-    fscanf(file, "%d %d %d %d\n", &bank->bankID, &bank->branchCount, &bank->numberOfEmployee, &bank->sort);
+    fscanf(file, "%d %d %d\n", &bank->bankID, &bank->branchCount, &bank->sort);
     bank->branches = NULL;
     if (bank->branchCount > 0)
     {
@@ -442,7 +442,6 @@ void loadBinaryFile(Bank* bank) {
     // Write bank info
     fwrite(&bank->bankID, sizeof(int), 1, file);
     fwrite(&bank->branchCount, sizeof(int), 1, file);
-    fwrite(&bank->numberOfEmployee, sizeof(int), 1, file);
     fwrite(&bank->sort, sizeof(int), 1, file);
 
     for (int i = 0; i < bank->branchCount; i++) {
@@ -539,7 +538,6 @@ void readBinaryFile(Bank* bank) {
     // Read bank info
     fread(&bank->bankID, sizeof(int), 1, file);
     fread(&bank->branchCount, sizeof(int), 1, file);
-    fread(&bank->numberOfEmployee, sizeof(int), 1, file);
     fread(&bank->sort, sizeof(int), 1, file);
 
     bank->branches = NULL;

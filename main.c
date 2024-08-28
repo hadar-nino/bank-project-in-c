@@ -82,7 +82,7 @@ void test(Bank* bank, Branch* branch) {
 
             Employee employee;
             sprintf(employee.name, "employee %d-%d", i + 1, j + 1);
-            sprintf(employee.position, "position %d-%d", i + 1, j + 1);
+            employee.age = 69;
             employee.branchID = i;
             employee.employeeID = count++;
             addEmployeeToBranch(&bank->branches[i], &employee);
@@ -106,11 +106,11 @@ void clearInputBuffer() {
 
 /**
  * sortBranchByType
- * Input: 
+ * Input:
  *  - bank: Pointer to a Bank structure
  *  - type: Integer indicating sort type (0 for employee count, 1 for customer count)
  * Output: None
- * Description: 
+ * Description:
  *  Sorts the branches of a bank based on the specified type, either by employee count or customer count.
  */
 
@@ -216,7 +216,7 @@ void loadTextFile(Bank* bank) {
 
         for (int u = 0; u < branch->employeesCount; u++)
         {
-            fprintf(file, "%s\n%d %d\n%s\n", branch->employees[u].name, branch->employees[u].employeeID, branch->employees[u].branchID, branch->employees[u].position);
+            fprintf(file, "%s\n%d %d %d\n", branch->employees[u].name, branch->employees[u].employeeID, branch->employees[u].branchID, branch->employees[u].age);
         }
     }
     fclose(file);
@@ -317,7 +317,7 @@ void readTextFile(Bank* bank) {
                         fgets(customer->creditCard->expiryDate, sizeof(customer->creditCard->expiryDate), file);
                         customer->creditCard->expiryDate[strcspn(customer->creditCard->expiryDate, "\n")] = '\0';
 
-                        fscanf(file, "%f %f\n", &customer->creditCard->creditLimit, &customer->creditCard->balance);                        
+                        fscanf(file, "%f %f\n", &customer->creditCard->creditLimit, &customer->creditCard->balance);
 
                         init(customer);
                         for (int l = 0; l < loanCount; l++) {
@@ -326,7 +326,7 @@ void readTextFile(Bank* bank) {
                                 printf("Memory allocation failed.\n");
                                 return; // Handle error or exit the function
                             }
-                            fgets(loan->startDate, 1+sizeof(loan->startDate), file);
+                            fgets(loan->startDate, 1 + sizeof(loan->startDate), file);
                             loan->startDate[strcspn(loan->startDate, "\n")] = '\0';
 
                             fgets(loan->endDate, 1 + sizeof(loan->endDate), file);
@@ -349,10 +349,7 @@ void readTextFile(Bank* bank) {
                         fgets(branch->employees[u].name, sizeof(branch->employees[u].name), file);
                         branch->employees[u].name[strcspn(branch->employees[u].name, "\n")] = '\0';
 
-                        fscanf(file, "%d %d\n", &branch->employees[u].employeeID, &branch->employees[u].branchID);
-
-                        fgets(branch->employees[u].position, sizeof(branch->employees[u].position), file);
-                        branch->employees[u].position[strcspn(branch->employees[u].position, "\n")] = '\0';
+                        fscanf(file, "%d %d %d\n", &branch->employees[u].employeeID, &branch->employees[u].branchID, &branch->employees[u].age);
                     }
                 }
             }
@@ -397,11 +394,11 @@ void printSubTypes(const Bank* bank) {
             }
             printBranch(&bank->branches[index]);
             break;
-        case 3:            
+        case 3:
             index = branchSelect(bank);
             if (index == -1) {
                 return;
-            }            
+            }
             index2 = EmployeeSelect(&bank->branches[index]);
             if (index2 == -1)
                 return;
@@ -454,7 +451,7 @@ void loadBinaryFile(Bank* bank) {
 
 
         fwrite(branch->name, sizeof(char), 50, file); // Assuming name is a fixed-size array
-        
+
         fwrite(branch->employees, sizeof(Employee), branch->employeesCount, file);
 
 
@@ -560,12 +557,12 @@ void readBinaryFile(Bank* bank) {
             fread(branch->name, sizeof(char), 50, file);  // Assuming name is a fixed-size array
 
             branch->name[strcspn(branch->name, "\n")] = '\0';  // Ensure null termination
-            
+
             branch->employees = NULL;
-            if (branch->employeesCount>0)
+            if (branch->employeesCount > 0)
             {
                 branch->employees = (Employee*)malloc(sizeof(Employee) * branch->employeesCount);
-                if (branch->employees ==NULL)
+                if (branch->employees == NULL)
                 {
                     printf("Memory allocation failed.\n");
                     freeBank(bank);
@@ -590,18 +587,18 @@ void readBinaryFile(Bank* bank) {
             for (int j = 0; j < branch->customerCount; j++) {
                 Customer* customer = &branch->customers[j];
 
-                // Read customer data   
+                // Read customer data  
                 int len;
                 fread(&len, sizeof(int), 1, file);
                 fread(customer->name, sizeof(char), len, file);  // Assuming name is a fixed-size array
-                
+
                 int loanCount;
                 fread(&customer->customerID, sizeof(int), 1, file);
                 fread(&loanCount, sizeof(int), 1, file);
                 fread(&len, sizeof(int), 1, file);
                 fread(customer->address, sizeof(char), len, file);  // Assuming name is a fixed-size array
 
-                            
+
                 // Read account info
                 fread(&customer->account.balance, sizeof(float), 1, file);
                 fread(&customer->account.transactionCount, sizeof(int), 1, file);
@@ -644,7 +641,7 @@ void readBinaryFile(Bank* bank) {
                     fclose(file);
                     return;
                 }
-                
+
                 int cardNumberLength;
                 fread(&cardNumberLength, sizeof(int), 1, file);
                 if (customer->creditCard->cardNumber == NULL) {
@@ -695,7 +692,7 @@ void readBinaryFile(Bank* bank) {
                     fread(loan->endDate, sizeof(char), endDateLength, file);
                     loan->endDate[endDateLength - 1] = '\0';  // Ensure null termination
 
-                    addLoan(customer, loan);                    
+                    addLoan(customer, loan);
                 }
             }
         }
@@ -838,20 +835,20 @@ Customer* richestCustomer(const Bank* bank) {
     return &bank->branches[indexBranch].customers[indexOfRichestCustomer];
 }
 /*
-*Input: -const Bank * bank 
+*Input: -const Bank * bank
 *Output :none (void)
     *
 *What the Function Does :
 *This function evaluates the financial performance of a bank.It calculates the sum of account balances and
 *loan amounts for each branch, computes a grade based on these sums, and prints the branch and overall
 * bank financial grades.It also provides recommendations based on the overall bank's grade.
-* 
+*
 */
 
 void bankFinancialStatement(const Bank* bank) {
     float branchAccountSum = 0, bankGrade = 0, branchLoansSum = 0;
 
-    if (bank->branchCount==0)
+    if (bank->branchCount == 0)
     {
         printf("\nbank has no branches or custemrs, please add in the manue\n");
         return;
@@ -913,7 +910,7 @@ void bankFinancialStatement(const Bank* bank) {
         printf("our goll for the next term should be to find new investors and selling more loans");
         return;
     }
-    printf("The final grade is not good. We should get more customers or sell more loans or, and potentially Laid off some employees.");
+    printf("The final grade is not good. We should get more customers or sell more loans or potentially Laid off some employees.\n");
 }
 
 
@@ -961,7 +958,7 @@ void fireEmployee(Bank* bank) {
 
     Branch* branch = &bank->branches[branchIndex]; // Get the selected branch
 
-    if (branch->employeesCount==1)
+    if (branch->employeesCount == 1)
     {
         free(branch->employees);
         branch->employees = NULL;
@@ -995,12 +992,12 @@ int main() {
     Customer customer = { account };
     Employee employee;
     int type = 0;
- //   test(&bank, &branch);
-    
+    test(&bank, &branch);
+
     while (choice != 0) {
-        displayMenu();    
+        displayMenu();
         printf("\nEnter your choice: ");
-        scanf("%d", &choice);    
+        scanf("%d", &choice);
         clearInputBuffer();
         switch (choice) {
 
@@ -1011,7 +1008,7 @@ int main() {
             type--;
             sortBranchByType(&bank, type);
             break;
-        
+
         case 2:
             // Call function to search branches by type
             printf("please enter the type you want to search bye by:\n[1] for employee count\n[2] for customer count\n");
@@ -1019,37 +1016,37 @@ int main() {
             type--;
             searchBranchByType(&bank, type);
             break;
-        
+
         case 3:
             // Call function to load a text file
             loadTextFile(&bank);
             break;
-        
+
         case 4:
             // Call function to read a text file
             readTextFile(&bank);
             break;
-        
+
         case 5:
             printSubTypes(&bank);
             break;
-        
+
         case 6:
             addNewBranch(&bank, &branch);
             break;
-        
+
         case 7:
             addNewEmployee(&bank, &employee);
             break;
-        
+
         case 8:
             addNewCustomer(&bank, &customer);
             break;
-        
+
         case 9:
             updateCustomer(&bank);
             break;
-            
+
         case 10:
             loadBinaryFile(&bank);
             break;
@@ -1057,12 +1054,12 @@ int main() {
         case 11:
             readBinaryFile(&bank);
             break;
-             
+
         case 12:
             bankFinancialStatement(&bank);
             break;
 
-        case 13:            
+        case 13:
             fireEmployee(&bank);
             break;
 

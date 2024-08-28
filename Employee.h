@@ -5,7 +5,7 @@ typedef struct {
     int employeeID;
     int branchID;
     char name[50];
-    char position[50];
+    int age;
 } Employee;
 void createEmployee(Employee* employee);
 void showEmployee(Employee* employee);

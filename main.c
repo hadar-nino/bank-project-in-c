@@ -27,7 +27,7 @@
 "[9] Update customer\n"\
 "[10] Load binary file\n"\
 "[11] Read binary file\n"\
-"[12] Find richest customer in bank\n"\
+"[12] bank Financial Statement\n"\
 "[13] Fire employee\n"\
 "[0] Exit\n");\
 }
@@ -44,7 +44,7 @@
  *  Iterates over an array and applies a processing function to each element.
  */
 
-void processArr(const void* arr, int size, size_t typeSize, void (*process)(const void*)) {
+void processArr(void* arr, int size, size_t typeSize, void (*process)(const void*)) {
     int i;
     for (i = 0; i < size; i++)
         process((char*)arr + i * typeSize);
@@ -839,6 +839,86 @@ Customer* richestCustomer(const Bank* bank) {
     showCustomer(&bank->branches[indexBranch].customers[indexOfRichestCustomer]);
     return &bank->branches[indexBranch].customers[indexOfRichestCustomer];
 }
+/*
+*Input: -const Bank * bank 
+*Output :none (void)
+    *
+*What the Function Does :
+*This function evaluates the financial performance of a bank.It calculates the sum of account balances and
+*loan amounts for each branch, computes a grade based on these sums, and prints the branch and overall
+* bank financial grades.It also provides recommendations based on the overall bank's grade.
+* 
+*/
+
+void bankFinancialStatement(const Bank* bank) {
+    float branchAccountSum = 0, bankGrade = 0, branchLoansSum = 0;
+
+    if (bank->branchCount==0)
+    {
+        printf("\nbank has no branches or custemrs, please add in the manue\n");
+        return;
+    }
+    printf("\nprossesing the bank Financial Statement...\n\n");
+    for (int j = 0; j < bank->branchCount; j++) {
+        for (int i = 0; i < bank->branches[j].customerCount; i++) {
+
+            branchAccountSum += bank->branches[j].customers[i].account.balance;
+
+
+            NODE* current = bank->branches[j].customers[i].headOfLoan.next;
+
+
+            while (current != NULL) {
+                Loan* value = (Loan*)current->key;
+                branchLoansSum += value->amount;
+                current = current->next;
+            }
+        }
+
+        printf("For the branch name: %s, ID: %d, the grade is: ", bank->branches[j].name, bank->branches[j].branchID);
+
+        float grade = 0;
+
+        if (branchAccountSum < 0) {
+            if (branchAccountSum < -10000) {
+                grade = 0;
+                printf("0, further investigation needed due to high debt.\n");
+            }
+            else {
+                grade = (branchLoansSum + branchAccountSum) / 2000;
+                if (grade > 30) {
+                    grade = 30;
+                }
+                printf("%.2f, some debt that needs to be addressed.\n", grade);
+            }
+        }
+        else {
+            grade = ((branchLoansSum + branchAccountSum)) / 1000;
+            if (grade > 100) {
+                grade = 100;
+            }
+            printf("%.2f\n", grade);
+        }
+
+        bankGrade += grade;
+
+        branchAccountSum = 0; branchLoansSum = 0;
+    }
+    bankGrade /= bank->branchCount;
+    printf("The bank's final grade: %.2f\n", bankGrade);
+
+    if (bankGrade > 90) {
+        printf("excellent!");
+        return;
+    }
+    if (bankGrade > 75) {
+        printf("our goll for the next term should be to find new investors and selling more loans");
+        return;
+    }
+    printf("The final grade is not good. We should get more customers or sell more loans or, and potentially Laid off some employees.");
+}
+
+
 
 /* EmployeeSelect
  * Input: A constant pointer to a Branch structure (const Branch* branch).
@@ -912,7 +992,7 @@ int main() {
     Account account = { 0,NULL,0 };
     int choice = 1;
     Bank bank;
- //   createBank(&bank);
+    createBank(&bank);
     Branch branch = { 0,"",NULL,NULL,0,0 };
     Customer customer = { account };
     Employee employee;
@@ -920,9 +1000,9 @@ int main() {
  //   test(&bank, &branch);
     
     while (choice != 0) {
-        displayMenu();    // Display the menu
+        displayMenu();    
         printf("\nEnter your choice: ");
-        scanf("%d", &choice);    // Get user choice
+        scanf("%d", &choice);    
         clearInputBuffer();
         switch (choice) {
 
@@ -981,7 +1061,7 @@ int main() {
             break;
              
         case 12:
-            richestCustomer(&bank);
+            bankFinancialStatement(&bank);
             break;
 
         case 13:            

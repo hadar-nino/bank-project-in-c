@@ -9,7 +9,7 @@
 
 void createBank(Bank* b) {
     int num;
-    printf("plaese enter bank id: ");
+    printf("creating bank \nplaese enter bank id: ");
     scanf("%d", &num);
     while (num<0){
         printf("the id number need to be positive, please enter again: ");
@@ -20,6 +20,7 @@ void createBank(Bank* b) {
     b->numberOfEmployee = 0;
     b->bankID = num;
     b->sort = 0;
+    initlLInkedList(b);
 }
 
 void initlLInkedList(Bank*bank) {
@@ -106,5 +107,7 @@ void showLInkedlist(const NODE1* node) {
 }
 
 void printBank(const Bank* bank) {
-    processArr(bank->branches, bank->branchCount, sizeof(Branch), printBranch);
+    printf("bank id: %d, number of braches in the bank: %d\n", bank->bankID, bank->branchCount);
+    if (bank->branchCount > 0)
+        processArr(bank->branches, bank->branchCount, sizeof(Branch), printBranch);
 }

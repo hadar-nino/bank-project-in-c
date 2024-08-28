@@ -231,6 +231,7 @@ void updateCustomer1(Customer* customer) {
             "[2] Create new transaction\n"
             "[3] Create new loan\n"
             "[4] Update credit card\n"
+            "[5] exit\n"
             "Enter your choice: ");
         scanf("%d", &choice);
         clearInputBuffer();
@@ -270,9 +271,11 @@ void updateCustomer1(Customer* customer) {
             createCreditCard(customer->creditCard);
             break;
 
+        case 5:
+            return;
         default:
             printf("Bad input, returning to the main menu.\n");
-            return;
+            break;
         }
         showCustomer(customer);
     }

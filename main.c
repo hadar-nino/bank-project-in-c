@@ -397,6 +397,16 @@ void printSubTypes(const Bank* bank) {
             }
             printBranch(&bank->branches[index]);
             break;
+        case 3:            
+            index = branchSelect(bank);
+            if (index == -1) {
+                return;
+            }            
+            index2 = EmployeeSelect(&bank->branches[index]);
+            if (index2 == -1)
+                return;
+            showEmployee(&bank->branches[index].employees[index2]);
+            break;
         case 4:
             index = branchSelect(bank);
             if (index == -1)
@@ -405,6 +415,10 @@ void printSubTypes(const Bank* bank) {
             if (index2 == -1)
                 return;
             showCustomer(&bank->branches[index].customers[index2]);
+            break;
+        default:
+            printf("bad input");
+            return;
         }
     }
 }
@@ -897,13 +911,13 @@ void fireEmployee(Bank* bank) {
 int main() {
     Account account = { 0,NULL,0 };
     int choice = 1;
-    Bank bank = { 111,NULL,0,0 };
+    Bank bank;
+    createBank(&bank);
     Branch branch = { 0,"",NULL,NULL,0,0 };
     Customer customer = { account };
     Employee employee;
     int type = 0;
-    initlLInkedList(&bank);
-  //  test(&bank, &branch);
+    test(&bank, &branch);
     
     while (choice != 0) {
         displayMenu();    // Display the menu

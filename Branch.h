@@ -6,7 +6,7 @@
 
 typedef struct Branch {
     int branchID;
-    char name[50];
+    char* name;
     Employee* employees;
     Customer* customers;
     int customerCount;

@@ -8,6 +8,8 @@
 
 void freeBranch(Branch* branch)
 {
+    free(branch->name);
+    branch->name = NULL;
     processArr(branch->customers,branch->customerCount,sizeof(Customer), freeCustomer);
     free(branch->customers);
     branch->customers = NULL;

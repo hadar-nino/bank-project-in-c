@@ -32,6 +32,26 @@
 "[0] Exit\n");\
 }
 
+char* myGets(char* buffer, int size) {
+    char* ok;
+    int res;
+    if (buffer != NULL && size > 0) {
+        do {
+            ok = fgets(buffer, size, stdin);
+        } while (ok && ((strlen(buffer) <= 1) && (isspace(buffer[0]))));
+        if (ok) {
+            char* back = buffer + strlen(buffer);
+            // trim end spaces
+            while ((buffer < back) && (isspace(*--back)));
+            *(back + 1) = '\0';
+            return buffer;
+        }
+        buffer[0] = '\0';
+    }
+    return NULL;
+}
+
+
 /**
  * processArr
  * Input:
@@ -250,8 +270,15 @@ void readTextFile(Bank* bank) {
             for (int i = 0; i < bank->branchCount; i++) {
                 Branch* branch = &bank->branches[i];
                 fscanf(file, "%d %d %d\n", &branch->branchID, &branch->customerCount, &branch->employeesCount);
-                fgets(branch->name, sizeof(branch->name), file);
-                branch->name[strcspn(branch->name, "\n")] = '\0';
+
+                char tempName[50];
+
+                fgets(tempName, sizeof(tempName), file);
+                tempName[strcspn(tempName, "\n")] = '\0';
+
+                branch->name = NULL;
+                branch->name = strdup(tempName);
+
                 if (i == 0)
                     bank->branchesID->key = branch->branchID;
                 else
@@ -450,7 +477,10 @@ void loadBinaryFile(Bank* bank) {
         fwrite(&branch->employeesCount, sizeof(int), 1, file);
 
 
-        fwrite(branch->name, sizeof(char), 50, file); // Assuming name is a fixed-size array
+        int nameLength = strlen(branch->name) + 1; // Include null terminator
+        fwrite(&nameLength, sizeof(int), 1, file);
+        fwrite(branch->name, sizeof(char), nameLength, file);
+
 
         fwrite(branch->employees, sizeof(Employee), branch->employeesCount, file);
 
@@ -554,9 +584,13 @@ void readBinaryFile(Bank* bank) {
             fread(&branch->branchID, sizeof(int), 1, file);
             fread(&branch->customerCount, sizeof(int), 1, file);
             fread(&branch->employeesCount, sizeof(int), 1, file);
-            fread(branch->name, sizeof(char), 50, file);  // Assuming name is a fixed-size array
 
-            branch->name[strcspn(branch->name, "\n")] = '\0';  // Ensure null termination
+            char tempName[50];
+            int len;
+            fread(&len, sizeof(int), 1, file);
+            fread(tempName, sizeof(char), len, file);
+            branch->name = NULL;
+            branch->name = strdup(tempName);
 
             branch->employees = NULL;
             if (branch->employeesCount > 0)
@@ -710,8 +744,13 @@ void readBinaryFile(Bank* bank) {
 
 void addNewBranch(Bank* bank, Branch* branch) {
     printf("enter name (the name will be 50 words): ");
-    fgets(branch->name, 50, stdin);
-    branch->name[strcspn(branch->name, "\n")] = '\0';
+
+    branch->name = NULL;
+    int len;
+    char inpStr[50];
+    myGets(inpStr, sizeof(inpStr));
+    branch->name = strdup(inpStr);
+
     createNewBranch(bank, branch);
 }
 
@@ -988,11 +1027,11 @@ int main() {
     int choice = 1;
     Bank bank;
     createBank(&bank);
-    Branch branch = { 0,"",NULL,NULL,0,0 };
+    Branch branch = { 0,NULL,NULL,NULL,0,0 };
     Customer customer = { account };
     Employee employee;
     int type = 0;
-    test(&bank, &branch);
+  //  test(&bank, &branch);
 
     while (choice != 0) {
         displayMenu();

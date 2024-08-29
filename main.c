@@ -76,7 +76,12 @@ void test(Bank* bank, Branch* branch) {
     for (int i = 0; i < 4; i++) {
         int sum;
         int count = 0;
-        sprintf(branch->name, "Branch %d", i + 1);
+
+        branch->name = NULL;
+        
+        char inpStr[50];
+        sprintf(inpStr, "Branch %d", i + 1);
+        branch->name = strdup(inpStr);
         createNewBranch(bank, branch);
 
         for (int j = 0; j < 5; j++) {
@@ -743,11 +748,10 @@ void readBinaryFile(Bank* bank) {
  */
 
 void addNewBranch(Bank* bank, Branch* branch) {
+    branch->name = NULL;
+    char inpStr[50];
     printf("enter name (the name will be 50 words): ");
 
-    branch->name = NULL;
-    int len;
-    char inpStr[50];
     myGets(inpStr, sizeof(inpStr));
     branch->name = strdup(inpStr);
 
@@ -1031,7 +1035,7 @@ int main() {
     Customer customer = { account };
     Employee employee;
     int type = 0;
-  //  test(&bank, &branch);
+    test(&bank, &branch);
 
     while (choice != 0) {
         displayMenu();

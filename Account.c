@@ -12,11 +12,10 @@ void updateAccount(Account* account) {
     float amount;
     char date[11];
     while (!isValidDate(date)) {
-        printf("\nEnter transaction date (YYYY-MM-DD): ");    // Prompt the user to enter the transaction date
-        fgets(date, 11, stdin);
-        date[strcspn(date, "\n")] = '\0';  // Remove the newline character if present
+        printf("\nEnter transaction date (YYYY-MM-DD): ");    
+        myGets(date, sizeof(date));
     }
-    printf("\nEnter transaction amount: ");    // Prompt the user to enter the transaction amount
+    printf("\nEnter transaction amount: "); 
     scanf("%f", &amount);
     account->balance += amount;
     clearInputBuffer();
@@ -24,7 +23,7 @@ void updateAccount(Account* account) {
     // Reallocate memory for the transactions array to add a new transaction
     Transaction** temp = (Transaction**)realloc(account->transactions, (account->transactionCount + 1) * sizeof(Transaction*));
 
-    if (temp == NULL) {        // Update the transactions pointer to point to the newly allocated memory
+    if (temp == NULL) {      
         printf("Memory allocation failed.\n");
         return;
     }

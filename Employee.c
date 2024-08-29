@@ -8,8 +8,7 @@
 
 void createEmployee(Employee* employee) {
     printf("enter name (the name will be 50 words): ");
-    fgets(employee->name, 50, stdin);
-    employee->name[strcspn(employee->name, "\n")] = '\0';
+    myGets(employee->name, sizeof(employee->name));
     printf("enter employee age: (it should be 18 or older): ");
     scanf("%d", &employee->age);
     while (employee->age < 18)

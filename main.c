@@ -32,7 +32,7 @@
 "[0] Exit\n");\
 }
 
-char* myGets(char* buffer, int size) {
+void myGets(char* buffer, int size) {
     char* ok;
     int res;
     if (buffer != NULL && size > 0) {
@@ -42,13 +42,18 @@ char* myGets(char* buffer, int size) {
         if (ok) {
             char* back = buffer + strlen(buffer);
             // trim end spaces
+            int clearBuffer = 1;
             while ((buffer < back) && (isspace(*--back)));
+            if (*(back + 1) =='\n')
+                clearBuffer = 0;
             *(back + 1) = '\0';
-            return buffer;
+
+            if (clearBuffer)            
+                while (getchar() != '\n');
+            return;
         }
         buffer[0] = '\0';
-    }
-    return NULL;
+    }    
 }
 
 

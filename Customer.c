@@ -12,26 +12,22 @@
 
 void createCustomer(Customer* customer) {
     printf("enter name (the name will be 100 words): ");
-    fgets(customer->name, 100, stdin);
-    customer->name[strcspn(customer->name, "\n")] = '\0';
-    printf("enter address (the name will be 100 words): ");
-    fgets(customer->address, 100, stdin);
-    customer->address[strcspn(customer->address, "\n")] = '\0';
+    myGets(customer->name, sizeof(customer->name));
+    printf("enter address (the address will be 100 words): ");
+    myGets(customer->address, sizeof(customer->address));
     customer->loanCount = 0;
     createCreditCard(customer->creditCard);
 }
 
 void createCreditCard(CreditCard* creditCard) {
     printf("enter credit card number (this will be 16 words): ");
-    fgets(creditCard->cardNumber, 16, stdin);
-    creditCard->cardNumber[strcspn(creditCard->cardNumber, "\n")] = '\0';
+    myGets(creditCard->cardNumber, sizeof(creditCard->cardNumber));
     creditCard->creditLimit = 1000;
     creditCard->balance = 12345;
     while (!isValidDate(creditCard->expiryDate))
     {
         printf("enter credit card expiry date (format: YYYY-MM-DD): ");
-        fgets(creditCard->expiryDate, sizeof(creditCard->expiryDate), stdin);
-        creditCard->expiryDate[strcspn(creditCard->expiryDate, "\n")] = '\0';
+        myGets(creditCard->expiryDate, sizeof(creditCard->expiryDate));
     }
 }
 
@@ -135,21 +131,19 @@ Loan* createLoan() {
     }
     temp->interestRate = interestRate;
     clearInputBuffer();
-    while (!isValidDate(temp->startDate)) {
+    while (!isValidDate(temp->startDate)) {      
         printf("Enter start date (format: YYYY-MM-DD): ");
-        fgets(temp->startDate, sizeof(temp->startDate), stdin);
-        temp->startDate[strcspn(temp->startDate, "\n")] = '\0';
+        myGets(temp->startDate, sizeof(temp->startDate));
     }
-    clearInputBuffer();
 
     while (!isValidDate(temp->endDate)) {
         printf("Enter end date (format: YYYY-MM-DD): ");
-        fgets(temp->endDate, sizeof(temp->endDate), stdin);
-        temp->endDate[strcspn(temp->endDate, "\n")] = '\0';
+        myGets(temp->endDate, sizeof(temp->endDate));
     }
 
     if (!isDateBiggerThenOldDate(temp->endDate, temp->startDate))
     {
+        free(temp);
         printf("loan failed the start date cant be greater than end date\n");
         return NULL;
     }
@@ -239,16 +233,14 @@ void updateCustomer1(Customer* customer) {
         case 0:
             // Update name
             printf("enter name (the name will be 100 words): ");
-            fgets(customer->name, 100, stdin);
-            customer->name[strcspn(customer->name, "\n")] = '\0';
+            myGets(customer->name, sizeof(customer->name));
             printf("Customer name updated to: %s\n", customer->name);
             break;
 
         case 1:
             // Update address
             printf("enter address (the address will be 100 words): ");
-            fgets(customer->address, 100, stdin);
-            customer->address[strcspn(customer->address, "\n")] = '\0';
+            myGets(customer->address, sizeof(customer->address));
             printf("Customer address updated to: %s\n", customer->address);
             break;
 

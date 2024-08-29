@@ -145,6 +145,11 @@ void clearInputBuffer() {
  */
 
 void sortBranchByType(Bank* bank, int type) {
+    if (bank->branchCount==0)
+    {
+        printf("bank has no branchs, please add first in the menu\n");
+        return;
+    }
     if (type == 0) {
         qsort(bank->branches, bank->branchCount, sizeof(Branch), compareEmployeesCount);
         bank->sort = 1;
@@ -1052,7 +1057,7 @@ int main() {
     Customer customer = { account };
     Employee employee;
     int type = 0;
-    test(&bank, &branch);
+  //  test(&bank, &branch);
 
     while (choice != 0) {
         displayMenu();

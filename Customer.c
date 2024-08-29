@@ -22,7 +22,6 @@ void createCustomer(Customer* customer) {
 void createCreditCard(CreditCard* creditCard) {
     printf("enter credit card number (this will be 16 words): ");
     myGets(creditCard->cardNumber, sizeof(creditCard->cardNumber));
-    creditCard->creditLimit = 1000;
     printf("enter credit Card Limit: ");
     scanf("%f", &creditCard->creditLimit);
     while (creditCard->creditLimit<0)

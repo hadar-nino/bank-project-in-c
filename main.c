@@ -863,6 +863,11 @@ void addNewEmployee(Bank* bank, Employee* employee) {
 
 void addNewCustomer(Bank* bank, Customer* customer) {
     customer->creditCard = (CreditCard*)malloc(sizeof(CreditCard));
+    if (customer->creditCard==NULL)
+    {
+        printf("error in system. return to menu");
+        return;
+    }
     int index = branchSelect(bank);
     if (index == -1) {
         return;

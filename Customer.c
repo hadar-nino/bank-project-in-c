@@ -58,7 +58,7 @@ void addLoan(Customer* customer,const Loan* loan) {
     NODE* tmp=NULL;
     NODE* current=NULL;
     if (!customer)
-        return NULL;
+        return;
     tmp = (NODE*)malloc(sizeof(NODE)); // new node
     if (tmp == NULL) {
         printf("Memory allocation failed\n");

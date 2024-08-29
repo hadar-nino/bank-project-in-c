@@ -23,7 +23,15 @@ void createCreditCard(CreditCard* creditCard) {
     printf("enter credit card number (this will be 16 words): ");
     myGets(creditCard->cardNumber, sizeof(creditCard->cardNumber));
     creditCard->creditLimit = 1000;
-    creditCard->balance = 12345;
+    printf("enter credit Card Limit: ");
+    scanf("%f", &creditCard->creditLimit);
+    while (creditCard->creditLimit<0)
+    {
+        printf("enter credit Card Limit need to be bigger than zero: ");
+        scanf("%f", &creditCard->creditLimit);
+    }
+    printf("enter credit Card balance: ");
+    scanf("%f", &creditCard->balance);
     while (!isValidDate(creditCard->expiryDate))
     {
         printf("enter credit card expiry date (format: YYYY-MM-DD): ");

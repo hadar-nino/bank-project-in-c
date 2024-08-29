@@ -20,6 +20,8 @@ void addCustomerToBranch(Branch* branch, Customer* customer);
 int compareEmployeesCount(const void* a, const void* b);
 
 int compareCustomerCount(const void* a, const void* b);
+int compareIdCount(const void* a, const void* b);
+
 
 void printBranch(const Branch* branch);
 #endif // Branch_H

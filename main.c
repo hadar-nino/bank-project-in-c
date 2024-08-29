@@ -145,10 +145,20 @@ void sortBranchByType(Bank* bank, int type) {
         bank->sort = 1;
         printf("Branches sorted by employee count.\n");
     }
-    else {
+    if(type==1) {
         qsort(bank->branches, bank->branchCount, sizeof(Branch), compareCustomerCount);
         bank->sort = 2;
         printf("Branches sorted by customer count.\n");
+    }
+    if (type == 2)
+    {
+        qsort(bank->branches, bank->branchCount, sizeof(Branch), compareIdCount);
+        bank->sort = 3;
+        printf("Branches sorted by id.\n");
+    }
+    else
+    {
+        printf("bad input, returning to manu");
     }
 }
 
@@ -181,11 +191,24 @@ void searchBranchByType(Bank* bank, int type) {
                 printf("Branch not found.\n");
             }
         }
-        else if (type == 1) {
+        if (type == 1) {
             printf("Enter the number of customers you want to find by: ");
             scanf("%d", &numOf);
             Branch key = { .customerCount = numOf };
             Branch* result = (Branch*)bsearch(&key, bank->branches, bank->branchCount, sizeof(Branch), compareCustomerCount);
+            if (result != NULL) {
+                printBranch(result);
+            }
+            else {
+                printf("Branch not found.\n");
+            }
+        }
+
+        if (type == 2) {
+            printf("Enter the number id you want to find by: ");
+            scanf("%d", &numOf);
+            Branch key = { .branchID = numOf };
+            Branch* result = (Branch*)bsearch(&key, bank->branches, bank->branchCount, sizeof(Branch), compareIdCount);
             if (result != NULL) {
                 printBranch(result);
             }
@@ -445,6 +468,8 @@ void printSubTypes(const Bank* bank) {
                 return;
             showCustomer(&bank->branches[index].customers[index2]);
             break;
+        case 0:
+            return;
         default:
             printf("bad input");
             return;
@@ -858,25 +883,7 @@ void updateCustomer(Bank* bank) {
     updateCustomer1(&bank->branches[index].customers[index2]);
 }
 
-/* richestCustomer
-    * Input: A constant pointer to a Bank structure (const Bank* bank).
-    * Output: Returns a pointer to the Customer structure of the richest customer in the bank.
-    * What the Function Does: Finds and displays the customer with the highest account balance across all branches of the bank.
-    */
 
-Customer* richestCustomer(const Bank* bank) {
-    int indexBranch = 0, indexOfRichestCustomer = 0;
-    for (int j = 0; j < bank->branchCount; j++) {
-        for (int i = 0; i < bank->branches[j].customerCount; i++) {
-            if (bank->branches[j].customers[i].account.balance > bank->branches[indexBranch].customers[indexOfRichestCustomer].account.balance) {
-                indexOfRichestCustomer = i;
-                indexBranch = j;
-            }
-        }
-    }
-    showCustomer(&bank->branches[indexBranch].customers[indexOfRichestCustomer]);
-    return &bank->branches[indexBranch].customers[indexOfRichestCustomer];
-}
 /*
 *Input: -const Bank * bank
 *Output :none (void)
@@ -1046,7 +1053,7 @@ int main() {
 
         case 1:
             // Call function to sort branches by type
-            printf("please enter the type you want to sort by:\n[1] for employee count\n[2] for customer count\n");
+            printf("please enter the type you want to sort by:\n[1] for employee count\n[2] for customer count\n[3] for branch id\n");
             scanf("%d", &type);
             type--;
             sortBranchByType(&bank, type);
@@ -1054,7 +1061,7 @@ int main() {
 
         case 2:
             // Call function to search branches by type
-            printf("please enter the type you want to search bye by:\n[1] for employee count\n[2] for customer count\n");
+            printf("please enter the type you want to search bye by:\n[1] for employee count\n[2] for customer count\n[3] for branch id\n");
             scanf("%d", &type);
             type--;
             searchBranchByType(&bank, type);

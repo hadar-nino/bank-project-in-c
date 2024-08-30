@@ -58,7 +58,7 @@ void addLoan(Customer* customer,const Loan* loan) {
     NODE* current=NULL;
     if (!customer)
         return;
-    tmp = (NODE*)malloc(sizeof(NODE)); // new node
+    tmp = (NODE*)malloc(sizeof(NODE)); 
     if (tmp == NULL) {
         printf("Memory allocation failed\n");
         return;
@@ -68,7 +68,7 @@ void addLoan(Customer* customer,const Loan* loan) {
     for (int i = 0; i < customer->loanCount; i++) {
         current = current->next;
     }
-    // Insert the new Node
+    
     tmp->next = current->next;
     current->next = tmp;
     customer->loanCount++;

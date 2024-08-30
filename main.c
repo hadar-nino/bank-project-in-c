@@ -90,7 +90,7 @@ void test(Bank* bank, Branch* branch) {
         createNewBranch(bank, branch);
 
         for (int j = 0; j < 5; j++) {
-            //            CreditCard creditCard = { "dk",12,44,"ff" };            
+         
             Account account = { 0,NULL,0 };
             Customer customer = { account };
             customer.creditCard = (CreditCard*)malloc(sizeof(CreditCard));
@@ -98,9 +98,9 @@ void test(Bank* bank, Branch* branch) {
             sprintf(customer.address, "Address %d-%d", i + 1, j + 1);
             customer.loanCount = 0;
             addCustomerToBranch(&bank->branches[i], &customer);
-            init(&bank->branches[i].customers[j]); // Initialize the linked list head for loans
+            init(&bank->branches[i].customers[j]); 
 
-            // Assign a different balance to each customer
+
             sum = (i + 1) * 1000 + (j + 1) * 100;
             bank->branches[i].customers[j].account.balance = sum;
             bank->branches[i].customers[j].creditCard->balance = sum * 7;
@@ -326,42 +326,42 @@ void readTextFile(Bank* bank) {
                     if (branch->customers == NULL)
                     {
                         printf("Memory allocation failed.\n");
-                        return; // Handle error or exit the function
+                        return; 
                     }
                     for (int j = 0; j < branch->customerCount; j++) {
                         Customer* customer = &branch->customers[j];
 
-                        // Read the customer's name, including spaces
+                        
                         fgets(customer->name, sizeof(customer->name), file);
-                        customer->name[strcspn(customer->name, "\n")] = '\0'; // Remove the newline character
+                        customer->name[strcspn(customer->name, "\n")] = '\0';
 
-                        // Read the customer's ID and loan count
+                        
                         int loanCount;
                         fscanf(file, "%d %d\n", &customer->customerID, &loanCount);
                         customer->loanCount = 0;
 
-                        // Read the customer's address, including spaces
+                        
                         fgets(customer->address, sizeof(customer->address), file);
-                        customer->address[strcspn(customer->address, "\n")] = '\0'; // Remove the newline character
+                        customer->address[strcspn(customer->address, "\n")] = '\0'; 
 
-                        // Read the customer's account balance and transaction count
+                        
                         fscanf(file, "%f %d\n", &customer->account.balance, &customer->account.transactionCount);
 
-                        // Allocate memory for the transactions array
+                        
                         customer->account.transactions = NULL;
                         if (customer->account.transactionCount > 0) {
                             customer->account.transactions = (Transaction**)malloc(customer->account.transactionCount * sizeof(Transaction*));
                             if (customer->account.transactions == NULL) {
                                 printf("Memory allocation failed for transactions.\n");
-                                return; // Handle error or exit the function
+                                return; 
                             }
 
-                            // Read each transaction's date and amount
+                            
                             for (int k = 0; k < customer->account.transactionCount; k++) {
                                 customer->account.transactions[k] = (Transaction*)malloc(sizeof(Transaction));
                                 if (customer->account.transactions[k] == NULL) {
                                     printf("Memory allocation failed for transaction %d.\n", k);
-                                    return; // Handle error or exit the function
+                                    return; 
                                 }
                                 fgets(customer->account.transactions[k]->date, sizeof(customer->account.transactions[k]->date), file);
                                 customer->account.transactions[k]->date[strcspn(customer->account.transactions[k]->date, "\n")] = '\0';
@@ -370,11 +370,11 @@ void readTextFile(Bank* bank) {
                             }
                         }
 
-                        // Allocate memory for the customer's credit card and read the details
+                        
                         customer->creditCard = (CreditCard*)malloc(sizeof(CreditCard));
                         if (customer->creditCard == NULL) {
                             printf("Memory allocation failed for credit card.\n");
-                            return; // Handle error or exit the function
+                            return; 
                         }
                         fgets(customer->creditCard->cardNumber, sizeof(customer->creditCard->cardNumber), file);
                         customer->creditCard->cardNumber[strcspn(customer->creditCard->cardNumber, "\n")] = '\0';
@@ -389,7 +389,7 @@ void readTextFile(Bank* bank) {
                             Loan* loan = (Loan*)malloc(sizeof(Loan));
                             if (loan == NULL) {
                                 printf("Memory allocation failed.\n");
-                                return; // Handle error or exit the function
+                                return; 
                             }
                             fgets(loan->startDate, 1 + sizeof(loan->startDate), file);
                             loan->startDate[strcspn(loan->startDate, "\n")] = '\0';
@@ -407,7 +407,7 @@ void readTextFile(Bank* bank) {
                     branch->employees = (Employee*)malloc(branch->customerCount * sizeof(Employee));
                     if (branch->employees == NULL) {
                         printf("Memory allocation failed.\n");
-                        return; // Handle error or exit the function
+                        return; 
                     }
                     for (int u = 0; u < branch->employeesCount; u++)
                     {
@@ -446,7 +446,7 @@ void printSubTypes(const Bank* bank) {
             "[0] exit");
 
         printf("\nEnter your choice: ");
-        scanf("%d", &choice);    // Get user choice
+        scanf("%d", &choice);    
         clearInputBuffer();
         switch (choice) {
         case 1:
@@ -503,7 +503,7 @@ void loadBinaryFile(Bank* bank) {
         return;
     }
 
-    // Write bank info
+    
     fwrite(&bank->bankID, sizeof(int), 1, file);
     fwrite(&bank->branchCount, sizeof(int), 1, file);
     fwrite(&bank->sort, sizeof(int), 1, file);
@@ -511,13 +511,13 @@ void loadBinaryFile(Bank* bank) {
     for (int i = 0; i < bank->branchCount; i++) {
         Branch* branch = &bank->branches[i];
 
-        // Write branch info
+        
         fwrite(&branch->branchID, sizeof(int), 1, file);
         fwrite(&branch->customerCount, sizeof(int), 1, file);
         fwrite(&branch->employeesCount, sizeof(int), 1, file);
 
 
-        int nameLength = strlen(branch->name) + 1; // Include null terminator
+        int nameLength = strlen(branch->name) + 1; 
         fwrite(&nameLength, sizeof(int), 1, file);
         fwrite(branch->name, sizeof(char), nameLength, file);
 
@@ -528,39 +528,39 @@ void loadBinaryFile(Bank* bank) {
         for (int j = 0; j < branch->customerCount; j++) {
             Customer* customer = &branch->customers[j];
 
-            // Write customer info
-            int nameLength = strlen(customer->name) + 1; // Include null terminator
+            
+            int nameLength = strlen(customer->name) + 1; 
             fwrite(&nameLength, sizeof(int), 1, file);
             fwrite(customer->name, sizeof(char), nameLength, file);
             fwrite(&customer->customerID, sizeof(int), 1, file);
             fwrite(&customer->loanCount, sizeof(int), 1, file);
 
-            int addressLength = strlen(customer->address) + 1; // Include null terminator
+            int addressLength = strlen(customer->address) + 1; 
             fwrite(&addressLength, sizeof(int), 1, file);
             fwrite(customer->address, sizeof(char), addressLength, file);
 
-            // Write account info
+            
             fwrite(&customer->account.balance, sizeof(float), 1, file);
             fwrite(&customer->account.transactionCount, sizeof(int), 1, file);
 
-            // Write transactions
+            
             for (int k = 0; k < customer->account.transactionCount; k++) {
                 Transaction* transaction = customer->account.transactions[k];
                 fwrite(&transaction->amount, sizeof(float), 1, file);
 
-                int dateLength = strlen(transaction->date) + 1; // Include null terminator
+                int dateLength = strlen(transaction->date) + 1; 
                 fwrite(&dateLength, sizeof(int), 1, file);
                 fwrite(transaction->date, sizeof(char), dateLength, file);
             }
 
-            // Write credit card info
-            int cardNumberLength = strlen(customer->creditCard->cardNumber) + 1; // Include null terminator
+            
+            int cardNumberLength = strlen(customer->creditCard->cardNumber) + 1; 
             fwrite(&cardNumberLength, sizeof(int), 1, file);
             fwrite(customer->creditCard->cardNumber, sizeof(char), cardNumberLength, file);
             fwrite(&customer->creditCard->creditLimit, sizeof(float), 1, file);
             fwrite(&customer->creditCard->balance, sizeof(float), 1, file);
 
-            int expiryDateLength = strlen(customer->creditCard->expiryDate) + 1; // Include null terminator
+            int expiryDateLength = strlen(customer->creditCard->expiryDate) + 1; 
             fwrite(&expiryDateLength, sizeof(int), 1, file);
             fwrite(customer->creditCard->expiryDate, sizeof(char), expiryDateLength, file);
 
@@ -569,13 +569,13 @@ void loadBinaryFile(Bank* bank) {
             while (loanNode) {
                 Loan* loan = (Loan*)loanNode->key;
 
-                int startDateLength = strlen(loan->startDate) + 1; // Include null terminator
+                int startDateLength = strlen(loan->startDate) + 1;
                 fwrite(&startDateLength, sizeof(int), 1, file);
                 fwrite(loan->startDate, sizeof(char), startDateLength, file);
                 fwrite(&loan->amount, sizeof(float), 1, file);
                 fwrite(&loan->interestRate, sizeof(float), 1, file);
 
-                int endDateLength = strlen(loan->endDate) + 1; // Include null terminator
+                int endDateLength = strlen(loan->endDate) + 1;
                 fwrite(&endDateLength, sizeof(int), 1, file);
                 fwrite(loan->endDate, sizeof(char), endDateLength, file);
 
@@ -602,7 +602,7 @@ void readBinaryFile(Bank* bank) {
         return;
     }
 
-    // Read bank info
+    
     fread(&bank->bankID, sizeof(int), 1, file);
     fread(&bank->branchCount, sizeof(int), 1, file);
     fread(&bank->sort, sizeof(int), 1, file);
@@ -617,7 +617,7 @@ void readBinaryFile(Bank* bank) {
             return;
         }
 
-        initlLInkedList(bank);  // Initialize the linked list for branch IDs
+        initlLInkedList(bank);  
 
         for (int i = 0; i < bank->branchCount; i++) {
             Branch* branch = &bank->branches[i];
@@ -661,19 +661,19 @@ void readBinaryFile(Bank* bank) {
             for (int j = 0; j < branch->customerCount; j++) {
                 Customer* customer = &branch->customers[j];
 
-                // Read customer data  
+                
                 int len;
                 fread(&len, sizeof(int), 1, file);
-                fread(customer->name, sizeof(char), len, file);  // Assuming name is a fixed-size array
+                fread(customer->name, sizeof(char), len, file); 
 
                 int loanCount;
                 fread(&customer->customerID, sizeof(int), 1, file);
                 fread(&loanCount, sizeof(int), 1, file);
                 fread(&len, sizeof(int), 1, file);
-                fread(customer->address, sizeof(char), len, file);  // Assuming name is a fixed-size array
+                fread(customer->address, sizeof(char), len, file);  
 
 
-                // Read account info
+                
                 fread(&customer->account.balance, sizeof(float), 1, file);
                 fread(&customer->account.transactionCount, sizeof(int), 1, file);
 
@@ -686,7 +686,7 @@ void readBinaryFile(Bank* bank) {
                         return;
                     }
 
-                    // Read transactions
+                    
                     for (int k = 0; k < customer->account.transactionCount; k++) {
                         customer->account.transactions[k] = (Transaction*)malloc(sizeof(Transaction));
                         if (customer->account.transactions[k] == NULL) {
@@ -704,11 +704,11 @@ void readBinaryFile(Bank* bank) {
                             return;
                         }
                         fread(customer->account.transactions[k]->date, sizeof(char), dateLength, file);
-                        customer->account.transactions[k]->date[dateLength - 1] = '\0';  // Ensure null termination
+                        customer->account.transactions[k]->date[dateLength - 1] = '\0';  
                     }
                 }
 
-                // Read credit card info
+                
                 customer->creditCard = (CreditCard*)malloc(sizeof(CreditCard));
                 if (customer->creditCard == NULL) {
                     printf("Memory allocation failed for credit card.\n");
@@ -724,7 +724,7 @@ void readBinaryFile(Bank* bank) {
                     return;
                 }
                 fread(customer->creditCard->cardNumber, sizeof(char), cardNumberLength, file);
-                customer->creditCard->cardNumber[cardNumberLength - 1] = '\0';  // Ensure null termination
+                customer->creditCard->cardNumber[cardNumberLength - 1] = '\0'; 
 
                 fread(&customer->creditCard->creditLimit, sizeof(float), 1, file);
                 fread(&customer->creditCard->balance, sizeof(float), 1, file);
@@ -737,14 +737,14 @@ void readBinaryFile(Bank* bank) {
                     return;
                 }
                 fread(customer->creditCard->expiryDate, sizeof(char), expiryDateLength, file);
-                customer->creditCard->expiryDate[expiryDateLength - 1] = '\0';  // Ensure null termination
+                customer->creditCard->expiryDate[expiryDateLength - 1] = '\0';  
 
-                // Initialize loan linked list
+              
                 customer->headOfLoan.key = NULL;
                 customer->headOfLoan.next = NULL;
                 NODE* lastLoanNode = &customer->headOfLoan;
                 customer->loanCount = 0;
-                // Read loans
+   
                 for (int l = 0; l < loanCount; l++) {
                     Loan* loan = (Loan*)malloc(sizeof(Loan));
                     if (loan == NULL) {
@@ -756,7 +756,7 @@ void readBinaryFile(Bank* bank) {
                     int startDateLength;
                     fread(&startDateLength, sizeof(int), 1, file);
                     fread(loan->startDate, sizeof(char), startDateLength, file);
-                    loan->startDate[startDateLength - 1] = '\0';  // Ensure null termination
+                    loan->startDate[startDateLength - 1] = '\0';  
 
                     fread(&loan->amount, sizeof(float), 1, file);
                     fread(&loan->interestRate, sizeof(float), 1, file);
@@ -764,7 +764,7 @@ void readBinaryFile(Bank* bank) {
                     int endDateLength;
                     fread(&endDateLength, sizeof(int), 1, file);
                     fread(loan->endDate, sizeof(char), endDateLength, file);
-                    loan->endDate[endDateLength - 1] = '\0';  // Ensure null termination
+                    loan->endDate[endDateLength - 1] = '\0';
 
                     addLoan(customer, loan);
                 }
@@ -1021,7 +1021,7 @@ void fireEmployee(Bank* bank) {
     if (employeeIndex == -1)
         return;
 
-    Branch* branch = &bank->branches[branchIndex]; // Get the selected branch
+    Branch* branch = &bank->branches[branchIndex]; 
 
     if (branch->employeesCount == 1)
     {
@@ -1032,32 +1032,31 @@ void fireEmployee(Bank* bank) {
         return;
     }
 
-    Employee* employeeToFire = &branch->employees[employeeIndex]; // Get a pointer to the employee to be fired
+    Employee* employeeToFire = &branch->employees[employeeIndex];
     if (employeeIndex != branch->employeesCount - 1) {
-        // Move the last employee's data to the position of the employee to be fired
         Employee* lastEmployeeInBranch = &branch->employees[branch->employeesCount - 1];
         memcpy(employeeToFire, lastEmployeeInBranch, sizeof(Employee));
     }
 
     branch->employeesCount--;
-    // Resize the employees array
+    
     Employee* temp = (Employee*)realloc(branch->employees, branch->employeesCount * sizeof(Employee));
     if (temp != NULL) {
-        branch->employees = temp; // Update the pointer if realloc succeeds    
+        branch->employees = temp;     
         printf("The employee has been fired and the staff list has been updated.");
     }
 }
 
 int main() {
     Account account = { 0,NULL,0 };
-    int choice = 1;
+    int choice = 15;
     Bank bank;
     createBank(&bank);
     Branch branch = { 0,NULL,NULL,NULL,0,0 };
     Customer customer = { account };
     Employee employee;
     int type = 0;
-  //  test(&bank, &branch);
+
 
     while (choice != 0) {
         displayMenu();
@@ -1067,7 +1066,7 @@ int main() {
         switch (choice) {
 
         case 1:
-            // Call function to sort branches by type
+            
             printf("please enter the type you want to sort by:\n[1] for employee count\n[2] for customer count\n[3] for branch id\n");
             scanf("%d", &type);
             type--;
@@ -1075,7 +1074,7 @@ int main() {
             break;
 
         case 2:
-            // Call function to search branches by type
+ 
             printf("please enter the type you want to search bye by:\n[1] for employee count\n[2] for customer count\n[3] for branch id\n");
             scanf("%d", &type);
             type--;
@@ -1083,12 +1082,12 @@ int main() {
             break;
 
         case 3:
-            // Call function to load a text file
+
             loadTextFile(&bank);
             break;
 
         case 4:
-            // Call function to read a text file
+
             readTextFile(&bank);
             break;
 

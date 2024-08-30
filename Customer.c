@@ -39,7 +39,6 @@ void createCreditCard(CreditCard* creditCard) {
 }
 
 
-// Function implementations
 void init(Customer* customer) {
     customer->headOfLoan.next = NULL;
     customer->headOfLoan.key = NULL;
@@ -86,16 +85,16 @@ void printList(const Customer customer) {
 }
 
 void freeLoan(Customer* c){
-    NODE* current = c->headOfLoan.next; // Start from the first node
+    NODE* current = c->headOfLoan.next; 
     NODE* next;
 
     while (current != NULL) {
-        next = current->next; // Save the next node
-        free(current->key);   // Free the struct
-        free(current);        // Free the node itself
-        current = next;       // Move to the next node
+        next = current->next; 
+        free(current->key);   
+        free(current);        
+        current = next;       
     }
-    c->headOfLoan.next = NULL; // Reset the list head to indicate it's empty
+    c->headOfLoan.next = NULL; 
 }
 
 
@@ -118,7 +117,7 @@ void showCustomer(const Customer* customer) {
 
 Loan* createLoan() {
     float amount, interestRate;
-    Loan* temp = malloc(sizeof(Loan));    // Allocate memory for the new Loan
+    Loan* temp = malloc(sizeof(Loan));   
     if (temp == NULL) {
         printf("Memory allocation failed\n");
         return NULL;
@@ -238,14 +237,14 @@ void updateCustomer1(Customer* customer) {
         clearInputBuffer();
         switch (choice) {
         case 0:
-            // Update name
+            
             printf("enter name (the name will be 100 words): ");
             myGets(customer->name, sizeof(customer->name));
             printf("Customer name updated to: %s\n", customer->name);
             break;
 
         case 1:
-            // Update address
+            
             printf("enter address (the address will be 100 words): ");
             myGets(customer->address, sizeof(customer->address));
             printf("Customer address updated to: %s\n", customer->address);
@@ -256,7 +255,7 @@ void updateCustomer1(Customer* customer) {
             break;
 
         case 3:
-            // Create new loan
+            
             printf("Creating new loan for customer %s\n", customer->name);
             Loan* loan = NULL;
             loan = createLoan();

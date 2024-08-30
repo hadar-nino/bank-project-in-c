@@ -21,7 +21,7 @@ void updateAccount(Account* account) {
     account->balance += amount;
     clearInputBuffer();
 
-    // Reallocate memory for the transactions array to add a new transaction
+    
     Transaction** temp = (Transaction**)realloc(account->transactions, (account->transactionCount + 1) * sizeof(Transaction*));
 
     if (temp == NULL) {      
@@ -30,18 +30,18 @@ void updateAccount(Account* account) {
     }
 
     account->transactions = temp;
-    // Allocate memory for the new transaction
+    
     account->transactions[account->transactionCount] = (Transaction*)malloc(sizeof(Transaction));
 
     if (account->transactions[account->transactionCount] == NULL) {
         printf("Memory allocation for the new transaction failed.\n");
         return;
     }
-    // Initialize the new transaction with the user-provided date and amount
+    
     strcpy(account->transactions[account->transactionCount]->date, date);
     account->transactions[account->transactionCount]->amount = amount;
 
-    account->transactionCount++;    // Increment the transaction count
+    account->transactionCount++;    
     printf("The transaction was added successfully.\n");
 }
 

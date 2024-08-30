@@ -10,4 +10,4 @@ typedef struct {
 
 showLoan(const Loan* l);
 
-#endif // !Loan_H
+#endif 

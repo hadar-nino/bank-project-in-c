@@ -8,6 +8,6 @@ typedef struct {
     char expiryDate[11];
 } CreditCard;
 
-#endif // !CreditCard_H
+#endif
 
 

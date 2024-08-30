@@ -13,7 +13,7 @@ typedef struct node1
 
 typedef struct {
     int bankID;
-    Branch* branches; // Array of Branch structures
+    Branch* branches; 
     int branchCount;
     NODE1* branchesID;
     int sort;
@@ -27,4 +27,4 @@ void createBank(Bank* b);
 void createNewBranch(Bank* bank, Branch* branch);
 void freeBank(Bank* bank);
 void freeBranchesID(Bank* bank);
-#endif // Bank_H
+#endif 

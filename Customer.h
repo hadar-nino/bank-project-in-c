@@ -6,7 +6,7 @@
 
 
 
-// Node
+
 typedef struct node {
     void* key;
     struct node* next;
@@ -15,9 +15,9 @@ typedef struct node {
 typedef struct Customer {
     Account account; 
     CreditCard* creditCard;
-    NODE headOfLoan; // Linked list of loans
+    NODE headOfLoan; 
     int customerID;
-    char name[100]; // Allocating enough space for the name
+    char name[100]; 
     char address[100];
     int loanCount;
 } Customer;
@@ -35,4 +35,4 @@ void freeLoan(Customer* c);
 int isValidDate(const char* date);
 int isDateBiggerThenOldDate(const char* date, const char* date2);
 
-#endif // !Customer_H
+#endif 

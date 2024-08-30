@@ -57,13 +57,13 @@ void freeBank(Bank* bank)
 }
 
 void freeBranchesID(Bank* bank) {
-    NODE1* current = bank->branchesID; // Start from the first node
+    NODE1* current = bank->branchesID; 
     NODE1* next;
 
     while (current != NULL) {
-        next = current->next; // Save the next node
-        free(current);        // Free the node itself  
-        current = next;       // Move to the next node
+        next = current->next; 
+        free(current);        
+        current = next;       
     }
     bank->branchesID->next = NULL;
     bank->branchesID->prev = NULL;
@@ -75,7 +75,7 @@ void addNewLink(NODE1* head, int data) {
     NODE1* current = NULL;
     if (!head)
         return NULL;
-    tmp = (NODE1*)malloc(sizeof(NODE1)); // new node
+    tmp = (NODE1*)malloc(sizeof(NODE1)); 
 
     if (tmp == NULL) {
         printf("Memory allocation failed\n");
@@ -87,7 +87,7 @@ void addNewLink(NODE1* head, int data) {
     while (current->next != NULL) {
         current = current->next;
     }
-    // Insert the new node
+    
     tmp->next = NULL;
     current->next = tmp;
     tmp->prev = current;

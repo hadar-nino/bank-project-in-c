@@ -6,4 +6,4 @@ typedef struct {
     float amount;
 } Transaction;
 
-#endif // !Transaction_H
+#endif 

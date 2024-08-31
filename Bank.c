@@ -23,7 +23,13 @@ void createBank(Bank* b) {
 }
 
 void initlLInkedList(Bank*bank) {
+    bank->branchesID = NULL;
     bank->branchesID = (NODE1*)malloc(sizeof(NODE1));
+    if (bank->branchesID==NULL)
+    {
+        printf("Memory allocation failed\n");
+        return;
+    }
     bank->branchesID->next = NULL;
     bank->branchesID->prev = NULL;
 }

@@ -271,6 +271,8 @@ void readTextFile(Bank* bank) {
                 branch->name = NULL;
                 branch->name = strdup(tempName);
 
+                branch->customers = NULL;
+                branch->employees = NULL;
                 if (i == 0)
                     bank->branchesID->key = branch->branchID;
                 else
@@ -312,6 +314,7 @@ void readTextFile(Bank* bank) {
 
                             
                             for (int k = 0; k < customer->account.transactionCount; k++) {
+                                customer->account.transactions[k] = NULL;
                                 customer->account.transactions[k] = (Transaction*)malloc(sizeof(Transaction));
                                 if (customer->account.transactions[k] == NULL) {
                                     printf("Memory allocation failed for transaction %d.\n", k);
@@ -324,7 +327,7 @@ void readTextFile(Bank* bank) {
                             }
                         }
 
-                        
+                        customer->creditCard = NULL;
                         customer->creditCard = (CreditCard*)malloc(sizeof(CreditCard));
                         if (customer->creditCard == NULL) {
                             printf("Memory allocation failed for credit card.\n");
@@ -605,6 +608,7 @@ void readBinaryFile(Bank* bank) {
             else
                 addNewLink(bank->branchesID, branch->branchID);
 
+            branch->customers = NULL;
             branch->customers = (Customer*)malloc(branch->customerCount * sizeof(Customer));
             if (branch->customers == NULL) {
                 printf("Memory allocation failed for customers.\n");
@@ -642,6 +646,7 @@ void readBinaryFile(Bank* bank) {
 
                     
                     for (int k = 0; k < customer->account.transactionCount; k++) {
+                        customer->account.transactions[k] = NULL;
                         customer->account.transactions[k] = (Transaction*)malloc(sizeof(Transaction));
                         if (customer->account.transactions[k] == NULL) {
                             printf("Memory allocation failed for transaction %d.\n", k);
@@ -662,7 +667,7 @@ void readBinaryFile(Bank* bank) {
                     }
                 }
 
-                
+                customer->creditCard = NULL;
                 customer->creditCard = (CreditCard*)malloc(sizeof(CreditCard));
                 if (customer->creditCard == NULL) {
                     printf("Memory allocation failed for credit card.\n");
@@ -1007,7 +1012,7 @@ int main() {
     Bank bank;
     createBank(&bank);
     Branch branch = { 0,NULL,NULL,NULL,0,0 };
-    Customer customer = { account };
+    Customer customer = { account,NULL };
     Employee employee;
     int type = 0;
     

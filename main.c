@@ -3,6 +3,7 @@
 #define _CRT_NONSTDC_NO_DEPRECATE
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <string.h>
 #include "Bank.h"
 #include "Branch.h"
@@ -34,7 +35,6 @@
 
 void myGets(char* buffer, int size) {
     char* ok;
-    int res;
     if (buffer != NULL && size > 0) {
         do {
             ok = fgets(buffer, size, stdin);
@@ -73,52 +73,6 @@ void processArr(void* arr, int size, size_t typeSize, void (*process)(const void
     int i;
     for (i = 0; i < size; i++)
         process((char*)arr + i * typeSize);
-}
-
-void test(Bank* bank, Branch* branch) {
-    int choice = 1;
-
-    for (int i = 0; i < 4; i++) {
-        int sum;
-        int count = 0;
-
-        branch->name = NULL;
-        
-        char inpStr[50];
-        sprintf(inpStr, "Branch %d", i + 1);
-        branch->name = strdup(inpStr);
-        createNewBranch(bank, branch);
-
-        for (int j = 0; j < 5; j++) {
-         
-            Account account = { 0,NULL,0 };
-            Customer customer = { account };
-            customer.creditCard = (CreditCard*)malloc(sizeof(CreditCard));
-            sprintf(customer.name, "Customer %d-%d", i + 1, j + 1);
-            sprintf(customer.address, "Address %d-%d", i + 1, j + 1);
-            customer.loanCount = 0;
-            addCustomerToBranch(&bank->branches[i], &customer);
-            init(&bank->branches[i].customers[j]); 
-
-
-            sum = (i + 1) * 1000 + (j + 1) * 100;
-            bank->branches[i].customers[j].account.balance = sum;
-            bank->branches[i].customers[j].creditCard->balance = sum * 7;
-            bank->branches[i].customers[j].creditCard->creditLimit = sum / 2;
-            bank->branches[i].customers[j].account.transactionCount = 0;
-            bank->branches[i].customers[j].account.transactions = NULL;
-            sprintf(customer.creditCard->expiryDate, "%d", j);
-            sprintf(customer.creditCard->cardNumber, "Customer %d-%d", i + 1, j + 1);
-
-            Employee employee;
-            sprintf(employee.name, "employee %d-%d", i + 1, j + 1);
-            employee.age = 69;
-            employee.branchID = i;
-            employee.employeeID = count++;
-            addEmployeeToBranch(&bank->branches[i], &employee);
-        }
-    }
-    printBank(bank);
 }
 
 /**
@@ -968,11 +922,11 @@ void bankFinancialStatement(const Bank* bank) {
     printf("The bank's final grade: %.2f\n", bankGrade);
 
     if (bankGrade > 90) {
-        printf("excellent!");
+        printf("excellent!\n");
         return;
     }
     if (bankGrade > 75) {
-        printf("our goll for the next term should be to find new investors and selling more loans");
+        printf("our goll for the next term should be to find new investors and selling more loans\n");
         return;
     }
     printf("The final grade is not good. We should get more customers or sell more loans or potentially Laid off some employees.\n");
@@ -1056,7 +1010,7 @@ int main() {
     Customer customer = { account };
     Employee employee;
     int type = 0;
-
+    
 
     while (choice != 0) {
         displayMenu();

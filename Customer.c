@@ -222,7 +222,7 @@ int isDateBiggerThenOldDate(const char* date, const char* date2) {
 
 
 void updateCustomer1(Customer* customer) {
-    int choice = 0;
+    int choice = 10;
     while (choice != 5)
     {
         printf("Update Customer\n"
@@ -273,7 +273,7 @@ void updateCustomer1(Customer* customer) {
             return;
         default:
             printf("Bad input, returning to the main menu.\n");
-            break;
+            return;
         }
         showCustomer(customer);
     }
